@@ -1,15 +1,17 @@
-# Stalker XRF Book
+# X-Ray Forge Book
 
-The [XRF book](https://xray-forge.github.io/xrf-book) documents the XRF script engine and companion tools for
-S.T.A.L.K.E.R.: Call of Pripyat.
+The [X-Ray Forge book](https://xray-forge.github.io/xrf-book) documents XRF: a collection of development projects for
+[X-Ray 16](https://github.com/OpenXRay/xray-16) engine. It covers the TypeScript scripting layer, build-time tooling, SDK,
+command-line tools, and development application.
 
 ## Project links
 
-- [XRF engine](https://github.com/xray-forge/xrf-engine)
-- [XRF tools](https://github.com/xray-forge/xrf-tools)
-- [X-Ray 16 TypeScript SDK](https://github.com/xray-forge/xrf-xray16-sdk) and
+- [XRF engine](https://github.com/xray-forge/stalker-xrf-engine)
+- [XRF tools](https://github.com/xray-forge/stalker-xrf-tools)
+- [XRF tools end-to-end tests](https://github.com/xray-forge/xrf-tools-e2e)
+- [X-Ray 16 TypeScript SDK](https://github.com/xray-forge/stalker-xrf-xray16-sdk) and
   [API reference](https://xray-forge.github.io/xrf-xray16-sdk/modules.html)
-- [XRF binary payloads](https://github.com/xray-forge/xrf-engine-bin)
+- [XRF binary payloads](https://github.com/xray-forge/stalker-xrf-bin)
 
 ## Resource packs
 
