@@ -1,8 +1,7 @@
 # X-Ray Forge
 
-X-Ray Forge (XRF) is a collection of development projects for [X-Ray 16](https://github.com/OpenXRay/xray-16), an X-Ray
-1.6 engine. It provides a TypeScript scripting layer and the tooling around it for building, testing, and maintaining
-mods.
+X-Ray Forge (XRF) is a collection of development projects for [X-Ray 16](https://github.com/OpenXRay/xray-16) engine. It
+provides a TypeScript scripting layer and the tooling around it for building, testing, and maintaining mods.
 
 ## What XRF includes
 
