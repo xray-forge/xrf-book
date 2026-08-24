@@ -2,6 +2,8 @@
   "name": "xrf-book",
   "private": true,
   "scripts": {
+    "setup": "cargo install mdbook",
+    "serve": "mdbook serve --open",
     "format": "prettier --write \"**/*.md\"",
     "format:check": "prettier --check \"**/*.md\""
   },
