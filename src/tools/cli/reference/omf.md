@@ -12,17 +12,17 @@ Command to copy a motion of provided omf file under a new name
 xrf-cli omf duplicate-motion [OPTIONS] --path <path> --from <from> --to <to>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to omf file |
-| `-d, --dest <dest>` |  |  | Path to resulting omf file, defaults to in place rewrite of the source file |
-| `--from <from>` | yes |  | Motion to copy, matched exactly |
-| `--to <to>` | yes |  | Name to give the copy |
-| `--play-once` |  |  | Clear looping on the copy so it plays once and ends |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to omf file                                                            |
+| `-d, --dest <dest>` |          |         | Path to resulting omf file, defaults to in place rewrite of the source file |
+| `--from <from>`     | yes      |         | Motion to copy, matched exactly                                             |
+| `--to <to>`         | yes      |         | Name to give the copy                                                       |
+| `--play-once`       |          |         | Clear looping on the copy so it plays once and ends                         |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli omf filter-motions`
 
@@ -32,17 +32,17 @@ Command to keep only selected motions of provided omf file
 xrf-cli omf filter-motions [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to omf file |
-| `-d, --dest <dest>` | yes |  | Path to resulting omf file |
-| `-k, --keep <keep>...` |  |  | Exact motion names to keep |
-| `--keep-prefix <keep-prefix>...` |  |  | Keep motions whose name starts with provided prefix |
-| `--dry-run` |  |  | Validate the change and report the result without writing any file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                           | Required | Default | Description                                                          |
+| -------------------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>`              | yes      |         | Path to omf file                                                     |
+| `-d, --dest <dest>`              | yes      |         | Path to resulting omf file                                           |
+| `-k, --keep <keep>...`           |          |         | Exact motion names to keep                                           |
+| `--keep-prefix <keep-prefix>...` |          |         | Keep motions whose name starts with provided prefix                  |
+| `--dry-run`                      |          |         | Validate the change and report the result without writing any file   |
+| `-s, --silent`                   |          |         | Turn off logging                                                     |
+| `-v, --verbose`                  |          |         | Turn on verbose logging                                              |
+| `--json`                         |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`                |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli omf info`
 
@@ -52,13 +52,13 @@ Command to print information about provided omf file
 xrf-cli omf info [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to ogf file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to ogf file                                                     |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli omf rename-motions`
 
@@ -68,17 +68,17 @@ Command to rename motions of provided omf file
 xrf-cli omf rename-motions [OPTIONS] --path <path> --dest <dest> --map <map>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to omf file |
-| `-d, --dest <dest>` | yes |  | Path to resulting omf file |
-| `-m, --map <map>` | yes |  | Path to JSON object mapping existing motion names to new ones |
-| `--strict` |  |  | Require every motion in the file to be covered by the map |
-| `--dry-run` |  |  | Validate the change and report the result without writing any file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to omf file                                                     |
+| `-d, --dest <dest>` | yes      |         | Path to resulting omf file                                           |
+| `-m, --map <map>`   | yes      |         | Path to JSON object mapping existing motion names to new ones        |
+| `--strict`          |          |         | Require every motion in the file to be covered by the map            |
+| `--dry-run`         |          |         | Validate the change and report the result without writing any file   |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli omf repack`
 
@@ -88,14 +88,14 @@ Command to repack provided omf file or directory of omf files
 xrf-cli omf repack [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to omf file or directory containing omf files |
-| `-d, --dest <dest>` |  |  | Path to resulting omf file, not applicable when verifying a directory |
-| `--verify` |  |  | Verify that repacked bytes match the source file instead of writing output |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                                |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to omf file or directory containing omf files                         |
+| `-d, --dest <dest>` |          |         | Path to resulting omf file, not applicable when verifying a directory      |
+| `--verify`          |          |         | Verify that repacked bytes match the source file instead of writing output |
+| `-s, --silent`      |          |         | Turn off logging                                                           |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                    |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr       |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                      |
 
 <!-- ANCHOR_END: commands -->

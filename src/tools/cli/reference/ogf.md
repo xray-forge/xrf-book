@@ -12,13 +12,13 @@ Command to print information about provided ogf file
 xrf-cli ogf info [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to ogf file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to ogf file                                                     |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli ogf patch-motion-refs`
 
@@ -28,16 +28,16 @@ Command to rewrite motion refs of provided ogf file
 xrf-cli ogf patch-motion-refs [OPTIONS] --path <path> --refs <refs>...
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to ogf file |
-| `-d, --dest <dest>` |  |  | Path to resulting ogf file, defaults to in place rewrite of the source file |
-| `-r, --refs <refs>...` | yes |  | Motion refs to store in the ogf file |
-| `--dry-run` |  |  | Validate the rewrite and report the result without writing any file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                 | Required | Default | Description                                                                 |
+| ---------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>`    | yes      |         | Path to ogf file                                                            |
+| `-d, --dest <dest>`    |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
+| `-r, --refs <refs>...` | yes      |         | Motion refs to store in the ogf file                                        |
+| `--dry-run`            |          |         | Validate the rewrite and report the result without writing any file         |
+| `-s, --silent`         |          |         | Turn off logging                                                            |
+| `-v, --verbose`        |          |         | Turn on verbose logging                                                     |
+| `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`      |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli ogf patch-texture-refs`
 
@@ -47,17 +47,17 @@ Command to rename a texture reference of provided ogf file
 xrf-cli ogf patch-texture-refs [OPTIONS] --path <path> --from <from> --to <to>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to ogf file |
-| `-d, --dest <dest>` |  |  | Path to resulting ogf file, defaults to in place rewrite of the source file |
-| `--from <from>` | yes |  | Texture reference to rename, matched exactly |
-| `--to <to>` | yes |  | Texture reference to write in its place |
-| `--dry-run` |  |  | Validate the change and report the result without writing any file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to ogf file                                                            |
+| `-d, --dest <dest>` |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
+| `--from <from>`     | yes      |         | Texture reference to rename, matched exactly                                |
+| `--to <to>`         | yes      |         | Texture reference to write in its place                                     |
+| `--dry-run`         |          |         | Validate the change and report the result without writing any file          |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli ogf verify`
 
@@ -67,13 +67,13 @@ Command to verify ogf visuals can be packed for rendering
 xrf-cli ogf verify [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to an ogf file or a directory to sweep |
-| `--root <root>...` |  |  | Additional root searched for textures after the visual's own tree, repeatable |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                                   |
+| ------------------- | -------- | ------- | ----------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to an ogf file or a directory to sweep                                   |
+| `--root <root>...`  |          |         | Additional root searched for textures after the visual's own tree, repeatable |
+| `-s, --silent`      |          |         | Turn off logging                                                              |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                       |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr          |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                         |
 
 <!-- ANCHOR_END: commands -->

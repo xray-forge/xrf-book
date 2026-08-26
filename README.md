@@ -1,8 +1,8 @@
 # X-Ray Forge Book
 
 The [X-Ray Forge book](https://xray-forge.github.io/xrf-book) documents XRF: a collection of development projects for
-[X-Ray 16](https://github.com/OpenXRay/xray-16) engine. It covers the TypeScript scripting layer, build-time tooling, SDK,
-command-line tools, and development application.
+[X-Ray 16](https://github.com/OpenXRay/xray-16) engine. It covers the TypeScript scripting layer, build-time tooling,
+SDK, command-line tools, and development application.
 
 ## Project links
 

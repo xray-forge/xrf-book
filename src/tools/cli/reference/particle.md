@@ -12,13 +12,13 @@ Command to print information about provided particle file
 xrf-cli particle info [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to particle file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to particle file                                                |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli particle pack`
 
@@ -28,15 +28,15 @@ Command to pack unpacked particle files into single particle.xr
 xrf-cli particle pack [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to unpacked particle file folder |
-| `-d, --dest <dest>` |  | `unpacked` | Path to resulting packed *.xr file |
-| `-f, --force` |  |  | Whether existing packed particle should be pruned if destination folder exists |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default    | Description                                                                    |
+| ------------------- | -------- | ---------- | ------------------------------------------------------------------------------ |
+| `-p, --path <path>` | yes      |            | Path to unpacked particle file folder                                          |
+| `-d, --dest <dest>` |          | `unpacked` | Path to resulting packed *.xr file                                             |
+| `-f, --force`       |          |            | Whether existing packed particle should be pruned if destination folder exists |
+| `-s, --silent`      |          |            | Turn off logging                                                               |
+| `-v, --verbose`     |          |            | Turn on verbose logging                                                        |
+| `--json`            |          |            | Write the run's JSON report to stdout, moving human output to stderr           |
+| `--report <PATH>`   |          |            | Write the run's JSON report to a file                                          |
 
 ## `xrf-cli particle repack`
 
@@ -46,14 +46,14 @@ Command to repack provided particle.xr into another file
 xrf-cli particle repack [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to particle file |
-| `-d, --dest <dest>` | yes |  | Path to resulting particle file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to particle file                                                |
+| `-d, --dest <dest>` | yes      |         | Path to resulting particle file                                      |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli particle re-unpack`
 
@@ -63,14 +63,14 @@ Command to re-unpack provided particle directory into another directory
 xrf-cli particle re-unpack [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to unpacked particle directory |
-| `-d, --dest <dest>` | yes |  | Path to resulting unpacked particle |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to unpacked particle directory                                  |
+| `-d, --dest <dest>` | yes      |         | Path to resulting unpacked particle                                  |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli particle unpack`
 
@@ -80,15 +80,15 @@ Command to unpack provided particle.xr into separate files
 xrf-cli particle unpack [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to particle.xr file |
-| `-d, --dest <dest>` |  | `unpacked` | Path to folder for exporting |
-| `-f, --force` |  |  | Whether existing unpacked data should be pruned if destination folder exists |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default    | Description                                                                  |
+| ------------------- | -------- | ---------- | ---------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |            | Path to particle.xr file                                                     |
+| `-d, --dest <dest>` |          | `unpacked` | Path to folder for exporting                                                 |
+| `-f, --force`       |          |            | Whether existing unpacked data should be pruned if destination folder exists |
+| `-s, --silent`      |          |            | Turn off logging                                                             |
+| `-v, --verbose`     |          |            | Turn on verbose logging                                                      |
+| `--json`            |          |            | Write the run's JSON report to stdout, moving human output to stderr         |
+| `--report <PATH>`   |          |            | Write the run's JSON report to a file                                        |
 
 ## `xrf-cli particle verify`
 
@@ -98,13 +98,13 @@ Command to verify provided particle file
 xrf-cli particle verify [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to particle.xr file |
-| `-u, --unpacked` |  |  | Whether should verify unpacked particle |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to particle.xr file                                             |
+| `-u, --unpacked`    |          |         | Whether should verify unpacked particle                              |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 <!-- ANCHOR_END: commands -->

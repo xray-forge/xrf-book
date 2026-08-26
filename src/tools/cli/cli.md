@@ -74,9 +74,9 @@ command definitions themselves, so an option added to the tool reaches this book
 
 ```powershell
 npm run cli:reference
-npm run cli:reference:check
+npm run format
 ```
 
-The first regenerates `src/tools/cli/reference/`, the second reports whether those pages still match the tool and
-answers non-zero when they do not. Both need the `xrf-tools` repository checked out beside this one. The generated pages
-are never edited by hand and are excluded from formatting, so the generator alone decides how they look.
+The first regenerates `src/tools/cli/reference/` and needs the `xrf-tools` repository checked out beside this one; the
+second brings the new pages into this book's formatting. Those pages are never edited by hand: a correction to an
+option's description belongs in the command definition it came from.

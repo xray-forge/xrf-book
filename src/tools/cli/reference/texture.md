@@ -12,20 +12,20 @@ Command to crop a rectangular region out of a dds file into a new dds file
 xrf-cli texture crop-dds [OPTIONS] --source <source> --output <output> --x <x> --y <y> --width <width> --height <height>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `--source <source>` | yes |  | Path to the dds file to read the region from |
-| `--output <output>` | yes |  | Path of the dds file to write |
-| `--x <x>` | yes |  | Left edge of the region, in pixels |
-| `--y <y>` | yes |  | Top edge of the region, in pixels |
-| `--width <width>` | yes |  | Width of the region, in pixels |
-| `--height <height>` | yes |  | Height of the region, in pixels |
-| `--fit-width <fit-width>` |  |  | Scale the cropped region to this width, preserving aspect and letterboxing |
-| `--fit-height <fit-height>` |  |  | Scale the cropped region to this height, preserving aspect and letterboxing |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                      | Required | Default | Description                                                                 |
+| --------------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `--source <source>`         | yes      |         | Path to the dds file to read the region from                                |
+| `--output <output>`         | yes      |         | Path of the dds file to write                                               |
+| `--x <x>`                   | yes      |         | Left edge of the region, in pixels                                          |
+| `--y <y>`                   | yes      |         | Top edge of the region, in pixels                                           |
+| `--width <width>`           | yes      |         | Width of the region, in pixels                                              |
+| `--height <height>`         | yes      |         | Height of the region, in pixels                                             |
+| `--fit-width <fit-width>`   |          |         | Scale the cropped region to this width, preserving aspect and letterboxing  |
+| `--fit-height <fit-height>` |          |         | Scale the cropped region to this height, preserving aspect and letterboxing |
+| `-s, --silent`              |          |         | Turn off logging                                                            |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                                     |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli texture info-dds`
 
@@ -35,13 +35,13 @@ Command to print information about provided dds file
 xrf-cli texture info-dds [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to dds file |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to dds file                                                     |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli texture pack-equipment-icons`
 
@@ -51,17 +51,17 @@ Command to pack dds icons into single element
 xrf-cli texture pack-equipment-icons [OPTIONS] --system-ltx <system-ltx> --source <source> --output <output>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `--system-ltx <system-ltx>` | yes |  | Path to system ltx file or root folder with ltx files |
-| `--source <source>` | yes |  | Path to source folder with section icons |
-| `--output <output>` | yes |  | Path to output dds file |
-| `--gamedata <gamedata>` |  |  | Path to gamedata folder for resources usage |
-| `--strict` |  |  | Turn on strict mode |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                      | Required | Default | Description                                                          |
+| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                |
+| `--source <source>`         | yes      |         | Path to source folder with section icons                             |
+| `--output <output>`         | yes      |         | Path to output dds file                                              |
+| `--gamedata <gamedata>`     |          |         | Path to gamedata folder for resources usage                          |
+| `--strict`                  |          |         | Turn on strict mode                                                  |
+| `-s, --silent`              |          |         | Turn off logging                                                     |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli texture pack-texture-description`
 
@@ -71,18 +71,18 @@ Command to pack texture description xml
 xrf-cli texture pack-texture-description [OPTIONS] --description <description> --base <base>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `--description <description>` | yes |  | Path to XML file describing textures |
-| `--base <base>` | yes |  | Path to base where search for described files |
-| `--output <output>` |  |  | Path to directory where output dds files |
-| `--file <file>...` |  |  | Name of a described file to pack, repeatable; packs every described file if omitted |
-| `--strict` |  |  | Turn on strict unpack mode |
-| `--parallel` |  |  | Turn on parallel mode for pack operations |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                        | Required | Default | Description                                                                         |
+| ----------------------------- | -------- | ------- | ----------------------------------------------------------------------------------- |
+| `--description <description>` | yes      |         | Path to XML file describing textures                                                |
+| `--base <base>`               | yes      |         | Path to base where search for described files                                       |
+| `--output <output>`           |          |         | Path to directory where output dds files                                            |
+| `--file <file>...`            |          |         | Name of a described file to pack, repeatable; packs every described file if omitted |
+| `--strict`                    |          |         | Turn on strict unpack mode                                                          |
+| `--parallel`                  |          |         | Turn on parallel mode for pack operations                                           |
+| `-s, --silent`                |          |         | Turn off logging                                                                    |
+| `-v, --verbose`               |          |         | Turn on verbose logging                                                             |
+| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                |
+| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                               |
 
 ## `xrf-cli texture unpack-equipment-icons`
 
@@ -92,15 +92,15 @@ Command to unpack dds icons into multiple icons
 xrf-cli texture unpack-equipment-icons [OPTIONS] --system-ltx <system-ltx> --source <source> --output <output>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `--system-ltx <system-ltx>` | yes |  | Path to system ltx file or root folder with ltx files |
-| `--source <source>` | yes |  | Path to source dds file |
-| `--output <output>` | yes |  | Path to output folder for sections icons |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                      | Required | Default | Description                                                          |
+| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                |
+| `--source <source>`         | yes      |         | Path to source dds file                                              |
+| `--output <output>`         | yes      |         | Path to output folder for sections icons                             |
+| `-s, --silent`              |          |         | Turn off logging                                                     |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli texture unpack-texture-description`
 
@@ -110,18 +110,18 @@ Command to unpack dds icons into multiple icons
 xrf-cli texture unpack-texture-description [OPTIONS] --description <description> --base <base>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `--description <description>` | yes |  | Path to XML file describing textures |
-| `--base <base>` | yes |  | Path to base where search for described files |
-| `--output <output>` |  |  | Path to output folder for icons |
-| `--file <file>...` |  |  | Name of a described file to unpack, repeatable; unpacks every described file if omitted |
-| `--strict` |  |  | Turn on strict unpack mode |
-| `--parallel` |  |  | Turn on parallel unpack mode |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                        | Required | Default | Description                                                                             |
+| ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------- |
+| `--description <description>` | yes      |         | Path to XML file describing textures                                                    |
+| `--base <base>`               | yes      |         | Path to base where search for described files                                           |
+| `--output <output>`           |          |         | Path to output folder for icons                                                         |
+| `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted |
+| `--strict`                    |          |         | Turn on strict unpack mode                                                              |
+| `--parallel`                  |          |         | Turn on parallel unpack mode                                                            |
+| `-s, --silent`                |          |         | Turn off logging                                                                        |
+| `-v, --verbose`               |          |         | Turn on verbose logging                                                                 |
+| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                    |
+| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                                   |
 
 ## `xrf-cli texture verify-equipment-icons`
 
@@ -131,12 +131,12 @@ Command to check inventory icon grid rects for overlaps
 xrf-cli texture verify-equipment-icons [OPTIONS] --system-ltx <system-ltx>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `--system-ltx <system-ltx>` | yes |  | Path to system ltx file or root folder with ltx files |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                      | Required | Default | Description                                                          |
+| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                |
+| `-s, --silent`              |          |         | Turn off logging                                                     |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
 
 <!-- ANCHOR_END: commands -->

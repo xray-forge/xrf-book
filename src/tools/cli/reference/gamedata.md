@@ -12,18 +12,18 @@ List assets resolved by an installation or gamedata tree
 xrf-cli gamedata list [OPTIONS] --path <path>...
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>...` | yes |  | Path to a game installation or a gamedata tree |
-| `--source <source>` |  | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `installation`, `containing-installation`. |
-| `--prefix <prefix>` |  |  | Limit to one logical subtree, such as configs or textures\wpn |
-| `-i, --ignore <ignore>...` |  |  | Logical prefixes the directory mounts omit, such as textures\wip |
-| `--loose` |  |  | List only loose files, ignoring archived entries |
-| `--shadowed` |  |  | Also report entries hidden by a higher-priority mount |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                     | Required | Default                   | Description                                                                                                                                                                                                                                                                                    |
+| -------------------------- | -------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>...`     | yes      |                           | Path to a game installation or a gamedata tree                                                                                                                                                                                                                                                 |
+| `--source <source>`        |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `installation`, `containing-installation`. |
+| `--prefix <prefix>`        |          |                           | Limit to one logical subtree, such as configs or textures\wpn                                                                                                                                                                                                                                  |
+| `-i, --ignore <ignore>...` |          |                           | Logical prefixes the directory mounts omit, such as textures\wip                                                                                                                                                                                                                               |
+| `--loose`                  |          |                           | List only loose files, ignoring archived entries                                                                                                                                                                                                                                               |
+| `--shadowed`               |          |                           | Also report entries hidden by a higher-priority mount                                                                                                                                                                                                                                          |
+| `-s, --silent`             |          |                           | Turn off logging                                                                                                                                                                                                                                                                               |
+| `-v, --verbose`            |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                        |
+| `--json`                   |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                           |
+| `--report <PATH>`          |          |                           | Write the run's JSON report to a file                                                                                                                                                                                                                                                          |
 
 ## `xrf-cli gamedata verify`
 
@@ -33,15 +33,15 @@ Command to verify gamedata
 xrf-cli gamedata verify [OPTIONS] <ROOT>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `<ROOT>` | yes |  | Path to assembled gamedata root |
-| `-i, --ignore <ignore>...` |  |  | Ignored assets in the gamedata root. Accepts multiple values separated by `,`. |
-| `--checks <checks>...` |  |  | List of checks to perform. Accepts multiple values separated by `,`. |
-| `--strict` |  |  | Fully validate expensive asset payloads |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                     | Required | Default | Description                                                                    |
+| -------------------------- | -------- | ------- | ------------------------------------------------------------------------------ |
+| `<ROOT>`                   | yes      |         | Path to assembled gamedata root                                                |
+| `-i, --ignore <ignore>...` |          |         | Ignored assets in the gamedata root. Accepts multiple values separated by `,`. |
+| `--checks <checks>...`     |          |         | List of checks to perform. Accepts multiple values separated by `,`.           |
+| `--strict`                 |          |         | Fully validate expensive asset payloads                                        |
+| `-s, --silent`             |          |         | Turn off logging                                                               |
+| `-v, --verbose`            |          |         | Turn on verbose logging                                                        |
+| `--json`                   |          |         | Write the run's JSON report to stdout, moving human output to stderr           |
+| `--report <PATH>`          |          |         | Write the run's JSON report to a file                                          |
 
 <!-- ANCHOR_END: commands -->

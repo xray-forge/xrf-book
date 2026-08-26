@@ -12,13 +12,13 @@ Command to generate markdown reference for all CLI commands
 xrf-cli docs generate [OPTIONS] --output <output>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-o, --output <output>` | yes |  | Path to fully generated documentation directory |
-| `-c, --check` |  |  | Verify existing documentation is up to date instead of writing it |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                  | Required | Default | Description                                                          |
+| ----------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-o, --output <output>` | yes      |         | Path to fully generated documentation directory                      |
+| `-c, --check`           |          |         | Verify existing documentation is up to date instead of writing it    |
+| `-s, --silent`          |          |         | Turn off logging                                                     |
+| `-v, --verbose`         |          |         | Turn on verbose logging                                              |
+| `--json`                |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`       |          |         | Write the run's JSON report to a file                                |
 
 <!-- ANCHOR_END: commands -->

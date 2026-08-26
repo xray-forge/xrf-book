@@ -12,16 +12,16 @@ Command to build translation files into gamedata
 xrf-cli translation build [OPTIONS] --path <path> --output <output>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to translation folder |
-| `-o, --output <output>` | yes |  | Path to output translation |
-| `-l, --language <language>` |  | `all` | Target language to translate |
-| `--no-sort` |  |  | Preserve source order instead of sorting dynamic translation files |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                      | Required | Default | Description                                                          |
+| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>`         | yes      |         | Path to translation folder                                           |
+| `-o, --output <output>`     | yes      |         | Path to output translation                                           |
+| `-l, --language <language>` |          | `all`   | Target language to translate                                         |
+| `--no-sort`                 |          |         | Preserve source order instead of sorting dynamic translation files   |
+| `-s, --silent`              |          |         | Turn off logging                                                     |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli translation initialize`
 
@@ -31,13 +31,13 @@ Command to initialize translation files
 xrf-cli translation initialize [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to translation folder |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to translation folder                                           |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli translation parse`
 
@@ -47,13 +47,13 @@ Command to parse xml translation into json variants
 xrf-cli translation parse [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to translation folder |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to translation folder                                           |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli translation verify`
 
@@ -63,14 +63,14 @@ Command to verify translation files integrity
 xrf-cli translation verify [OPTIONS] --path <path>
 ```
 
-| Option | Required | Default | Description |
-| ------ | -------- | ------- | ----------- |
-| `-p, --path <path>` | yes |  | Path to translation folder |
-| `-l, --language <language>` |  | `all` | Target language to translate |
-| `--strict` |  |  | Fail with non 0 error code if translation are missing |
-| `-s, --silent` |  |  | Turn off logging |
-| `-v, --verbose` |  |  | Turn on verbose logging |
-| `--json` |  |  | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>` |  |  | Write the run's JSON report to a file |
+| Option                      | Required | Default | Description                                                          |
+| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>`         | yes      |         | Path to translation folder                                           |
+| `-l, --language <language>` |          | `all`   | Target language to translate                                         |
+| `--strict`                  |          |         | Fail with non 0 error code if translation are missing                |
+| `-s, --silent`              |          |         | Turn off logging                                                     |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
 
 <!-- ANCHOR_END: commands -->

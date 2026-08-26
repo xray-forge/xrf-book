@@ -10,7 +10,7 @@ npm run cli -- open_project_folder
 ## Commands
 
 | Command               | Opens                                                |
-| --------------------- |------------------------------------------------------|
+| --------------------- | ---------------------------------------------------- |
 | `open_game_folder`    | The configured or detected S.T.A.L.K.E.R. game root. |
 | `open_project_folder` | The `xrf-engine` repository root.                    |
 
