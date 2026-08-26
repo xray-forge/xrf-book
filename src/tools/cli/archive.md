@@ -2,12 +2,12 @@
 
 Archive commands work with X-Ray `.db` database archives.
 
-## `pack-archive`
+## Packing
 
-`pack-archive` builds database archives from a folder, replacing the `xrCompress` tool of the original SDK.
+`archive pack` builds database archives from a folder, replacing the `xrCompress` tool of the original SDK.
 
 ```powershell
-xrf-cli pack-archive --path target\gamedata --dest target\db --name gamedata
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata
 ```
 
 A set that fits in one volume is written as `<name>.db`; a larger one splits into `<name>.db0`, `<name>.db1` and so on.
@@ -17,18 +17,6 @@ Identical files are stored once and referenced twice.
 
 Give the archive a `[header]`. Without one the engine assumes a `.db` is an encrypted Shadow of Chernobyl archive and
 decrypts it into nonsense; `--xdb` is the other way to say an archive is not that.
-
-### Options
-
-- `-p, --path <path>`: folder to pack, normally a `gamedata` root. Required.
-- `-d, --dest <dest>`: destination folder for the volumes. Defaults to `packed`.
-- `-n, --name <name>`: base name of the volumes. Defaults to `gamedata`.
-- `--ltx <path>`: configuration file selecting what to include. Options given on the command line win over it.
-- `--store`: store every file instead of compressing.
-- `--max-size <megabytes>`: maximum volume size. Defaults to and is capped at 1900.
-- `--xdb`: write volumes with the `xdb` extension.
-- `--no-skip-list`: keep editor and source leftovers the game build normally drops.
-- `-s, --silent`: disable command logging.
 
 ### Configuration file
 
@@ -54,46 +42,48 @@ entry_point = $fs_root$\gamedata\
 `[include_files]` lists names one per line. `[header]` is written into the archive verbatim, and its `entry_point` is
 where the engine mounts the contents, so an archive of a `gamedata` tree needs it.
 
-## `unpack-archive`
+Anything named on the command line wins over the configuration file.
 
-`unpack-archive` opens an archive project and exports the contained files to a folder.
+## Unpacking
 
-```powershell
-xrf-cli unpack-archive --path gamedata.db0 --dest unpacked
-```
-
-### Options
-
-- `-p, --path <path>`: path to a `.db` archive file. Required.
-- `-d, --dest <dest>`: destination folder. Defaults to `unpacked`.
-- `--parallel <count>`: number of parallel unpack workers. Defaults to `32`.
-- `--dry`: read and summarize the archive without writing files.
-- `-s, --silent`: disable command logging.
-
-Relative destination paths are resolved from the current working directory.
-
-### Output
-
-Without `--silent`, the command prints:
-
-- archive count;
-- file count;
-- compressed size;
-- real unpacked size;
-- unpack duration when files are written.
-
-With `--dry`, the command still reads the archive metadata but does not write the extracted files. Use it to confirm
-that a database can be opened before spending time on a full unpack.
-
-### Examples
+`archive unpack` opens an archive project and exports the contained files to a folder. Relative destination paths are
+resolved from the current working directory.
 
 ```powershell
-xrf-cli unpack-archive --path .\db\configs.db0 --dest .\unpacked\configs
-xrf-cli unpack-archive --path .\db\textures.db0 --dest .\unpacked\textures --parallel 8
-xrf-cli unpack-archive --path .\db\sounds.db0 --dry
+xrf-cli archive unpack --path .\db\configs.db0 --dest .\unpacked\configs
+xrf-cli archive unpack --path .\db\textures.db0 --dest .\unpacked\textures --parallel 8
+xrf-cli archive unpack --path .\db\sounds.db0 --dry
 ```
 
-### Failure notes
+`--dry` still reads the archive metadata but writes no files. Use it to confirm that a database can be opened before
+spending time on a full unpack.
 
 The source path must point to a readable X-Ray database archive. If the destination already contains files, choose a new
 folder or clean it before running the command.
+
+## Reading without unpacking
+
+`archive info`, `archive list`, and `archive find` describe a volume or a whole set without writing anything, and
+`archive extract` pulls out one file or one directory.
+
+```powershell
+xrf-cli archive info --path .\db
+xrf-cli archive list --path .\db\configs.db0 --files
+xrf-cli archive find --path .\db --query wpn_ak74
+xrf-cli archive extract --path .\db --file textures\wpn\wpn_ak74.dds --dest .\ak74.dds
+```
+
+A path naming one volume reads that volume alone; a path naming a directory reads every volume it holds as one set.
+
+## Verifying
+
+`archive verify` reads every payload back and checks its decompression and CRC, so a set that opens but cannot be read
+is reported rather than discovered later by the engine.
+
+```powershell
+xrf-cli archive verify --path .\db --json
+```
+
+## Command reference
+
+{{#include reference/archive.md:commands}}

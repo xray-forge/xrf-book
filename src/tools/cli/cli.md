@@ -4,45 +4,79 @@ The Rust `xrf-cli` binary provides repeatable asset inspection, conversion, pack
 verification outside the engine repository wrapper.
 
 ```powershell
-xrf-cli <command> --help
+xrf-cli <group> <command> --help
 ```
 
-The engine CLI wraps selected operations through `npm run cli -- ...`. Use `xrf-cli` directly for scripts and
-format-specific workflows.
+Every command belongs to a group, so operations read as `xrf-cli archive pack` or `xrf-cli gamedata verify`. The engine
+CLI wraps selected operations through `npm run cli -- ...`; use `xrf-cli` directly for scripts and format-specific
+workflows.
 
 ## Command groups
 
-| Group       | Commands                                                                                                                                                                       |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Archive     | `unpack-archive`                                                                                                                                                               |
-| Externs     | `export-externs`                                                                                                                                                               |
-| Gamedata    | `verify-gamedata`                                                                                                                                                              |
-| LTX         | `format-ltx`, `verify-ltx`                                                                                                                                                     |
-| Models      | `info-ogf`, `patch-ogf-motion-refs`, `patch-ogf-texture-refs`, `info-omf`, `repack-omf`, `filter-omf-motions`, `rename-omf-motions`, `duplicate-omf-motion`                    |
-| Particle    | `info-particles`, `unpack-particles`, `pack-particles`, `repack-particles`, `re-unpack-particles`, `verify-particles`                                                          |
-| Spawn       | `info-spawn`, `unpack-spawn`, `pack-spawn`, `repack-spawn`, `verify-spawn`                                                                                                     |
-| Texture     | `info-dds`, `crop-dds`, `unpack-equipment-icons`, `pack-equipment-icons`, `verify-equipment-icons`, `unpack-texture-description`, `pack-texture-description`, `patch-thm-bump` |
-| Translation | `initialize-translation`, `build-translation`, `verify-translation`, `parse-translation`                                                                                       |
+{{#include reference/README.md:groups}}
 
-## Logging
+## Reporting
 
-Some commands offer `--silent` or `--verbose`. Rust logging honors `RUST_LOG` when it is set.
+Four options are available on every command.
 
-## Read and write commands
+| Option            | Effect                                                                            |
+| ----------------- | --------------------------------------------------------------------------------- |
+| `-s, --silent`    | Say nothing but the fact that a run failed.                                       |
+| `-v, --verbose`   | Say more than a normal run does.                                                  |
+| `--json`          | Write one JSON report to standard output and move human output to standard error. |
+| `--report <PATH>` | Write the same JSON report to a file, leaving human output alone.                 |
 
-Inspection commands such as `info-ogf`, `info-omf`, `info-dds`, `info-spawn`, and `info-particles` read input files and
-print parsed metadata. Conversion commands such as archive unpacking, spawn packing, particle packing, texture packing,
-and translation building write output paths.
+`--silent` and `--verbose` cannot be combined, and neither can `--json` and `--report`; either pair is a usage error.
+Rust logging honours `RUST_LOG` when it is set.
 
-Use explicit input and output paths when documenting or scripting a command. Some commands use named options such as
-`--path` and `--dest`; `verify-gamedata` uses its assembled gamedata root as a positional operand. Explicit paths make
-generated assets easier to reproduce.
+`--json` is what a script or an agent should use: standard output carries exactly one JSON document and nothing else, so
+it can be piped straight into a parser.
 
-## Usage pattern
+```powershell
+xrf-cli gamedata verify .\target\gamedata --json | ConvertFrom-Json
+```
 
-Use the command-specific page when working with a file format. Each page lists the required input, output behavior, and
-the commands that are safe to run as read-only inspection versus commands that write files.
+The document is the same in either mode:
 
-When running from the engine repository, prefer the engine CLI wrapper if it already exposes the workflow. Use `xrf-cli`
-directly when you need a lower-level command that the engine wrapper does not register. On Windows, use `xrf-cli.exe` or
-the bundled path under `cli/bin/tools`.
+```json
+{
+  "command": ["gamedata", "verify"],
+  "duration": 1204,
+  "error": null,
+  "exitCode": 0,
+  "outcome": "success",
+  "result": {}
+}
+```
+
+`outcome` is `success`, `checkFailed`, or `executionFailed`, and `exitCode` is the code the process then exits with.
+`result` carries whatever the command found, in that command's own shape, and is `null` for a command that reports no
+structured result yet. A failing run still produces the document, so a check that judged its input invalid reports the
+findings explaining the verdict rather than only a non-zero exit.
+
+## Exit codes
+
+| Code | Meaning                                             |
+| ---- | --------------------------------------------------- |
+| 0    | Success.                                            |
+| 1    | The command could not do its job.                   |
+| 2    | The invocation was rejected before the command ran. |
+| 3    | A check ran and judged its input invalid.           |
+
+Only `verify` commands and `--check` or `--strict` modes answer 3, and only for content they judged. An unreadable file,
+a refused write, or a check that reached no verdict answers 1. A requested report that cannot be written also answers 1,
+whatever the command itself decided, so a script never reads a previous run's report as this run's answer.
+
+## Command reference
+
+Each group page carries its own guidance first and a generated command reference after it. The reference comes from the
+command definitions themselves, so an option added to the tool reaches this book without anyone rewriting a table:
+
+```powershell
+npm run cli:reference
+npm run cli:reference:check
+```
+
+The first regenerates `src/tools/cli/reference/`, the second reports whether those pages still match the tool and
+answers non-zero when they do not. Both need the `xrf-tools` repository checked out beside this one. The generated pages
+are never edited by hand and are excluded from formatting, so the generator alone decides how they look.

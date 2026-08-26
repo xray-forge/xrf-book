@@ -2,57 +2,41 @@
 
 Translation commands work with XRF JSON translation projects and generated gamedata string tables.
 
-## Commands
-
-| Command                  | Purpose                                                                                      |
-| ------------------------ | -------------------------------------------------------------------------------------------- |
-| `initialize-translation` | Ensure translation files have the expected language keys.                                    |
-| `build-translation`      | Build translation JSON into gamedata output files.                                           |
-| `verify-translation`     | Check translation completeness.                                                              |
-| `parse-translation`      | Placeholder command. It accepts `--path` but does not currently parse or write translations. |
-
 ## Initialize
 
+`translation initialize` ensures translation files carry the expected language keys, adding the missing ones as nulls.
+Running it twice changes nothing the second time.
+
 ```powershell
-xrf-cli initialize-translation --path ./translations
+xrf-cli translation initialize --path ./translations
 ```
-
-Options:
-
-- `-p, --path <path>`: translation file or folder. Required.
-- `-s, --silent`: disable logging.
-- `-v, --verbose`: enable verbose logging.
 
 ## Build
 
+`translation build` compiles translation JSON into gamedata string tables, one file per language.
+
 ```powershell
-xrf-cli build-translation --path ./translations --output ./gamedata/configs/text --language ukr
+xrf-cli translation build --path ./translations --output ./gamedata/configs/text --language ukr
 ```
-
-Options:
-
-- `-p, --path <path>`: translation file or folder. Required.
-- `-o, --output <path>`: output folder. Required.
-- `-l, --language <language>`: target language. Defaults to `all`.
-- `-s, --silent`: disable logging.
-- `-v, --verbose`: enable verbose logging.
-- `--sort`: toggles sorting for dynamic translation files.
 
 ## Verify
 
+`translation verify` checks completeness. Gaps are reported as findings; `--strict` is what turns them into a non-zero
+exit, which is what a build pipeline gates on.
+
 ```powershell
-xrf-cli verify-translation --path ./translations --language ukr --strict
+xrf-cli translation verify --path ./translations --language ukr --strict
 ```
 
-Options:
+## Parse
 
-- `-p, --path <path>`: translation file or folder. Required.
-- `-l, --language <language>`: target language. Defaults to `all`.
-- `--strict`: exit with a non-zero status when translations are missing.
-- `-s, --silent`: disable logging.
-- `-v, --verbose`: enable verbose logging.
+`translation parse` is a placeholder. It accepts `--path` but does not currently parse or write translations.
 
 ## Notes
 
 Use the engine repository's `npm run cli -- translations ...` workflow to convert original X-Ray XML string tables to
 XRF JSON sources.
+
+## Command reference
+
+{{#include reference/translation.md:commands}}

@@ -3,23 +3,17 @@
 Gamedata commands validate one assembled gamedata directory. Run them after building gamedata and before launching or
 packaging it.
 
-## `verify-gamedata`
+## `gamedata verify`
 
 ```powershell
-xrf-cli verify-gamedata ./target/gamedata
+xrf-cli gamedata verify ./target/gamedata
 ```
 
 `ROOT` is the required positional path to the assembled gamedata directory. The command reads configs from
 `ROOT/configs` and requires `ROOT/configs/system.ltx`.
 
-## Options
-
-- `-i, --ignore <names...>`: ignored files or folders. Multiple names are comma-separated.
-- `--checks <checks...>`: selected verification checks. If omitted, all checks run.
-- `--report <path>`: write a JSON verification report.
-- `--silent`: disable logging.
-- `-v, --verbose`: enable verbose logging.
-- `-s, --strict`: fully validate expensive asset payloads.
+If `--checks` is omitted, all checks run. `--strict` fully validates expensive asset payloads; it is long-only, because
+`-s` means `--silent` on every command.
 
 Accepted check names are `animations`, `levels`, `ltx`, `meshes`, `particles`, `particles-usage`, `scripts`, `shaders`,
 `sounds`, `spawns`, `textures`, `weapons`, and `weathers`. The script check parses emitted `.script` files with the
@@ -46,7 +40,7 @@ attributed to a rule, and the rule identifier is what appears in findings and in
 | `shaders`         | `shaders.renderer-root`, `shaders.lua-syntax`, `shaders.source-read`, `shaders.source-invalid`, `shaders.include-missing`, `shaders.include-cycle`, `shaders.include-syntax`                                                                                                                                                                                                                                                                                                                               |
 | `sounds`          | `sounds.files`, `sounds.references`                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `spawns`          | `spawns.path`, `spawns.read`                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `textures`        | `textures.path`, `textures.read`, `textures.dds`, `textures.bump`                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `textures`        | `textures.path`, `textures.read`, `textures.dds`, `textures.bump`                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `weapons`         | `weapons.validation`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `weathers`        | `weathers.definitions`, `weathers.files`, `weathers.validation`                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
@@ -58,39 +52,46 @@ to `idle`; duplicate motion names across banks in one HUD namespace are reported
 `textures.bump` resolves the bump each `.thm` declares the way `CTextureDescrMngr::LoadTHM` does, by the name in the
 descriptor rather than by a `_bump` suffix convention. A name that resolves to nothing still takes the `_bump` shader
 path, because `bump_exist()` only checks the name is non-empty: the loader substitutes `ed\ed_dummy_bump` and logs
-`! Fallback to default bump map` on every load, so the surface is flat and the log is noisy. Importing a texture under
-a new path is the usual way to produce one, since the copied descriptor keeps pointing into the source layout. Repoint
-it with `patch-thm-bump --to`, or `patch-thm-bump --off` when the bump does not exist and is not going to.
+`! Fallback to default bump map` on every load, so the surface is flat and the log is noisy. Importing a texture under a
+new path is the usual way to produce one, since the copied descriptor keeps pointing into the source layout. Repoint it
+with `thm patch-bump --to`, or `thm patch-bump --off` when the bump does not exist and is not going to.
 
 ## JSON report
 
-Pass `--report` to write the result for CI or other tooling:
+Pass `--report` to write the result for CI or other tooling, or `--json` to put it on standard output for a pipe:
 
 ```powershell
-xrf-cli verify-gamedata ./target/gamedata --checks sounds,weathers --report ./verification-report.json
+xrf-cli gamedata verify ./target/gamedata --checks sounds,weathers --report ./verification-report.json
 ```
 
-The report is a single object with camelCase keys:
+The file carries the [shared report envelope](cli.md#reporting); what this command found is under `result`:
 
 ```json
 {
-  "checks": [
-    {
-      "durationMs": 114,
-      "findings": [],
-      "status": "passed",
-      "summary": "122/122 weather files valid",
-      "verificationType": "weathers"
-    }
-  ],
-  "durationMs": 311,
-  "status": "passed"
+  "command": ["gamedata", "verify"],
+  "duration": 311,
+  "error": null,
+  "exitCode": 0,
+  "outcome": "success",
+  "result": {
+    "checks": [
+      {
+        "duration": 114,
+        "findings": [],
+        "status": "passed",
+        "summary": "122/122 weather files valid",
+        "verificationType": "weathers"
+      }
+    ],
+    "duration": 311,
+    "status": "passed"
+  }
 }
 ```
 
 `status` is one of `passed`, `failed`, `error`, `incomplete`, or `skipped`. The top-level status is the most severe
-individual status. `incomplete` means a check could cover only part of its expected input; `durationMs` is `null` when a
-check did not run.
+individual status. `incomplete` means a check could cover only part of its expected input. Durations are whole
+milliseconds, and a check's is `null` when it did not run.
 
 Each entry of `findings` describes one violation:
 
@@ -105,12 +106,12 @@ Findings are ordered by asset path, rule, then message, so two reports over the 
 ## Examples
 
 ```powershell
-xrf-cli verify-gamedata ./target/gamedata
-xrf-cli verify-gamedata ./target/gamedata --checks scripts,ltx
-xrf-cli verify-gamedata ./target/gamedata --checks weathers
-xrf-cli verify-gamedata ./target/gamedata --checks sounds --strict
-xrf-cli verify-gamedata ./target/gamedata --report ./verification-report.json
-xrf-cli verify-gamedata ./target/gamedata --ignore .git,textures_unpacked --strict
+xrf-cli gamedata verify ./target/gamedata
+xrf-cli gamedata verify ./target/gamedata --checks scripts,ltx
+xrf-cli gamedata verify ./target/gamedata --checks weathers
+xrf-cli gamedata verify ./target/gamedata --checks sounds --strict
+xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json
+xrf-cli gamedata verify ./target/gamedata --ignore .git,textures_unpacked --strict
 ```
 
 ## Result
@@ -120,3 +121,7 @@ or incomplete. In normal logging mode it prints each failure message before exit
 
 The command validates the files present in the assembled tree, including generated scripts and configs. It does not
 validate source repositories or files that were not included in the build.
+
+## Command reference
+
+{{#include reference/gamedata.md:commands}}

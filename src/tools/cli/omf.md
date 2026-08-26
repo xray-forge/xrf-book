@@ -6,11 +6,11 @@ OMF commands inspect, re-serialize, and edit the motion set of X-Ray motion file
 
 | Command                | Purpose                                                         | Writes files       |
 | ---------------------- | --------------------------------------------------------------- | ------------------ |
-| `info-omf`             | Print version, motions, bones, and animation parts.             | No                 |
-| `repack-omf`           | Read a motion file and write it back, or verify it round-trips. | Only with `--dest` |
-| `filter-omf-motions`   | Keep only selected motions, dropping the rest.                  | Yes                |
-| `rename-omf-motions`   | Rename motions using a name map.                                | Yes                |
-| `duplicate-omf-motion` | Copy a motion under a new name, optionally clearing its loop.   | Yes                |
+| `omf info`             | Print version, motions, bones, and animation parts.             | No                 |
+| `omf repack`           | Read a motion file and write it back, or verify it round-trips. | Only with `--dest` |
+| `omf filter-motions`   | Keep only selected motions, dropping the rest.                  | Yes                |
+| `omf rename-motions`   | Rename motions using a name map.                                | Yes                |
+| `omf duplicate-motion` | Copy a motion under a new name, optionally clearing its loop.   | Yes                |
 
 ## How motions are stored
 
@@ -21,10 +21,10 @@ A motion file holds two parallel lists: motion **definitions**, which carry the 
 name and then reads the payload stored at the same position, so the two lists must always be filtered and renamed
 together. Both commands maintain that pairing; the names an LTX `anm_*` key refers to are the definition names.
 
-## `info-omf`
+## `omf info`
 
 ```powershell
-xrf-cli info-omf --path ./meshes/example.omf
+xrf-cli omf info --path ./meshes/example.omf
 ```
 
 Options:
@@ -48,19 +48,19 @@ motions read `0b10`.
 
 ### When to use it
 
-Use `info-omf` when checking whether a motion file is readable, whether expected motions are present, or how motion
+Use `omf info` when checking whether a motion file is readable, whether expected motions are present, or how motion
 parts map to skeleton bones.
 
 The command is read-only and prints the parsed structure; it does not merge, split, or repair motion files. If an
 expected animation is absent, check the source OMF first and then inspect the model or config that references the motion
 name.
 
-## `repack-omf`
+## `omf repack`
 
 ```powershell
-xrf-cli repack-omf --path ./meshes/example.omf --dest ./meshes/example.repacked.omf
-xrf-cli repack-omf --path ./meshes/example.omf --verify
-xrf-cli repack-omf --path ./meshes
+xrf-cli omf repack --path ./meshes/example.omf --dest ./meshes/example.repacked.omf
+xrf-cli omf repack --path ./meshes/example.omf --verify
+xrf-cli omf repack --path ./meshes
 ```
 
 Options:
@@ -88,13 +88,13 @@ generated motion banks. Because it fails on any mismatch, it works as a build or
 
 Use single-file write mode when you need a normalized copy of a motion file.
 
-## `filter-omf-motions`
+## `omf filter-motions`
 
 Shared animation banks often carry motions for many weapons at once. This command extracts the subset you need.
 
 ```powershell
-xrf-cli filter-omf-motions --path ./shared_bank.omf --dest ./wpn_ak74_hud_animation.omf --keep-prefix ak_74_
-xrf-cli filter-omf-motions --path ./bank.omf --dest ./trimmed.omf --keep idle --keep-prefix ak_74_ pist_
+xrf-cli omf filter-motions --path ./shared_bank.omf --dest ./wpn_ak74_hud_animation.omf --keep-prefix ak_74_
+xrf-cli omf filter-motions --path ./bank.omf --dest ./trimmed.omf --keep idle --keep-prefix ak_74_ pist_
 ```
 
 Options:
@@ -113,11 +113,11 @@ Surviving definitions are renumbered so their internal motion index stays consis
 `--dest` is required rather than defaulting to an in-place rewrite. Trimming a shared bank in place would destroy it for
 every other weapon that sources from it, and the input is often a read-only reference dump.
 
-## `rename-omf-motions`
+## `omf rename-motions`
 
 ```powershell
-xrf-cli rename-omf-motions --path ./trimmed.omf --dest ./renamed.omf --map ./ak74.json
-xrf-cli rename-omf-motions --path ./trimmed.omf --dest ./renamed.omf --map ./ak74.json --strict
+xrf-cli omf rename-motions --path ./trimmed.omf --dest ./renamed.omf --map ./ak74.json
+xrf-cli omf rename-motions --path ./trimmed.omf --dest ./renamed.omf --map ./ak74.json --strict
 ```
 
 Options:
@@ -144,12 +144,12 @@ incomplete map.
 
 Renaming updates the definition name and the payload name together, so the new name is what the engine resolves.
 
-## `duplicate-omf-motion`
+## `omf duplicate-motion`
 
 Copies one motion under a second name, so a bank can provide an animation it does not ship.
 
 ```powershell
-xrf-cli duplicate-omf-motion --path ./wpn_hand_pm_hud_animation.omf --from pm_idle --to pm_idle_bore --play-once
+xrf-cli omf duplicate-motion --path ./wpn_hand_pm_hud_animation.omf --from pm_idle --to pm_idle_bore --play-once
 ```
 
 Options:
@@ -174,25 +174,25 @@ state indefinitely, appearing frozen until some other action forces a state chan
 
 That is the situation when an imported animation pack ships no bore at all. Copying the weapon's idle and clearing its
 loop yields a motion that holds the idle pose and then ends, which is enough for the engine to leave the state. Confirm
-the result with `info-omf -v`: the copy should read `0b10`.
+the result with `omf info -v`: the copy should read `0b10`.
 
 ## Shared options
 
 All commands accept `-s, --silent` to disable logging and `-v, --verbose` to enable verbose logging. Under
-`filter-omf-motions` and `rename-omf-motions`, `--verbose` prints the resulting motion list.
+`omf filter-motions` and `omf rename-motions`, `--verbose` prints the resulting motion list.
 
-Under `repack-omf`, `--verbose` additionally reports every file that verified as byte identical. Without it, verifying a
+Under `omf repack`, `--verbose` additionally reports every file that verified as byte identical. Without it, verifying a
 directory prints only mismatches, read failures, and a closing summary, and verifying a single file that passes prints
 nothing at all. Scripts can therefore treat single-file verification as silent on success and rely on the exit status.
 
 ## Failure notes
 
-`repack-omf` exits with a non-zero status when any file mismatches or cannot be processed. In directory mode it also
+`omf repack` exits with a non-zero status when any file mismatches or cannot be processed. In directory mode it also
 reports the count of mismatched and errored files. A successful run exits zero.
 
 A file that cannot be read fails before anything is written. The most common cause is a truncated source: a chunk header
 declares more bytes than the file actually contains. Such files are damaged at the source and need to be re-extracted,
-usually from the original packed archive with `unpack-archive` rather than from an unpacked dump.
+usually from the original packed archive with `archive unpack` rather than from an unpacked dump.
 
 Writing rejects data it cannot represent faithfully rather than emitting a corrupt file. Motion marks exist only in
 version 4, so writing a version 3 file that carries marks fails, as does writing a file whose motion count and motion
@@ -200,7 +200,11 @@ definition count disagree.
 
 The editing commands refuse work that would produce a file the engine cannot use, before writing anything:
 
-- `filter-omf-motions` fails when no motion matches, since an empty motion file is not useful and the usual cause is a
+- `omf filter-motions` fails when no motion matches, since an empty motion file is not useful and the usual cause is a
   mistyped prefix.
-- `rename-omf-motions` fails when the map matches nothing, and when a rename would give two motions the same name,
+- `omf rename-motions` fails when the map matches nothing, and when a rename would give two motions the same name,
   because lookups are by name and a duplicate makes one of them unreachable.
+
+## Command reference
+
+{{#include reference/omf.md:commands}}

@@ -4,6 +4,7 @@
   "scripts": {
     "setup": "cargo install mdbook",
     "serve": "mdbook serve --open",
+    "cli:reference": "cd ../xrf-tools && cargo run --quiet -p xrf-cli -- docs generate --output ../xrf-book/src/tools/cli/reference --silent",
     "format": "prettier --write \"**/*.md\"",
     "format:check": "prettier --check \"**/*.md\""
   },

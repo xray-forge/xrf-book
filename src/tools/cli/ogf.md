@@ -6,14 +6,14 @@ OGF commands inspect X-Ray model files and safely rewrite motion or texture refe
 
 | Command                  | Purpose                                               | Writes files |
 | ------------------------ | ----------------------------------------------------- | ------------ |
-| `info-ogf`               | Print header, textures, bones, lods, and motion refs. | No           |
-| `patch-ogf-motion-refs`  | Replace the motion references stored inside a model.  | Yes          |
-| `patch-ogf-texture-refs` | Rename a texture reference stored inside a model.     | Yes          |
+| `ogf info`               | Print header, textures, bones, lods, and motion refs. | No           |
+| `ogf patch-motion-refs`  | Replace the motion references stored inside a model.  | Yes          |
+| `ogf patch-texture-refs` | Rename a texture reference stored inside a model.     | Yes          |
 
-## `info-ogf`
+## `ogf info`
 
 ```powershell
-xrf-cli info-ogf --path ./meshes/example.ogf
+xrf-cli ogf info --path ./meshes/example.ogf
 ```
 
 Options:
@@ -41,22 +41,22 @@ buffer offset, triangle count, and vertex count.
 
 ### When to use it
 
-Use `info-ogf` to confirm that a mesh file can be parsed, to inspect texture references, or to compare model metadata
+Use `ogf info` to confirm that a mesh file can be parsed, to inspect texture references, or to compare model metadata
 without opening a graphical tool.
 
 The command is read-only: it does not rewrite chunks, normalize paths, or repair model data. If a model fails to parse,
 first confirm the file is an OGF from the expected game version, then compare the reported failure with neighboring
 meshes from the same source archive.
 
-## `patch-ogf-motion-refs`
+## `ogf patch-motion-refs`
 
 An animated model stores the paths of the OMF files it loads animations from. This command rewrites those paths, which
 is what lets a model be moved to a different directory layout without re-exporting it from the SDK.
 
 ```powershell
-xrf-cli patch-ogf-motion-refs --path ./meshes/wpn_ak74_hud.ogf --refs "dynamics\weapons\wpn_ak74\wpn_ak74_hud_animation"
-xrf-cli patch-ogf-motion-refs --path ./hands.ogf --dest ./hands.patched.ogf --refs "dynamics\weapons\wpn_hand\hud_animation\*.omf"
-xrf-cli patch-ogf-motion-refs --path ./hands.ogf --refs "first\animation" "second\animation"
+xrf-cli ogf patch-motion-refs --path ./meshes/wpn_ak74_hud.ogf --refs "dynamics\weapons\wpn_ak74\wpn_ak74_hud_animation"
+xrf-cli ogf patch-motion-refs --path ./hands.ogf --dest ./hands.patched.ogf --refs "dynamics\weapons\wpn_hand\hud_animation\*.omf"
+xrf-cli ogf patch-motion-refs --path ./hands.ogf --refs "first\animation" "second\animation"
 ```
 
 Options:
@@ -91,16 +91,16 @@ destination file is removed. A model without a motion references chunk is refuse
 ### When to use it
 
 Use it when relocating animation banks, for example when consolidating per-weapon hand animations into one shared
-directory and pointing every hands model at it with a wildcard. Confirm the result with `info-ogf`.
+directory and pointing every hands model at it with a wildcard. Confirm the result with `ogf info`.
 
-## `patch-ogf-texture-refs`
+## `ogf patch-texture-refs`
 
 A model stores the path of every texture it uses. This command renames one of those paths, which is what lets an
 imported texture follow your project's naming without re-exporting the model.
 
 ```powershell
-xrf-cli patch-ogf-texture-refs --path ./meshes/wpn_ak74u.ogf --from "wpn\wpn_aksu\wpn_aksu" --to "wpn\wpn_ak74u\wpn_ak74u"
-xrf-cli patch-ogf-texture-refs --path ./model.ogf --dest ./model.patched.ogf --from "old\name" --to "new\name" --dry-run
+xrf-cli ogf patch-texture-refs --path ./meshes/wpn_ak74u.ogf --from "wpn\wpn_aksu\wpn_aksu" --to "wpn\wpn_ak74u\wpn_ak74u"
+xrf-cli ogf patch-texture-refs --path ./model.ogf --dest ./model.patched.ogf --from "old\name" --to "new\name" --dry-run
 ```
 
 Options:
@@ -136,5 +136,9 @@ destination file is removed.
 
 ### When to use it
 
-Rename the texture files first, patch every model that referenced them, then confirm with `info-ogf` and
-`verify-gamedata`. A missed model leaves a dangling reference.
+Rename the texture files first, patch every model that referenced them, then confirm with `ogf info` and
+`gamedata verify`. A missed model leaves a dangling reference.
+
+## Command reference
+
+{{#include reference/ogf.md:commands}}
