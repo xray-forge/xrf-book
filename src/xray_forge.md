@@ -16,11 +16,11 @@ provides a TypeScript scripting layer and the tooling around it for building, te
 
 - Setting up or building an XRF project? Read [Installation](./INSTALLATION.md), then
   [Building](./xrf/building/building.md).
-- Writing or changing scripts? Start with the [Script engine](./script_engine/script_engine.md) and
+- Writing or changing scripts? Start with the [Game scripting](./script_engine/script_engine.md) and
   [Schemes](./script_engine/schemes/schemes.md).
 - Looking for a command? See the [XRF CLI](./xrf/cli/cli.md) or [XRF Tools CLI](./tools/cli/cli.md).
 - Working with game-data files? See [XRF Tools](./tools/tools.md).
-- Investigating runtime behavior? Read [Game engine](./game_engine/game_engine.md) and
+- Investigating runtime behavior? Read [X-Ray engine](./game_engine/game_engine.md) and
   [Debugging](./debugging/debugging.md).
 
 ## Repositories

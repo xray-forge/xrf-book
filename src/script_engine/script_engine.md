@@ -1,7 +1,7 @@
-# Script engine
+# Game scripting
 
-The script engine chapter documents the XRF gameplay layer: TypeScript scripts, generated Lua, LTX/XML configs, forms,
-translations, schemes, managers, binders, and gameplay data.
+This chapter documents the XRF gameplay layer: TypeScript scripts, generated Lua, LTX/XML configs, forms, translations,
+schemes, managers, binders, and gameplay data.
 
 The engine starts Lua and calls XRF entry points. XRF then owns most gameplay behavior above the native X-Ray runtime.
 

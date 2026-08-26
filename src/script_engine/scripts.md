@@ -1,6 +1,6 @@
 # Scripts
 
-The script engine is the TypeScript runtime layer that is compiled to Lua and loaded by the X-Ray engine. It owns the
+The XRF scripting layer is the TypeScript runtime that is compiled to Lua and loaded by the X-Ray engine. It owns the
 Lua extern modules, object binders, scheme registry, global managers, server object classes, and shared helpers used by
 configs and gameplay logic.
 

@@ -1,4 +1,4 @@
-# AI and logics
+# Debug AI and logics
 
 Use this page when an NPC is alive in game but its scheme, planner, relation, or animation state does not match what you
 expect.
@@ -75,6 +75,6 @@ because JIT compilation can change the measured call pattern.
 
 ## Useful console commands
 
-Common AI debug toggles are listed in the game engine command reference:
+Common AI debug toggles are listed in the X-Ray engine command reference:
 
 [AI debug console commands](../game_engine/console_commands.md#ai-debug-console-commands)

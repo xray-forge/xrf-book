@@ -1,4 +1,4 @@
-# Managers
+# Script managers
 
 Managers are singleton runtime services stored in `registry.managers`. They own cross-object systems such as events,
 save/load, sound, simulation, trade, tasks, map spots, weather, upgrades, and debug state.

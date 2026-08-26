@@ -1,4 +1,4 @@
-# Translations
+# Translations command
 
 `translations` contains helper commands for JSON translation sources and original X-Ray XML string tables.
 

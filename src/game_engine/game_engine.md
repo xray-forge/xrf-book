@@ -1,4 +1,4 @@
-# Game engine
+# X-Ray engine
 
 XRF runs on top of the X-Ray engine used by S.T.A.L.K.E.R. Call of Pripyat style games. The engine owns the executable,
 renderer, file system, console, configuration loading, Lua VM, luabind exports, server objects, client objects, ALife

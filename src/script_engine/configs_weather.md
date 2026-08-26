@@ -1,4 +1,4 @@
-# Weather
+# Weather configs
 
 Weather configs define environment cycles, ambient sounds, fog, suns, thunderbolts, weather effects, and manager-level
 weather selection. Runtime weather behavior is handled by `WeatherManager`.

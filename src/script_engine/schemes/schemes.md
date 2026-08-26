@@ -122,15 +122,104 @@ An empty target, `nil`, or the current section does not switch. Timer baselines 
 
 ## Scheme families
 
-- **Stalker:** NPC movement, animations, combat, and interaction (`walker`, `remark`, `animpoint`, `smartcover`).
-- **Monster:** monster movement, territory, animations, and combat (`mob_walker`, `mob_home`, `mob_remark`,
-  `mob_combat`).
-- **Restrictor:** zone triggers, timers, visual effects, and actor events (`sr_idle`, `sr_timer`, `sr_teleport`,
-  `sr_particle`).
-- **Physical:** usable and reactive world objects (`ph_idle`, `ph_button`, `ph_door`, `ph_code`, `ph_on_hit`).
-- **Helicopter:** scripted flight and weapons (`heli_move`).
-- **Generic:** behavior attached alongside an active scheme (`combat`, `danger`, `death`, `hit`, `meet`,
-  `post_combat_idle`, `wounded`).
+XRF ships 55 schemes. Each one has its own page; the sidebar lists them alphabetically.
+
+### Stalker
+
+Primary schemes for stalker NPCs: movement, position, animation, and interaction.
+
+| Scheme                          | Purpose                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------ |
+| [`animpoint`](./animpoint.md)   | Move to a registered smart cover point and play an idle animation there. |
+| [`camper`](./camper.md)         | Hold a combat position, scan look points, and fire from cover.           |
+| [`companion`](./companion.md)   | Follow and assist the actor.                                             |
+| [`cover`](./cover.md)           | Move to a cover point near a smart terrain and look while animating.     |
+| [`patrol`](./patrol.md)         | Coordinate a group of stalkers moving as one unit around a commander.    |
+| [`remark`](./remark.md)         | Play a short scripted animation, optionally aimed, with optional sound.  |
+| [`sleeper`](./sleeper.md)       | Move to a sleeping patrol point and sleep or sit.                        |
+| [`smartcover`](./smartcover.md) | Use a registered smart cover and update the cover target state.          |
+| [`walker`](./walker.md)         | Follow a patrol path while no higher-priority planner state is active.   |
+
+### Monster
+
+Monster movement, territory, animations, and combat.
+
+| Scheme                          | Purpose                                                          |
+| ------------------------------- | ---------------------------------------------------------------- |
+| [`mob_combat`](./mob_combat.md) | Generic monster combat switch scheme.                            |
+| [`mob_death`](./mob_death.md)   | Handle monster death callbacks and record the killer id.         |
+| [`mob_home`](./mob_home.md)     | Keep a monster within a home area and radius range.              |
+| [`mob_jump`](./mob_jump.md)     | Turn a monster toward a point and force a jump.                  |
+| [`mob_remark`](./mob_remark.md) | Play scripted monster animations and optional interaction state. |
+| [`mob_walker`](./mob_walker.md) | Follow a patrol path, optionally stopping at look points.        |
+
+### Restrictor
+
+Zone triggers, timers, visual effects, and actor events driven from a restrictor.
+
+| Scheme                                    | Purpose                                                        |
+| ----------------------------------------- | -------------------------------------------------------------- |
+| [`sr_crow_spawner`](./sr_crow_spawner.md) | Spawn crows at configured patrol paths up to a total limit.    |
+| [`sr_cutscene`](./sr_cutscene.md)         | Teleport the actor, disable game UI, and play camera effects.  |
+| [`sr_deimos`](./sr_deimos.md)             | Drive a disorientation effect based on actor movement speed.   |
+| [`sr_idle`](./sr_idle.md)                 | Wait and evaluate switch conditions without running an effect. |
+| [`sr_light`](./sr_light.md)               | Register the restrictor as a light-control zone for stalkers.  |
+| [`sr_monster`](./sr_monster.md)           | Stage a monster ambush while the actor is inside the zone.     |
+| [`sr_no_weapon`](./sr_no_weapon.md)       | Track whether the actor is inside a weapons-disabled zone.     |
+| [`sr_particle`](./sr_particle.md)         | Play particle effects, optionally following a path.            |
+| [`sr_postprocess`](./sr_postprocess.md)   | Apply a gray/noise postprocess while the actor is inside.      |
+| [`sr_psy_antenna`](./sr_psy_antenna.md)   | Apply psy-zone effects while the actor is inside.              |
+| [`sr_silence`](./sr_silence.md)           | Mark the restrictor as a silence zone.                         |
+| [`sr_teleport`](./sr_teleport.md)         | Teleport the actor after entry once a timeout elapses.         |
+| [`sr_timer`](./sr_timer.md)               | Show a HUD timer and switch sections when it reaches a value.  |
+
+### Physical
+
+Usable and reactive world objects.
+
+| Scheme                              | Purpose                                                                 |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| [`ph_button`](./ph_button.md)       | Play a button animation and switch sections when used.                  |
+| [`ph_code`](./ph_code.md)           | Open a numeric input window and evaluate condlists for entered codes.   |
+| [`ph_door`](./ph_door.md)           | Control door open/closed and lock state, NPC locking, tips, and sounds. |
+| [`ph_force`](./ph_force.md)         | Apply a constant force toward a patrol point.                           |
+| [`ph_hit`](./ph_hit.md)             | Apply a scripted hit when the section activates.                        |
+| [`ph_idle`](./ph_idle.md)           | Neutral physical-object scheme controlling usability and tips.          |
+| [`ph_minigun`](./ph_minigun.md)     | Aim and fire a minigun at a patrol point, the actor, or a story object. |
+| [`ph_on_death`](./ph_on_death.md)   | Switch sections when the object receives a death callback.              |
+| [`ph_on_hit`](./ph_on_hit.md)       | Switch sections when the object receives a hit callback.                |
+| [`ph_oscillate`](./ph_oscillate.md) | Apply alternating constant force to a physical object joint.            |
+
+### Helicopter
+
+Scripted flight and weapons.
+
+| Scheme                        | Purpose                                                                    |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| [`heli_move`](./heli_move.md) | Move a helicopter along a patrol path and configure targeting and weapons. |
+
+### Generic
+
+Behavior attached alongside an active scheme rather than replacing it.
+
+| Scheme                                      | Purpose                                                                 |
+| ------------------------------------------- | ----------------------------------------------------------------------- |
+| [`abuse`](./abuse.md)                       | React when the actor abuses an NPC repeatedly.                          |
+| [`combat`](./combat.md)                     | Select a scripted combat style for stalkers through a condlist.         |
+| [`combat_camper`](./combat_camper.md)       | Internal `combat` helper: hide and watch the last known enemy position. |
+| [`combat_ignore`](./combat_ignore.md)       | Control whether a stalker accepts an enemy while scripted logic runs.   |
+| [`combat_zombied`](./combat_zombied.md)     | Internal `combat` helper: simplified zombied combat actions.            |
+| [`corpse_detection`](./corpse_detection.md) | Find and loot nearby corpses.                                           |
+| [`danger`](./danger.md)                     | Replace the default danger evaluator and track heard hostile sounds.    |
+| [`death`](./death.md)                       | Run configured condlists on death and store the killer id.              |
+| [`gather_items`](./gather_items.md)         | Control whether a stalker may use the base item-pickup evaluator.       |
+| [`hear`](./hear.md)                         | Switch sections from `on_sound` rules when a matching sound is heard.   |
+| [`help_wounded`](./help_wounded.md)         | Help nearby wounded friendly stalkers.                                  |
+| [`hit`](./hit.md)                           | Switch sections on a hit callback and record hit metadata.              |
+| [`meet`](./meet.md)                         | Control greetings, idle animation, and dialog at interaction distance.  |
+| [`post_combat_idle`](./post_combat_idle.md) | Wait briefly after combat before returning to alife behavior.           |
+| [`reach_task`](./reach_task.md)             | Drive squad members toward their assigned simulation target.            |
+| [`wounded`](./wounded.md)                   | Capture a stalker into a wounded state at health or psy breakpoints.    |
 
 ## Patrol names
 

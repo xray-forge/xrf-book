@@ -1,6 +1,6 @@
 # Registry
 
-The registry is the shared runtime state table for the script engine. It is defined in
+The registry is the shared runtime state table for the XRF scripting layer. It is defined in
 `src/engine/core/database/registry.ts` and re-exported through `src/engine/core/database`.
 
 Use it for state that must be visible across binders, schemes, managers, and utility modules.

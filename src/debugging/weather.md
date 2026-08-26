@@ -1,4 +1,4 @@
-# Weather
+# Debug weather
 
 XRF weather is managed by `WeatherManager`. It reads level weather settings, dynamic weather graphs, AtmosFear-style
 configuration, and weather FX state, then updates weather on actor spawn and on hourly game-time changes.

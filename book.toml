@@ -7,3 +7,7 @@ title = "Xray forge book"
 [output.html]
 git-repository-url = "https://github.com/xray-forge/xrf-book"
 site-url = "/xrf-book/"
+
+[output.html.fold]
+enable = true
+level = 1
