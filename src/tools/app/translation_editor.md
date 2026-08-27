@@ -39,5 +39,4 @@ game XML, or validate translation structure.
 ## CLI equivalent
 
 Use `xrf-cli initialize-translation`, `xrf-cli build-translation`, and `xrf-cli verify-translation` for write, build,
-and verification workflows. In the engine repository, use `npm run cli -- translations ...` for XML-to-JSON conversion
-and project translation checks.
+and verification workflows.

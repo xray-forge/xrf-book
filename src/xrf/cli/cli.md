@@ -37,28 +37,27 @@ Run package scripts from the repository root with `npm run <script>`:
 ## Commands
 
 The CLI builds and packages the project, manages resources and engine binaries, links a local game, and handles common
-format, spawn, particle, translation, and verification tasks. Each command has its own page:
+format, spawn, particle, and verification tasks. Each command has its own page:
 
-| Command                                      | Purpose                                                   |
-| -------------------------------------------- | --------------------------------------------------------- |
-| [`build`](./commands/build.md)               | Build `target/gamedata`.                                  |
-| [`clone`](./commands/clone.md)               | Clone configured additional resource repositories.        |
-| [`compress`](./commands/compress.md)         | Compress built gamedata into archives.                    |
-| [`engine`](./commands/engine.md)             | Inspect, switch, list, or roll back bundled engines.      |
-| [`format`](./commands/format.md)             | Format LTX files.                                         |
-| [`icons`](./commands/icons.md)               | Pack and unpack equipment icons and texture descriptions. |
-| [`link`](./commands/link.md)                 | Manage project links to the local game installation.      |
-| [`lint`](./commands/lint.md)                 | Run repository lint checks.                               |
-| [`logs`](./commands/logs.md)                 | Print the last lines from the linked game log.            |
-| [`open`](./commands/open.md)                 | Open configured game and project folders.                 |
-| [`pack`](./commands/pack.md)                 | Create mod or game packages.                              |
-| [`particles`](./commands/particles.md)       | Pack or unpack `particles.xr`.                            |
-| [`parse`](./commands/parse.md)               | Parse directory trees or game externals.                  |
-| [`spawn`](./commands/spawn.md)               | Unpack ALife spawn files.                                 |
-| [`start`](./commands/start.md)               | Start the configured game executable.                     |
-| [`test`](./commands/test.md)                 | Run the project test suites.                              |
-| [`translations`](./commands/translations.md) | Initialize, convert, and check translation files.         |
-| [`verify`](./commands/verify.md)             | Run project, gamedata, LTX, and particles verification.   |
+| Command                                | Purpose                                                             |
+| -------------------------------------- | ------------------------------------------------------------------- |
+| [`build`](./commands/build.md)         | Build `target/gamedata`.                                            |
+| [`clone`](./commands/clone.md)         | Clone configured additional resource repositories.                  |
+| [`compress`](./commands/compress.md)   | Compress built gamedata into archives.                              |
+| [`engine`](./commands/engine.md)       | Inspect, switch, list, or roll back bundled engines.                |
+| [`format`](./commands/format.md)       | Format LTX files.                                                   |
+| [`icons`](./commands/icons.md)         | Pack and unpack equipment icons and texture descriptions.           |
+| [`link`](./commands/link.md)           | Manage project links to the local game installation.                |
+| [`lint`](./commands/lint.md)           | Run repository lint checks.                                         |
+| [`logs`](./commands/logs.md)           | Print the last lines from the linked game log.                      |
+| [`open`](./commands/open.md)           | Open configured game and project folders.                           |
+| [`pack`](./commands/pack.md)           | Create mod or game packages.                                        |
+| [`particles`](./commands/particles.md) | Pack or unpack `particles.xr`.                                      |
+| [`parse`](./commands/parse.md)         | Parse directory trees or game externals.                            |
+| [`spawn`](./commands/spawn.md)         | Unpack ALife spawn files.                                           |
+| [`start`](./commands/start.md)         | Start the configured game executable.                               |
+| [`test`](./commands/test.md)           | Run the project test suites.                                        |
+| [`verify`](./commands/verify.md)       | Run project, gamedata, LTX, particle, and translation verification. |
 
 Use `npm run cli -- <command> --help` for current command-specific options.
 

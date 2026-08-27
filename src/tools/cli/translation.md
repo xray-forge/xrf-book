@@ -34,8 +34,8 @@ xrf-cli translation verify --path ./translations --language ukr --strict
 
 ## Notes
 
-Use the engine repository's `npm run cli -- translations ...` workflow to convert original X-Ray XML string tables to
-XRF JSON sources.
+The engine repository wraps `translation verify` as `npm run cli -- verify translations` and `translation build` as the
+`translations` build target. It has no wrapper for `initialize` or `parse`; call `xrf-cli` directly for those.
 
 ## Command reference
 

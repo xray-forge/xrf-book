@@ -3,8 +3,8 @@
 Translations provide string-table source for UI labels, dialogs, tasks, item names, achievements, subtitles, and other
 text shown by the game.
 
-XRF keeps the main editable translation source in JSON files under `src/engine/translations`. The build converts those
-sources into X-Ray string-table XML under `target/gamedata/configs/text`.
+XRF keeps the translation source in JSON files under `src/engine/translations`. The build converts those sources into
+X-Ray string-table XML under `target/gamedata/configs/text`.
 
 ## Supported languages
 
@@ -44,8 +44,7 @@ Values can be strings or string arrays:
 }
 ```
 
-String arrays are used when XML text contains explicit line breaks. The XML import helper splits `\n` into arrays when
-converting existing string-table XML into JSON.
+String arrays are used when the generated XML text needs explicit line breaks.
 
 ## Build behavior
 
@@ -61,24 +60,25 @@ The source path is `src/engine/translations`. The target path is:
 target/gamedata/configs/text
 ```
 
-Do not edit generated XML under `target/`. Fix the JSON source or the imported static XML source instead.
+Do not edit generated XML under `target/`. Fix the JSON source instead.
 
-## Translation utilities
+## Checking translations
 
-The local CLI exposes helper commands under `translations`:
+The local CLI lists missing or invalid entries through `verify translations`:
 
 ```powershell
-npm run cli translations init <path>
-npm run cli translations check
-npm run cli translations check -- --language eng
-npm run cli translations to_json <path> -- --language eng --output src/engine/translations
+npm run cli -- verify translations
+npm run cli -- verify translations --language eng
+npm run cli -- verify translations --strict
 ```
 
-Use `init` to add missing locale keys to JSON translation files. Use `check` to list missing or invalid entries. Use
-`to_json` when importing existing X-Ray XML string tables.
+Without `--strict` the command only reports gaps; `--strict` turns them into a non-zero exit.
 
-The XML importer accepts an optional `--encoding` value. If encoding is not passed, it tries the XML header first and
-then falls back to `windows-1251` for `ukr` and `rus`, or `windows-1250` for the other supported locales.
+Filling a new file with the full set of locale keys is an [`xrf-cli`](../tools/cli/translation.md) task:
+
+```powershell
+xrf-cli translation initialize --path src/engine/translations
+```
 
 ## References from game data
 
@@ -98,6 +98,6 @@ script callbacks rather than plain string ids.
 - Keep ids stable when only the wording changes.
 - Fill every supported locale key used by the file.
 - Use arrays only for intentional multiline text.
-- Run `npm run cli translations check` after translation edits.
+- Run `npm run cli -- verify translations` after translation edits.
 - Run `npm run cli build -- --include translations` before packaging.
 - Do not patch generated files under `target/gamedata/configs/text`.

@@ -32,7 +32,6 @@
     - [Spawn](xrf/cli/commands/spawn.md)
     - [Start](xrf/cli/commands/start.md)
     - [Test](xrf/cli/commands/test.md)
-    - [Translations](xrf/cli/commands/translations.md)
     - [Verify](xrf/cli/commands/verify.md)
   - [Extensions](xrf/extensions.md)
     - [Achievement rewards](xrf/extensions/achievement_rewards.md)

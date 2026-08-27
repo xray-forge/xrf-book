@@ -30,5 +30,5 @@ language.
 
 ## Sources
 
-XRF uses JSON translation sources for generated multilingual output and can also copy static XML translation files where
-they are part of the source tree. Use the translation CLI commands when converting existing game XML into JSON sources.
+XRF uses JSON translation sources for generated multilingual output. Check them with
+`npm run cli -- verify translations`; see [Translations](../../script_engine/translations.md).

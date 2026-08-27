@@ -18,6 +18,7 @@ npm run cli -- verify <command>
 | `verify ltx`                | LTX structure and `$scheme` values. |
 | `verify particles-packed`   | Packed `particles.xr`.              |
 | `verify particles-unpacked` | Unpacked particle files.            |
+| `verify translations`       | Project translation dictionaries.   |
 
 ## Options
 
@@ -27,6 +28,9 @@ npm run cli -- verify <command>
 - `verify gamedata -s, --strict`: fully validate expensive asset payloads, including complete sound decoding.
 - `verify ltx -v, --verbose`: print verbose external-tool logs.
 - Particle verification commands support `-v, --verbose`.
+- `verify translations -l, --language <locale>`: check one locale instead of all of them.
+- `verify translations -s, --strict`: fail on missing entries instead of only listing them.
+- `verify translations -v, --verbose`: print verbose external-tool logs.
 
 ### Selecting checks
 
@@ -54,6 +58,7 @@ npm run cli -- verify gamedata --checks weapons --report target/verify-weapons.j
 ```powershell
 npm run cli -- verify externs
 npm run cli -- verify gamedata --verbose
+npm run cli -- verify translations --language ukr --strict
 ```
 
 Build gamedata before `verify gamedata`. `verify externs` does not write files. Regenerate a stale manifest with
@@ -62,3 +67,4 @@ Build gamedata before `verify gamedata`. `verify externs` does not write files. 
 ## Failure notes
 
 `verify project` reports setup problems without failing. Other checks fail on invalid data or tool errors.
+`verify translations` reads `src/engine/translations`, not built gamedata, and only fails with `--strict`.

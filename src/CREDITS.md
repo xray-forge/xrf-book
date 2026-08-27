@@ -8,6 +8,5 @@ XRF builds on work from the S.T.A.L.K.E.R. and OpenXRay modding ecosystem.
 - [AtmosFear](https://www.moddb.com/mods/atmosfear-for-call-of-pripyat)
 - [Call of Chernobyl](https://www.moddb.com/mods/call-of-chernobyl)
 - [Anomaly](https://anomalymod.com/stalker-community-creators/)
-- Universal ACDC
 
 This community project is not affiliated with GSC Game World.
