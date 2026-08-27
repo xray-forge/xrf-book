@@ -44,7 +44,21 @@ Values can be strings or string arrays:
 }
 ```
 
-String arrays are used when the generated XML text needs explicit line breaks.
+String arrays are used when the generated XML text needs explicit line breaks. The build joins them on the `\n` the
+engine reads as a line break, so an array and the single line it joins to produce the same string table.
+
+## Importing existing string tables
+
+JSON is the only source format. Raw X-Ray XML — a downloaded mod, a gamedata tree, or an installed game — becomes a
+source through [`xrf-cli translation parse`](../tools/cli/translation.md#parse), one language per run:
+
+```powershell
+xrf-cli translation parse --path <mod or installation> --language eng --output src/engine/translations
+xrf-cli translation parse --path <mod or installation> --language ukr --output src/engine/translations
+```
+
+Running it once per language merges them into one file per table, gives every record an explicit `null` for the
+languages it lacks, and leaves text already in the source alone. Multi-line text is split into the array form above.
 
 ## Build behavior
 

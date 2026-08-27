@@ -41,19 +41,27 @@ xrf-cli translation initialize [OPTIONS] --path <path>
 
 ## `xrf-cli translation parse`
 
-Command to parse xml translation into json variants
+Command to parse xml translations into json sources
 
 ```txt
-xrf-cli translation parse [OPTIONS] --path <path>
+xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --output <output>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to translation folder                                           |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                    |
+| --------------------------- | -------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>...`      | yes      |                           | Root holding raw xml translations. Repeat to layer roots, highest priority first                                                                                                                                                                                                               |
+| `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `installation`, `containing-installation`. |
+| `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as configs\text\eng                                                                                                                                                                                                                                         |
+| `-l, --language <language>` | yes      |                           | Language every entry read by this run is filed under. Raw xml carries no language, so it is declared rather than guessed                                                                                                                                                                       |
+| `-o, --output <output>`     | yes      |                           | Directory the json sources are written to, merging with any already there                                                                                                                                                                                                                      |
+| `--file <file>`             |          |                           | Restrict the run to one string table, by file name                                                                                                                                                                                                                                             |
+| `--overwrite`               |          |                           | Replace existing text that differs, instead of keeping what is already there                                                                                                                                                                                                                   |
+| `--dry-run`                 |          |                           | Report what would be written without writing it                                                                                                                                                                                                                                                |
+| `--strict`                  |          |                           | Answer with a check failure when anything was unreadable or off schema                                                                                                                                                                                                                         |
+| `-s, --silent`              |          |                           | Turn off logging                                                                                                                                                                                                                                                                               |
+| `-v, --verbose`             |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                        |
+| `--json`                    |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                           |
+| `--report <PATH>`           |          |                           | Write the run's JSON report to a file                                                                                                                                                                                                                                                          |
 
 ## `xrf-cli translation verify`
 

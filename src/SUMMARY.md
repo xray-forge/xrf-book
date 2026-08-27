@@ -50,6 +50,7 @@
     - [Icon editor](tools/app/icon_editor.md)
     - [Spawn editor](tools/app/spawn_editor.md)
     - [Translation editor](tools/app/translation_editor.md)
+    - [Translation parser](tools/app/translation_parser.md)
   - [Tools CLI](tools/cli/cli.md)
     - [Archive](tools/cli/archive.md)
     - [Gamedata](tools/cli/gamedata.md)
