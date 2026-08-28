@@ -40,6 +40,19 @@ The document is the same in either mode:
 
 ```json
 {
+  "build": {
+    "version": "0.1.0",
+    "kind": "optimized",
+    "commit": "791cd5014b9fa842e3e47419e22dcce023474784",
+    "reference": "main",
+    "isDirty": false,
+    "builtAt": "2026-08-28T09:14:02Z",
+    "target": "x86_64-pc-windows-msvc",
+    "rustc": "rustc 1.97.1",
+    "profile": "release",
+    "optimization": "opt-level=s, lto=true, codegen-units=1",
+    "runId": null
+  },
   "command": ["gamedata", "verify"],
   "duration": 1204,
   "error": null,
@@ -53,6 +66,11 @@ The document is the same in either mode:
 `result` carries whatever the command found, in that command's own shape, and is `null` for a command that reports no
 structured result yet. A failing run still produces the document, so a check that judged its input invalid reports the
 findings explaining the verdict rather than only a non-zero exit.
+
+`build` says which binary produced the document. A report outlives the run that wrote it, so comparing two of them —
+across releases, or against a result someone else reported — means knowing what each was measured with. `isDirty`
+separates a report from a released commit from one produced by a working tree that merely started at that commit, and
+`runId` names the workflow run for a binary that came from CI rather than a developer's machine.
 
 ## Exit codes
 

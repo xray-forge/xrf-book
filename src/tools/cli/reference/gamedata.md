@@ -39,6 +39,7 @@ xrf-cli gamedata verify [OPTIONS] <ROOT>
 | `-i, --ignore <ignore>...` |          |         | Ignored assets in the gamedata root. Accepts multiple values separated by `,`. |
 | `--checks <checks>...`     |          |         | List of checks to perform. Accepts multiple values separated by `,`.           |
 | `--strict`                 |          |         | Fully validate expensive asset payloads                                        |
+| `--trace-reads`            |          |         | Account for every asset read, reporting redundancy against unique paths        |
 | `-s, --silent`             |          |         | Turn off logging                                                               |
 | `-v, --verbose`            |          |         | Turn on verbose logging                                                        |
 | `--json`                   |          |         | Write the run's JSON report to stdout, moving human output to stderr           |

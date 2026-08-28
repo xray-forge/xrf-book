@@ -51,6 +51,8 @@
     - [Spawn editor](tools/app/spawn_editor.md)
     - [Translation editor](tools/app/translation_editor.md)
     - [Translation parser](tools/app/translation_parser.md)
+    - [Translation builder](tools/app/translation_builder.md)
+    - [Translation verifier](tools/app/translation_verifier.md)
   - [Tools CLI](tools/cli/cli.md)
     - [Archive](tools/cli/archive.md)
     - [Gamedata](tools/cli/gamedata.md)

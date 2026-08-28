@@ -13,20 +13,36 @@ xrf-cli translation initialize --path ./translations
 
 ## Build
 
-`translation build` compiles translation JSON into gamedata string tables, one file per language.
+`translation build` compiles translation JSON into gamedata string tables, one file per source per language, each
+written in that language's code page.
 
 ```powershell
 xrf-cli translation build --path ./translations --output ./gamedata/configs/text --language ukr
 ```
 
+`--path` names roots and reads through the virtual file system, so a source tree layered over an installation compiles
+what the engine would load. One source file is still accepted directly. The output is always a plain directory — a
+string table is a file, and an archive has nowhere to put one — and it may not sit inside any of the source roots.
+
+A missing translation compiles to the id itself, which is the engine's own fallback, so every language gets a complete
+table rather than a short one. The report carries a row per language with the tables written and ids compiled.
+
 ## Verify
 
-`translation verify` checks completeness. Gaps are reported as findings; `--strict` is what turns them into a non-zero
-exit, which is what a build pipeline gates on.
+`translation verify` checks completeness: every id a language has no text for, counting an explicit `null` placeholder
+as missing. Gaps are reported as findings; `--strict` is what turns them into a non-zero exit, which is what a build
+pipeline gates on.
 
 ```powershell
 xrf-cli translation verify --path ./translations --language ukr --strict
 ```
+
+`--path` names roots and reads through the virtual file system, so a source tree layered over an installation is checked
+the way the engine would load it. One source file is still accepted directly, since a single file needs no roots.
+
+The report carries two things: a finding per missing id, and a `languages` array with one row per file and language. The
+rows are what make the report readable at scale — checking a two-language import against all eight languages produces
+149,979 findings, and the same answer is 1,072 rows.
 
 ## Parse
 

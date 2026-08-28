@@ -9,19 +9,21 @@
 Command to build translation files into gamedata
 
 ```txt
-xrf-cli translation build [OPTIONS] --path <path> --output <output>
+xrf-cli translation build [OPTIONS] --path <path>... --output <output>
 ```
 
-| Option                      | Required | Default | Description                                                          |
-| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>`         | yes      |         | Path to translation folder                                           |
-| `-o, --output <output>`     | yes      |         | Path to output translation                                           |
-| `-l, --language <language>` |          | `all`   | Target language to translate                                         |
-| `--no-sort`                 |          |         | Preserve source order instead of sorting dynamic translation files   |
-| `-s, --silent`              |          |         | Turn off logging                                                     |
-| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
-| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
+| Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                    |
+| --------------------------- | -------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>...`      | yes      |                           | Root holding translation sources, or one source file. Repeat to layer roots, highest priority first                                                                                                                                                                                            |
+| `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `installation`, `containing-installation`. |
+| `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as translations                                                                                                                                                                                                                                             |
+| `-o, --output <output>`     | yes      |                           | Path to output translation                                                                                                                                                                                                                                                                     |
+| `-l, --language <language>` |          | `all`                     | Target language to translate                                                                                                                                                                                                                                                                   |
+| `--no-sort`                 |          |                           | Preserve source order instead of sorting dynamic translation files                                                                                                                                                                                                                             |
+| `-s, --silent`              |          |                           | Turn off logging                                                                                                                                                                                                                                                                               |
+| `-v, --verbose`             |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                        |
+| `--json`                    |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                           |
+| `--report <PATH>`           |          |                           | Write the run's JSON report to a file                                                                                                                                                                                                                                                          |
 
 ## `xrf-cli translation initialize`
 
@@ -68,17 +70,19 @@ xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --out
 Command to verify translation files integrity
 
 ```txt
-xrf-cli translation verify [OPTIONS] --path <path>
+xrf-cli translation verify [OPTIONS] --path <path>...
 ```
 
-| Option                      | Required | Default | Description                                                          |
-| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>`         | yes      |         | Path to translation folder                                           |
-| `-l, --language <language>` |          | `all`   | Target language to translate                                         |
-| `--strict`                  |          |         | Fail with non 0 error code if translation are missing                |
-| `-s, --silent`              |          |         | Turn off logging                                                     |
-| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
-| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
+| Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                    |
+| --------------------------- | -------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>...`      | yes      |                           | Root holding translation sources, or one source file. Repeat to layer roots, highest priority first                                                                                                                                                                                            |
+| `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `installation`, `containing-installation`. |
+| `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as translations                                                                                                                                                                                                                                             |
+| `-l, --language <language>` |          | `all`                     | Target language to translate                                                                                                                                                                                                                                                                   |
+| `--strict`                  |          |                           | Fail with non 0 error code if translation are missing                                                                                                                                                                                                                                          |
+| `-s, --silent`              |          |                           | Turn off logging                                                                                                                                                                                                                                                                               |
+| `-v, --verbose`             |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                        |
+| `--json`                    |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                           |
+| `--report <PATH>`           |          |                           | Write the run's JSON report to a file                                                                                                                                                                                                                                                          |
 
 <!-- ANCHOR_END: commands -->

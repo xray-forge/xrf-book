@@ -15,6 +15,10 @@ xrf-cli gamedata verify ./target/gamedata
 If `--checks` is omitted, all checks run. `--strict` fully validates expensive asset payloads; it is long-only, because
 `-s` means `--silent` on every command.
 
+`--trace-reads` accounts for every asset the run physically reads and adds a `reads` block to the report. It answers
+whether a sweep reads the same bytes more than once, which no duration can show. It costs a lock on the read path, so it
+is asked for when measuring rather than left on.
+
 Accepted check names are `animations`, `levels`, `ltx`, `meshes`, `particles`, `particles-usage`, `scripts`, `shaders`,
 `sounds`, `spawns`, `textures`, `weapons`, and `weathers`. The script check parses emitted `.script` files with the
 LuaJIT syntax dialect.
@@ -33,7 +37,7 @@ attributed to a rule, and the rule identifier is what appears in findings and in
 | `animations`      | `animations.player-hud`, `animations.hud-item`, `animations.motion-collision`                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `levels`          | `levels.ai-guid`, `levels.ai-node-count`, `levels.ai-version`, `levels.cform-version`, `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.graph-duplicate`, `levels.graph-guid`, `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`, `levels.missing-bundle`, `levels.missing-file`, `levels.orphan-bundle`, `levels.roster-conflict`, `levels.shader-reference`, `levels.shaders-chunk`, `levels.texture-reference`, `levels.undeclared-map` |
 | `ltx`             | `ltx.formatting`, `ltx.schema`, `ltx.verification`                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `meshes`          | `meshes.path`, `meshes.read`, `meshes.validation`, `meshes.motion-read`, `meshes.motion-validation`, `meshes.shader-library`                                                                                                                                                                                                                                                                                                                                                                               |
+| `meshes`          | `meshes.path`, `meshes.read`, `meshes.validation`, `meshes.motion-label`, `meshes.motion-read`, `meshes.motion-validation`, `meshes.shader-library`                                                                                                                                                                                                                                                                                                                                                        |
 | `particles`       | `particles.library`, `particles.texture`                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `particles-usage` | `particles-usage.reference`, `particles-usage.spawn`, `particles-usage.spawn-custom-data`                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `scripts`         | `scripts.path`, `scripts.read`, `scripts.syntax`                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -64,34 +68,38 @@ Pass `--report` to write the result for CI or other tooling, or `--json` to put 
 xrf-cli gamedata verify ./target/gamedata --checks sounds,weathers --report ./verification-report.json
 ```
 
-The file carries the [shared report envelope](cli.md#reporting); what this command found is under `result`:
+The file carries the [shared report envelope](cli.md#reporting), whose own fields are described there. What this command
+found is the `result` object inside it:
 
 ```json
 {
-  "command": ["gamedata", "verify"],
+  "cache": { "entries": 41, "bytes": 22593488, "hits": 25572, "misses": 42481, "refused": 0 },
+  "checks": [
+    {
+      "duration": 114,
+      "findings": [],
+      "status": "passed",
+      "summary": "122/122 weather files valid",
+      "verificationType": "weathers"
+    }
+  ],
   "duration": 311,
-  "error": null,
-  "exitCode": 0,
-  "outcome": "success",
-  "result": {
-    "checks": [
-      {
-        "duration": 114,
-        "findings": [],
-        "status": "passed",
-        "summary": "122/122 weather files valid",
-        "verificationType": "weathers"
-      }
-    ],
-    "duration": 311,
-    "status": "passed"
-  }
+  "status": "passed"
 }
 ```
 
 `status` is one of `passed`, `failed`, `error`, `incomplete`, or `skipped`. The top-level status is the most severe
 individual status. `incomplete` means a check could cover only part of its expected input. Durations are whole
 milliseconds, and a check's is `null` when it did not run.
+
+`cache` reports what the run retained and how well it served reads. `hits + misses` counts every parsed asset the run
+asked for, and `hits` is the work retention saved; a kind the run does not retain still counts a miss, because the store
+is consulted before the retention policy is. A non-zero `refused` means a byte ceiling stopped retention partway, which
+would otherwise look like an unexplained slowdown.
+
+`reads` appears only with `--trace-reads`, and reports `paths`, `reads`, `bytes`, `unique_bytes` as `uniqueBytes`, and a
+capped `hottest` list of the most-read paths. The gap between `bytes` and `uniqueBytes` is the redundant work; `paths`
+is the untruncated count, so the capped list never reads as a complete one.
 
 Each entry of `findings` describes one violation:
 
