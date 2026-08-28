@@ -60,6 +60,7 @@
     - [OGF](tools/cli/ogf.md)
     - [OMF](tools/cli/omf.md)
     - [Particle](tools/cli/particle.md)
+    - [Profile](tools/cli/profile.md)
     - [Spawn](tools/cli/spawn.md)
     - [Texture](tools/cli/texture.md)
     - [Translation](tools/cli/translation.md)
