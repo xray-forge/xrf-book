@@ -26,6 +26,15 @@ exists to remove the ways that goes wrong:
 - **Every round is reported.** `runs` carries each measurement in execution order, so the spread is visible rather than
   hidden behind the median.
 
+## Memory
+
+`peakBytes` is the largest resident set seen while the command ran, and `meanBytes` is the average across the samples.
+Both are reported as the median of the per-round values, the same way the duration is.
+
+Read them together. A low mean under a high peak is a transient allocation — something built, used and dropped. Two
+similar figures are a process that held on to what it touched. The peak alone cannot tell those apart, and that is the
+difference between an allocation worth chasing and one that is already free.
+
 ## Comparing builds
 
 Repeat `--binary`. The first one named is the baseline, and every other reports `deltaPercent` against it — negative is

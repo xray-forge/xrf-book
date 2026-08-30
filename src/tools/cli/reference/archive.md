@@ -107,16 +107,16 @@ Command to unpack provided *.db into separate files
 xrf-cli archive unpack [OPTIONS] --path <path>
 ```
 
-| Option                  | Required | Default    | Description                                                          |
-| ----------------------- | -------- | ---------- | -------------------------------------------------------------------- |
-| `-p, --path <path>`     | yes      |            | Path to *.db file                                                    |
-| `-d, --dest <dest>`     |          | `unpacked` | Path to folder for exporting                                         |
-| `--parallel <parallel>` |          | `32`       | Count of parallel threads for unpack                                 |
-| `--dry`                 |          |            | Run in dry mode without actually unpacking to disk                   |
-| `-s, --silent`          |          |            | Turn off logging                                                     |
-| `-v, --verbose`         |          |            | Turn on verbose logging                                              |
-| `--json`                |          |            | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`       |          |            | Write the run's JSON report to a file                                |
+| Option                  | Required | Default    | Description                                                                          |
+| ----------------------- | -------- | ---------- | ------------------------------------------------------------------------------------ |
+| `-p, --path <path>`     | yes      |            | Path to *.db file                                                                    |
+| `-d, --dest <dest>`     |          | `unpacked` | Path to folder for exporting                                                         |
+| `--parallel <parallel>` |          |            | Count of parallel threads for unpack, defaulting to the host's available parallelism |
+| `--dry`                 |          |            | Run in dry mode without actually unpacking to disk                                   |
+| `-s, --silent`          |          |            | Turn off logging                                                                     |
+| `-v, --verbose`         |          |            | Turn on verbose logging                                                              |
+| `--json`                |          |            | Write the run's JSON report to stdout, moving human output to stderr                 |
+| `--report <PATH>`       |          |            | Write the run's JSON report to a file                                                |
 
 ## `xrf-cli archive verify`
 

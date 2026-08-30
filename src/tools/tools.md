@@ -27,8 +27,8 @@ Use the CLI when the command must be repeatable, run in CI, or become part of an
 verification, translation builds, archive unpacking, spawn conversion, and texture packing.
 
 Use the desktop app when you need to inspect structured project data with navigation: archives, configs, dialogs,
-exports, icons, spawns, and translations. Some app routes are read-only or prototype workflows; the page for each app
-tool calls out what is currently wired.
+exports, icons, spawns, and translations. Some app routes are read-only or prototype workflows; the application itself
+is the authority on what each tool currently supports.
 
 ## Implementation source
 

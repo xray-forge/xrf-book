@@ -2,33 +2,19 @@
 
 <img src="images/main_window.png" alt="main window" />
 
-The XRF tools application is a Tauri desktop app with Rust commands and a React UI. Use it for interactive inspection
-and one-off data operations; use the CLI for scripted work.
+The XRF tools application is a Tauri desktop app with a Rust backend and a React UI. Use it for interactive inspection
+and one-off data operations; use the [Tools CLI](../cli/cli.md) when the task must be repeatable, scripted, or run in
+CI.
 
-The application source is split across:
+It groups its work into editors for archives, configs, dialogs, script exports, equipment icons, spawns, and
+translations. Which screens and actions each one currently offers changes with the application, so the application is
+the authority on that, not this book. Some routes are read-only or prototype workflows, and several write files —
+packing, unpacking, formatting, and saving spawn data all overwrite their targets.
+
+Keep a backup before writing over game data.
+
+## Source
 
 - `xrf-tools/bin/xrf-app`: Tauri backend plugins and commands;
 - `xrf-tools/bin/xrf-ui`: React routes, pages, stores, and components;
 - `xrf-tools/crates/*`: reusable parsers, verifiers, packers, and project readers.
-
-## Tools
-
-| Tool                                        | Use it for                                                      | Writes files                                    |
-| ------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------- |
-| [Archive editor](archive_editor.md)         | Browse `.db` archive projects, read files, and unpack archives. | Unpack workflow writes files.                   |
-| [Config editor](config_editor.md)           | Verify and format LTX config projects.                          | Formatter can write files.                      |
-| [Dialog editor](dialog_editor.md)           | Inspect the current dialog graph prototype.                     | No production data workflow is wired.           |
-| [Exports viewer](exports_viewer.md)         | Browse parsed condition, dialog, and effect declarations.       | No                                              |
-| [Icon editor](icon_editor.md)               | Open equipment sprites and pack equipment icons.                | Pack workflow writes DDS output.                |
-| [Spawn editor](spawn_editor.md)             | Inspect, import/export, save, pack, and unpack spawn data.      | Save/export/pack/unpack workflows write files.  |
-| [Translation editor](translation_editor.md) | Open and inspect translation JSON projects.                     | No write workflow is exposed in the current UI. |
-
-## Project paths
-
-The app stores selected XRF project and configs paths in local storage. Several tools use those paths to prefill common
-locations such as `src/engine/configs`, `target/gamedata/spawns/all.spawn`, `target/game_link`, and
-`src/engine/translations`.
-
-## Choose the CLI when
-
-Use [Tools CLI](../cli/cli.md) when the task must be repeatable, scripted, or run in CI.
