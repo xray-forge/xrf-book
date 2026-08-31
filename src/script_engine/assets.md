@@ -44,7 +44,7 @@ confirm the copied path matches the engine-facing layout.
 
 Use format-specific tools for packed or structured assets:
 
-- icon texture workflows through `icons` commands;
+- sprite sheet workflows through `sprites` commands;
 - `particles.xr` workflows through `particles` commands;
 - spawn workflows through `spawn` commands;
 - archive inspection through the Tools CLI archive commands.

@@ -46,7 +46,7 @@ format, spawn, particle, and verification tasks. Each command has its own page:
 | [`compress`](./commands/compress.md)   | Compress built gamedata into archives.                              |
 | [`engine`](./commands/engine.md)       | Inspect, switch, list, or roll back bundled engines.                |
 | [`format`](./commands/format.md)       | Format LTX files.                                                   |
-| [`icons`](./commands/icons.md)         | Pack and unpack equipment icons and texture descriptions.           |
+| [`sprites`](./commands/sprites.md)     | Pack and unpack the equipment sprite and description sprites.       |
 | [`link`](./commands/link.md)           | Manage project links to the local game installation.                |
 | [`lint`](./commands/lint.md)           | Run repository lint checks.                                         |
 | [`logs`](./commands/logs.md)           | Print the last lines from the linked game log.                      |
