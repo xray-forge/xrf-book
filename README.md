@@ -1,6 +1,6 @@
 ![xrf-book-banner@0.5x.png](src/images/xrf-book-banner%400.5x.png)
 
-# 🎮 [XRF Book](README.md)
+# XRF Book
 
 The [X-Ray Forge book](https://xray-forge.github.io/xrf-book) documents XRF: a collection of development projects for
 [X-Ray 16](https://github.com/OpenXRay/xray-16) engine. It covers the TypeScript scripting layer, build-time tooling,
