@@ -1,6 +1,6 @@
 # Tools Application
 
-<img src="images/main_window.png" alt="main window" />
+<img src="../../images/xrf-app-main-window.png" alt="main window" />
 
 The XRF tools application is a Tauri desktop app with a Rust backend and a React UI. Use it for interactive inspection
 and one-off data operations; use the [Tools CLI](../cli/cli.md) when the task must be repeatable, scripted, or run in
