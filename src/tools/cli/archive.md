@@ -18,6 +18,14 @@ Identical files are stored once and referenced twice.
 Give the archive a `[header]`. Without one the engine assumes a `.db` is an encrypted Shadow of Chernobyl archive and
 decrypts it into nonsense; `--xdb` is the other way to say an archive is not that.
 
+### Replacing an existing set
+
+A destination that already holds volumes of the same name is refused, and `--force` is how you say to replace them.
+Packing writes each volume at its final name, so a forced run that fails or is stopped partway leaves neither the
+previous set nor a complete new one. A run that was not forced takes back the volumes it made, so a failure leaves the
+destination as it found it. Volumes of a different set name in the same directory are never touched: packing `gamedata`
+and `textures` into one folder is ordinary.
+
 ### Configuration file
 
 Without `--ltx` the whole folder is packed. The file uses the same dialect `xrCompress` accepted:

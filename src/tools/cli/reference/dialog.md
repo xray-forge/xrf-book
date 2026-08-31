@@ -4,12 +4,12 @@
 
 <!-- ANCHOR: commands -->
 
-## `xrf-cli dialog parse`
+## `xrf-cli dialog info`
 
 Command to read dialog xml and report what it holds
 
 ```txt
-xrf-cli dialog parse [OPTIONS] --path <path>...
+xrf-cli dialog info [OPTIONS] --path <path>...
 ```
 
 | Option                 | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
