@@ -47,6 +47,29 @@ Values can be strings or string arrays:
 String arrays are used when the generated XML text needs explicit line breaks. The build joins them on the `\n` the
 engine reads as a line break, so an array and the single line it joins to produce the same string table.
 
+## Canonical formatting
+
+Sources have one canonical shape, and every tool that writes one produces it: ids and locale keys sorted, two-space
+indentation, a trailing newline. Keeping to it is what stops a hand-added record and an imported one from producing
+unrelated diff noise in the same file.
+
+Ordering is natural rather than alphabetical by byte, so `st_thanks2` sorts before `st_thanks10` and `ammo-5.45x39-ap`
+before `ammo-11.43x23-fmj`.
+
+A source added or edited by hand is normalized with [`xrf-cli translation format`](../tools/cli/translation.md#format):
+
+```powershell
+xrf-cli translation format --path src/engine/translations
+xrf-cli translation format --path src/engine/translations --check
+```
+
+`--check` writes nothing and exits non-zero when a source is not normalized, which is the form a build step or a
+pre-commit hook uses. Formatting never changes what a source means: values are left exactly as written, and no locale
+key is added or removed.
+
+Line endings are not part of the canonical shape. Each file keeps the convention it already has, which is
+`.gitattributes`' business rather than the formatter's.
+
 ## Importing existing string tables
 
 JSON is the only source format. Raw X-Ray XML — a downloaded mod, a gamedata tree, or an installed game — becomes a
@@ -112,6 +135,7 @@ script callbacks rather than plain string ids.
 - Keep ids stable when only the wording changes.
 - Fill every supported locale key used by the file.
 - Use arrays only for intentional multiline text.
+- Run `xrf-cli translation format --path src/engine/translations` after adding records by hand.
 - Run `npm run cli -- verify translations` after translation edits.
 - Run `npm run cli build -- --include translations` before packaging.
 - Do not patch generated files under `target/gamedata/configs/text`.
