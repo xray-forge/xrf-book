@@ -52,6 +52,27 @@ where the engine mounts the contents, so an archive of a `gamedata` tree needs i
 
 Anything named on the command line wins over the configuration file.
 
+### Compared with xrCompress
+
+Both tools packing the same tree with the same configuration, on one machine, as the median of interleaved runs. The
+`-fast` setting is the one that matches what the packer does; the xrCompress default trades speed for a smaller archive.
+
+| Input                                    | `archive pack` | `xrCompress -fast` |
+| ---------------------------------------- | -------------- | ------------------ |
+| 1,657 config files, 9.89 MB              | 0.22 s         | 0.59 s             |
+| 4,206 Anomaly configs and scripts, 35 MB | 0.89 s         | 1.00 s             |
+| 1,017 mesh files, 275 MB                 | 0.21 s         | 1.06 s             |
+| Vanilla gamedata, 36,925 files, 4.69 GB  | 5.9 s          | 18.2 s             |
+
+Archive size, where the input holds anything compressible:
+
+| Input                              | `archive pack` | `xrCompress -fast` | `xrCompress` |
+| ---------------------------------- | -------------- | ------------------ | ------------ |
+| 1,657 config files, 9.89 MB        | 2.00 MB        | 2.49 MB            | 1.93 MB      |
+| Anomaly configs and scripts, 35 MB | 8.57 MB        | 10.63 MB           | 8.26 MB      |
+
+The archives are interchangeable: packed from one tree by either tool, they unpack to byte-identical files.
+
 ## Unpacking
 
 `archive unpack` opens an archive project and exports the contained files to a folder. Relative destination paths are
