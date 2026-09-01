@@ -90,6 +90,20 @@ spending time on a full unpack.
 The source path must point to a readable X-Ray database archive. If the destination already contains files, choose a new
 folder or clean it before running the command.
 
+### Speed
+
+The original SDK shipped no unpacker, so these are absolute figures rather than a comparison. One machine, median of
+interleaved runs, warm file cache.
+
+| Archive                                  | Files  | Default | `--parallel 1` |
+| ---------------------------------------- | ------ | ------- | -------------- |
+| Vanilla configs, 2.00 MB                 | 1,657  | 0.28 s  | 0.72 s         |
+| Anomaly configs and scripts, 8.57 MB     | 4,206  | 0.71 s  | 1.86 s         |
+| Vanilla meshes, 275 MB                   | 1,017  | 0.28 s  | 0.75 s         |
+| Vanilla gamedata, 4.48 GB over 3 volumes | 36,925 | 8.1 s   | 24.6 s         |
+
+Unpacking spreads across cores and packing does not, so `--parallel` is the flag that moves these figures.
+
 ## Reading without unpacking
 
 `archive info`, `archive list`, and `archive find` describe a volume or a whole set without writing anything, and
