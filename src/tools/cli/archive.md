@@ -59,10 +59,10 @@ Both tools packing the same tree with the same configuration, on one machine, as
 
 | Input                                    | `archive pack` | `xrCompress -fast` |
 | ---------------------------------------- | -------------- | ------------------ |
-| 1,657 config files, 9.89 MB              | 0.22 s         | 0.59 s             |
-| 4,206 Anomaly configs and scripts, 35 MB | 0.89 s         | 1.00 s             |
-| 1,017 mesh files, 275 MB                 | 0.21 s         | 1.06 s             |
-| Vanilla gamedata, 36,925 files, 4.69 GB  | 5.9 s          | 18.2 s             |
+| 1,657 config files, 9.89 MB              | 0.22 s / 11 MB | 0.59 s / 110 MB    |
+| 4,206 Anomaly configs and scripts, 35 MB | 0.89 s / 13 MB | 1.00 s / 117 MB    |
+| 1,017 mesh files, 275 MB                 | 0.21 s / 45 MB | 1.06 s / 126 MB    |
+| Vanilla gamedata, 36,925 files, 4.69 GB  | 5.9 s / 329 MB | 18.2 s / 274 MB    |
 
 Archive size, where the input holds anything compressible:
 
@@ -90,19 +90,12 @@ spending time on a full unpack.
 The source path must point to a readable X-Ray database archive. If the destination already contains files, choose a new
 folder or clean it before running the command.
 
-### Speed
+### Speed and memory
 
-The original SDK shipped no unpacker, so these are absolute figures rather than a comparison. One machine, median of
-interleaved runs, warm file cache.
-
-| Archive                                  | Files  | Default | `--parallel 1` |
-| ---------------------------------------- | ------ | ------- | -------------- |
-| Vanilla configs, 2.00 MB                 | 1,657  | 0.28 s  | 0.72 s         |
-| Anomaly configs and scripts, 8.57 MB     | 4,206  | 0.71 s  | 1.86 s         |
-| Vanilla meshes, 275 MB                   | 1,017  | 0.28 s  | 0.75 s         |
-| Vanilla gamedata, 4.48 GB over 3 volumes | 36,925 | 8.1 s   | 24.6 s         |
-
-Unpacking spreads across cores and packing does not, so `--parallel` is the flag that moves these figures.
+| Archive                                 | `archive unpack` | `--parallel 1` |
+| --------------------------------------- | ---------------- | -------------- |
+| Vanilla configs, 1,657 files, 2.00 MB   | 0.21 s / 12 MB   | 0.46 s / 10 MB |
+| Vanilla gamedata, 36,925 files, 4.48 GB | 6.2 s / 33 MB    | 13.8 s / 29 MB |
 
 ## Reading without unpacking
 
