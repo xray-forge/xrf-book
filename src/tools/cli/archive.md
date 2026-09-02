@@ -56,13 +56,15 @@ Anything named on the command line wins over the configuration file.
 
 Both tools packing the same tree with the same configuration, on one machine, as the median of interleaved runs. The
 `-fast` setting is the one that matches what the packer does; the xrCompress default trades speed for a smaller archive.
+Each result is wall-clock time / peak RAM. Time is in seconds (`s`); peak RAM is the highest sampled resident memory in
+megabytes (`MB`).
 
-| Input                                    | `archive pack` | `xrCompress -fast` |
-| ---------------------------------------- | -------------- | ------------------ |
-| 1,657 config files, 9.89 MB              | 0.22 s / 11 MB | 0.59 s / 110 MB    |
-| 4,206 Anomaly configs and scripts, 35 MB | 0.89 s / 13 MB | 1.00 s / 117 MB    |
-| 1,017 mesh files, 275 MB                 | 0.21 s / 45 MB | 1.06 s / 126 MB    |
-| Vanilla gamedata, 36,925 files, 4.69 GB  | 5.9 s / 329 MB | 18.2 s / 274 MB    |
+| Input                                    | `archive pack` time / peak RAM (s / MB) | `xrCompress -fast` time / peak RAM (s / MB) |
+| ---------------------------------------- | --------------------------------------- | ------------------------------------------- |
+| 1,657 config files, 9.89 MB              | 0.22 s / 11 MB                          | 0.59 s / 110 MB                             |
+| 4,206 Anomaly configs and scripts, 35 MB | 0.89 s / 13 MB                          | 1.00 s / 117 MB                             |
+| 1,017 mesh files, 275 MB                 | 0.21 s / 45 MB                          | 1.06 s / 126 MB                             |
+| Vanilla gamedata, 36,925 files, 4.69 GB  | 5.9 s / 329 MB                          | 18.2 s / 274 MB                             |
 
 Archive size, where the input holds anything compressible:
 
@@ -92,10 +94,13 @@ folder or clean it before running the command.
 
 ### Speed and memory
 
-| Archive                                 | `archive unpack` | `--parallel 1` |
-| --------------------------------------- | ---------------- | -------------- |
-| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB   | 0.39 s / 10 MB |
-| Vanilla gamedata, 36,925 files, 4.48 GB | 6.2 s / 30 MB    | 13.0 s / 25 MB |
+Each result is wall-clock time / peak RAM. Time is in seconds (`s`); peak RAM is the highest sampled resident memory in
+megabytes (`MB`).
+
+| Archive                                 | `archive unpack` time / peak RAM (s / MB) | `--parallel 1` time / peak RAM (s / MB) |
+| --------------------------------------- | ----------------------------------------- | --------------------------------------- |
+| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB                            | 0.39 s / 10 MB                          |
+| Vanilla gamedata, 36,925 files, 4.48 GB | 6.2 s / 30 MB                             | 13.0 s / 25 MB                          |
 
 ## Reading without unpacking
 
