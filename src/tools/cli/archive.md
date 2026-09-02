@@ -61,10 +61,10 @@ megabytes (`MB`).
 
 | Input                                    | `archive pack` time / peak RAM (s / MB) | `xrCompress -fast` time / peak RAM (s / MB) |
 | ---------------------------------------- | --------------------------------------- | ------------------------------------------- |
-| 1,657 config files, 9.89 MB              | 0.22 s / 11 MB                          | 0.59 s / 110 MB                             |
-| 4,206 Anomaly configs and scripts, 35 MB | 0.89 s / 13 MB                          | 1.00 s / 117 MB                             |
-| 1,017 mesh files, 275 MB                 | 0.21 s / 45 MB                          | 1.06 s / 126 MB                             |
-| Vanilla gamedata, 36,925 files, 4.69 GB  | 5.9 s / 329 MB                          | 18.2 s / 274 MB                             |
+| 1,657 config files, 9.89 MB              | 0.22 s / 11 MB                          | 0.57 s / 99 MB                              |
+| 4,206 Anomaly configs and scripts, 35 MB | 0.86 s / 13 MB                          | 0.97 s / 101 MB                             |
+| 1,017 mesh files, 275 MB                 | 0.17 s / 28 MB                          | 1.07 s / 115 MB                             |
+| Vanilla gamedata, 36,925 files, 4.69 GB  | 4.6 s / 180 MB                          | 16.8 s / 275 MB                             |
 
 Archive size, where the input holds anything compressible:
 
@@ -99,8 +99,8 @@ megabytes (`MB`).
 
 | Archive                                 | `archive unpack` time / peak RAM (s / MB) | `--parallel 1` time / peak RAM (s / MB) |
 | --------------------------------------- | ----------------------------------------- | --------------------------------------- |
-| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB                            | 0.39 s / 10 MB                          |
-| Vanilla gamedata, 36,925 files, 4.48 GB | 6.2 s / 30 MB                             | 13.0 s / 25 MB                          |
+| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB                            | 0.40 s / 10 MB                          |
+| Vanilla gamedata, 36,925 files, 4.48 GB | 6.1 s / 28 MB                             | 12.3 s / 21 MB                          |
 
 ## Reading without unpacking
 
