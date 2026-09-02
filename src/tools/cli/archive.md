@@ -94,8 +94,8 @@ folder or clean it before running the command.
 
 | Archive                                 | `archive unpack` | `--parallel 1` |
 | --------------------------------------- | ---------------- | -------------- |
-| Vanilla configs, 1,657 files, 2.00 MB   | 0.21 s / 12 MB   | 0.46 s / 10 MB |
-| Vanilla gamedata, 36,925 files, 4.48 GB | 6.2 s / 33 MB    | 13.8 s / 29 MB |
+| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB   | 0.39 s / 10 MB |
+| Vanilla gamedata, 36,925 files, 4.48 GB | 6.2 s / 30 MB    | 13.0 s / 25 MB |
 
 ## Reading without unpacking
 
