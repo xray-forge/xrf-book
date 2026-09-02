@@ -1,14 +1,16 @@
 # OGF CLI
 
-OGF commands inspect X-Ray model files and safely rewrite motion or texture references.
+OGF commands inspect X-Ray model files, safely rewrite motion or texture references, and normalize files the engine
+tolerates but no longer reads whole.
 
 ## Commands
 
-| Command                  | Purpose                                               | Writes files |
-| ------------------------ | ----------------------------------------------------- | ------------ |
-| `ogf info`               | Print header, textures, bones, lods, and motion refs. | No           |
-| `ogf patch-motion-refs`  | Replace the motion references stored inside a model.  | Yes          |
-| `ogf patch-texture-refs` | Rename a texture reference stored inside a model.     | Yes          |
+| Command                  | Purpose                                                      | Writes files |
+| ------------------------ | ------------------------------------------------------------ | ------------ |
+| `ogf fix`                | Drop bytes the engine never reads from a model or directory. | Yes          |
+| `ogf info`               | Print header, textures, bones, lods, and motion refs.        | No           |
+| `ogf patch-motion-refs`  | Replace the motion references stored inside a model.         | Yes          |
+| `ogf patch-texture-refs` | Rename a texture reference stored inside a model.            | Yes          |
 
 ## `ogf info`
 
@@ -138,6 +140,50 @@ destination file is removed.
 
 Rename the texture files first, patch every model that referenced them, then confirm with `ogf info` and
 `gamedata verify`. A missed model leaves a dangling reference.
+
+## `ogf fix`
+
+Some shipped models carry bytes the engine never reads: Anomaly and Call of Chernobyl include assets whose motion
+references chunk declares not tracked data. The engine loads them, and `gamedata verify` reports each as a
+`meshes.chunk-residue` finding. This command rewrites such a model into well-formed bytes and changes nothing the engine
+reads.
+
+```powershell
+xrf-cli ogf fix --path ./meshes/actors/stalker_zombied/stalker_zombied_bandit2a_face1.ogf
+xrf-cli ogf fix --path ./meshes --dry-run
+xrf-cli ogf fix --path ./meshes/wpn_m1891.ogf --dest ./fixed/wpn_m1891.ogf
+```
+
+Options:
+
+- `-p, --path <path>`: path to an `.ogf` file or a directory. A directory is swept recursively for `.ogf` files, in path
+  order. Required.
+- `-d, --dest <dest>`: path to the resulting file, for a single model only. Defaults to rewriting the source in place.
+- `--dry-run`: report what would change and how many bytes would go without writing anything.
+- `-j, --jobs <JOBS>`: how much of the machine a directory sweep uses: `auto`, a worker count, or a share such as `50%`.
+
+### What changes
+
+Only bytes the engine never reads go: the unread tail of the motion references chunk, its declared size, and whatever
+follows the last well-formed chunk. Every other byte stays where it was, and a model that is already well-formed is left
+untouched. With `--dest`, the destination is written even when nothing changed, so the output exists either way.
+
+### Safety checks
+
+- Normalized bytes are read back before anything is written: they must parse, carry no residue, and yield exactly the
+  motion references the source yielded.
+- A file whose trailing bytes cannot be accounted for is refused, not truncated to its last good chunk. So is a chunk
+  that declares more bytes than the file holds: `fix` normalizes models the engine tolerates, it does not repair broken
+  ones.
+- The result is staged beside the destination and moved into place, so a failed write leaves the previous file whole.
+
+A directory sweep continues past a refused model and fails at the end with exit code 1, naming every model it could not
+fix under `findings` while the ones it did fix stay fixed.
+
+### When to use it
+
+Run it after `gamedata verify` reports `meshes.chunk-residue`, or over an imported model set before committing it.
+Confirm with `ogf info`, which no longer reports residue for a fixed model.
 
 ## Command reference
 
