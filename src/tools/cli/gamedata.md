@@ -15,6 +15,10 @@ xrf-cli gamedata verify ./target/gamedata
 If `--checks` is omitted, all checks run. `--strict` fully validates expensive asset payloads; it is long-only, because
 `-s` means `--silent` on every command.
 
+`-j, --jobs` bounds how much of the machine the sweep uses; see the [execution](./cli.md#execution) conventions. The
+verdict does not depend on it — the same tree produces the same findings and the same report at any width — so `-j 1` is
+how you make a run somebody else can reproduce.
+
 `--trace-reads` accounts for every asset the run physically reads and adds a `reads` block to the report. It answers
 whether a sweep reads the same bytes more than once, which no duration can show. It costs a lock on the read path, so it
 is asked for when measuring rather than left on.

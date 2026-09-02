@@ -58,12 +58,13 @@ Grid coordinates are cells, not pixels; a cell is 50x50, hardcoded in the engine
 ## Description sprites
 
 ```powershell
-xrf-cli sprite unpack-description --description ./configs/ui/textures_descr/ui_actor.xml --base ./textures --output ./textures_unpacked --parallel
+xrf-cli sprite unpack-description --description ./configs/ui/textures_descr/ui_actor.xml --base ./textures --output ./textures_unpacked
 xrf-cli sprite pack-description --description ./configs/ui/textures_descr/ui_actor.xml --base ./textures_unpacked --output ./textures --strict
 ```
 
 Description commands require `--description` and `--base`. If `--output` is omitted, output defaults to the base path.
-Both support `-v, --verbose`, `-s, --strict`, and `--parallel`.
+Both support `-v, --verbose` and `-s, --strict`. Unpacking spreads its sheets across workers and takes `-j, --jobs`;
+packing is sequential and does not.
 
 A description can name several sheets; both commands rewrite all of them by default. Repeat `--file <name>` to select
 one or more. Use the declared path (`ui\ui_actor_weapons`) with either separator, or an unambiguous bare name

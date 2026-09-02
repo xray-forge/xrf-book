@@ -56,6 +56,7 @@ The document is the same in either mode:
   "command": ["gamedata", "verify"],
   "duration": 1204,
   "error": null,
+  "execution": { "workers": 8, "origin": "auto" },
   "exitCode": 0,
   "outcome": "success",
   "result": {}
@@ -71,6 +72,24 @@ findings explaining the verdict rather than only a non-zero exit.
 across releases, or against a result someone else reported — means knowing what each was measured with. `isDirty`
 separates a report from a released commit from one produced by a working tree that merely started at that commit, and
 `runId` names the workflow run for a binary that came from CI rather than a developer's machine.
+
+`execution` says how wide the run was, for the same reason and on every report: comparing two of them means knowing how
+much of each machine was used. See below.
+
+## Execution
+
+Commands with work to spread take `-j, --jobs`. It is not on every command, because a command with no parallel work has
+nothing to bound.
+
+| Value        | Meaning                                                       |
+| ------------ | ------------------------------------------------------------- |
+| `auto`       | Whatever the machine offers. The default when `-j` is absent. |
+| `<count>`    | Exactly that many workers. `1` is a real sequential run.      |
+| `<percent>%` | That share of the machine, rounded down, never below one.     |
+
+```powershell
+xrf-cli gamedata verify .\target\gamedata -j 50%
+```
 
 ## Exit codes
 

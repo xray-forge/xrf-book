@@ -82,7 +82,7 @@ resolved from the current working directory.
 
 ```powershell
 xrf-cli archive unpack --path .\db\configs.db0 --dest .\unpacked\configs
-xrf-cli archive unpack --path .\db\textures.db0 --dest .\unpacked\textures --parallel 8
+xrf-cli archive unpack --path .\db\textures.db0 --dest .\unpacked\textures -j 8
 xrf-cli archive unpack --path .\db\sounds.db0 --dry
 ```
 
@@ -97,10 +97,10 @@ folder or clean it before running the command.
 Each result is wall-clock time / peak RAM. Time is in seconds (`s`); peak RAM is the highest sampled resident memory in
 megabytes (`MB`).
 
-| Archive                                 | `archive unpack` time / peak RAM (s / MB) | `--parallel 1` time / peak RAM (s / MB) |
-| --------------------------------------- | ----------------------------------------- | --------------------------------------- |
-| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB                            | 0.40 s / 10 MB                          |
-| Vanilla gamedata, 36,925 files, 4.48 GB | 6.1 s / 28 MB                             | 12.3 s / 21 MB                          |
+| Archive                                 | `archive unpack` time / peak RAM (s / MB) | `-j 1` time / peak RAM (s / MB) |
+| --------------------------------------- | ----------------------------------------- | ------------------------------- |
+| Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB                            | 0.40 s / 10 MB                  |
+| Vanilla gamedata, 36,925 files, 4.48 GB | 6.1 s / 28 MB                             | 12.3 s / 21 MB                  |
 
 ## Reading without unpacking
 

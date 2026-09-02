@@ -33,16 +33,17 @@ Command to verify gamedata
 xrf-cli gamedata verify [OPTIONS] <ROOT>
 ```
 
-| Option                     | Required | Default | Description                                                                    |
-| -------------------------- | -------- | ------- | ------------------------------------------------------------------------------ |
-| `<ROOT>`                   | yes      |         | Path to assembled gamedata root                                                |
-| `-i, --ignore <ignore>...` |          |         | Ignored assets in the gamedata root. Accepts multiple values separated by `,`. |
-| `--checks <checks>...`     |          |         | List of checks to perform. Accepts multiple values separated by `,`.           |
-| `--strict`                 |          |         | Fully validate expensive asset payloads                                        |
-| `--trace-reads`            |          |         | Account for every asset read, reporting redundancy against unique paths        |
-| `-s, --silent`             |          |         | Turn off logging                                                               |
-| `-v, --verbose`            |          |         | Turn on verbose logging                                                        |
-| `--json`                   |          |         | Write the run's JSON report to stdout, moving human output to stderr           |
-| `--report <PATH>`          |          |         | Write the run's JSON report to a file                                          |
+| Option                     | Required | Default | Description                                                                      |
+| -------------------------- | -------- | ------- | -------------------------------------------------------------------------------- |
+| `<ROOT>`                   | yes      |         | Path to assembled gamedata root                                                  |
+| `-i, --ignore <ignore>...` |          |         | Ignored assets in the gamedata root. Accepts multiple values separated by `,`.   |
+| `--checks <checks>...`     |          |         | List of checks to perform. Accepts multiple values separated by `,`.             |
+| `--strict`                 |          |         | Fully validate expensive asset payloads                                          |
+| `--trace-reads`            |          |         | Account for every asset read, reporting redundancy against unique paths          |
+| `-j, --jobs <JOBS>`        |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%' |
+| `-s, --silent`             |          |         | Turn off logging                                                                 |
+| `-v, --verbose`            |          |         | Turn on verbose logging                                                          |
+| `--json`                   |          |         | Write the run's JSON report to stdout, moving human output to stderr             |
+| `--report <PATH>`          |          |         | Write the run's JSON report to a file                                            |
 
 <!-- ANCHOR_END: commands -->

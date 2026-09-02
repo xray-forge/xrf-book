@@ -19,7 +19,6 @@ xrf-cli sprite pack-description [OPTIONS] --description <description> --base <ba
 | `--output <output>`           |          |         | Path to directory where output dds files                                            |
 | `--file <file>...`            |          |         | Name of a described file to pack, repeatable; packs every described file if omitted |
 | `--strict`                    |          |         | Turn on strict unpack mode                                                          |
-| `--parallel`                  |          |         | Turn on parallel mode for pack operations                                           |
 | `-s, --silent`                |          |         | Turn off logging                                                                    |
 | `-v, --verbose`               |          |         | Turn on verbose logging                                                             |
 | `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                |
@@ -60,7 +59,7 @@ xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <
 | `--output <output>`           |          |         | Path to output folder for icons                                                         |
 | `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted |
 | `--strict`                    |          |         | Turn on strict unpack mode                                                              |
-| `--parallel`                  |          |         | Turn on parallel unpack mode                                                            |
+| `-j, --jobs <JOBS>`           |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'        |
 | `-s, --silent`                |          |         | Turn off logging                                                                        |
 | `-v, --verbose`               |          |         | Turn on verbose logging                                                                 |
 | `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                    |
