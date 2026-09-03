@@ -84,22 +84,29 @@ Command to pack provided directory into *.db archive volumes
 xrf-cli archive pack [OPTIONS] --path <path>
 ```
 
-| Option                  | Required | Default    | Description                                                                                 |
-| ----------------------- | -------- | ---------- | ------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`     | yes      |            | Path to the directory to pack, normally a gamedata root                                     |
-| `-d, --dest <dest>`     |          | `packed`   | Path to folder for writing the volumes                                                      |
-| `-n, --name <name>`     |          | `gamedata` | Base name of the volumes, written as &lt;name&gt;.db0, &lt;name&gt;.db1 and so on           |
-| `--ltx <ltx>`           |          |            | Path to an xrCompress configuration LTX describing what to include                          |
-| `--store`               |          |            | Store every file instead of compressing what the engine expects compressed                  |
-| `--max-size <max-size>` |          |            | Maximum volume size in megabytes, from 1 to 1900                                            |
-| `--oversized-volumes`   |          |            | Let --max-size exceed 1900 MB, which only an engine fork that raised XRP_MAX_SIZE can mount |
-| `--xdb`                 |          |            | Write volumes with the xdb extension                                                        |
-| `--no-skip-list`        |          |            | Keep editor and source leftovers the engine build normally drops                            |
-| `-f, --force`           |          |            | Replace volumes of the same set the destination already holds                               |
-| `-s, --silent`          |          |            | Turn off logging                                                                            |
-| `-v, --verbose`         |          |            | Turn on verbose logging                                                                     |
-| `--json`                |          |            | Write the run's JSON report to stdout, moving human output to stderr                        |
-| `--report <PATH>`       |          |            | Write the run's JSON report to a file                                                       |
+| Option                                                       | Required | Default    | Description                                                                                                  |
+| ------------------------------------------------------------ | -------- | ---------- | ------------------------------------------------------------------------------------------------------------ |
+| `-p, --path <path>`                                          | yes      |            | Path to the directory to pack, normally a gamedata root                                                      |
+| `-d, --dest <dest>`                                          |          | `packed`   | Path to folder for writing the volumes                                                                       |
+| `-n, --name <name>`                                          |          | `gamedata` | Base name of the volumes, written as &lt;name&gt;.db0, &lt;name&gt;.db1 and so on                            |
+| `--config <config>`                                          |          |            | Path to a packing configuration describing what to include, as *.ltx or *.json                               |
+| `--include-file <include-file>...`                           |          |            | File to pack, named relative to --path, repeatable                                                           |
+| `--include-directory <include-directory>...`                 |          |            | Directory to pack with everything below it, relative to --path, repeatable                                   |
+| `--include-directory-shallow <include-directory-shallow>...` |          |            | Directory whose own files are packed while its subdirectories only get listed, repeatable                    |
+| `--exclude-directory <exclude-directory>...`                 |          |            | Directory to leave out along with everything below it, repeatable                                            |
+| `--exclude-directory-shallow <exclude-directory-shallow>...` |          |            | Directory to leave out while its contents still pack, repeatable                                             |
+| `--exclude-extension <exclude-extension>...`                 |          |            | Extension pattern that keeps a file out, such as *.txt, repeatable                                           |
+| `--header <header>...`                                       |          |            | Header entry written into the archive as &lt;key&gt;=&lt;value&gt;, repeatable, replacing the default header |
+| `--store`                                                    |          |            | Store every file instead of compressing what the engine expects compressed                                   |
+| `--max-size <max-size>`                                      |          |            | Maximum volume size in megabytes, from 1 to 1900                                                             |
+| `--oversized-volumes`                                        |          |            | Let --max-size exceed 1900 MB, which only an engine fork that raised XRP_MAX_SIZE can mount                  |
+| `--xdb`                                                      |          |            | Write volumes with the xdb extension                                                                         |
+| `--no-skip-list`                                             |          |            | Keep editor and source leftovers the engine build normally drops                                             |
+| `-f, --force`                                                |          |            | Replace volumes of the same set the destination already holds                                                |
+| `-s, --silent`                                               |          |            | Turn off logging                                                                                             |
+| `-v, --verbose`                                              |          |            | Turn on verbose logging                                                                                      |
+| `--json`                                                     |          |            | Write the run's JSON report to stdout, moving human output to stderr                                         |
+| `--report <PATH>`                                            |          |            | Write the run's JSON report to a file                                                                        |
 
 ## `xrf-cli archive unpack`
 

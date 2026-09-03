@@ -28,7 +28,9 @@ and `textures` into one folder is ordinary.
 
 ### Configuration file
 
-Without `--ltx` the whole folder is packed. The file uses the same dialect `xrCompress` accepted:
+Without `--config` the whole folder is packed.
+
+`.ltx` uses the same dialect `xrCompress` accepted:
 
 ```ini
 [options]
@@ -50,7 +52,52 @@ entry_point = $fs_root$\gamedata\
 `[include_files]` lists names one per line. `[header]` is written into the archive verbatim, and its `entry_point` is
 where the engine mounts the contents, so an archive of a `gamedata` tree needs it.
 
-Anything named on the command line wins over the configuration file.
+`.json` says the same thing in a shape automation can produce without knowing that dialect. The packed root is the empty
+path rather than `.\`, and header keys keep the engine's own spelling because it is the engine that reads them:
+
+```json
+{
+  "excludeExtensions": ["*.txt", "*.json"],
+  "includeFiles": ["gamemtl.xr"],
+  "includeDirectories": [
+    { "path": "configs", "isRecursive": true },
+    { "path": "scripts", "isRecursive": true }
+  ],
+  "header": [
+    { "key": "auto_load", "value": "true" },
+    { "key": "entry_point", "value": "$fs_root$\\gamedata\\" }
+  ]
+}
+```
+
+An unknown key is refused rather than ignored, so a misspelled field cannot quietly pack a different archive than the
+file describes. A field the file omits leaves whatever the caller already held, exactly as an absent LTX section does.
+
+Either format carries the selection rules and the header, and nothing else: the source, the destination, the volume
+name, and the run options belong to the invocation.
+
+### Naming the selection directly
+
+The same rules can be given as options, for a caller that already holds the values and has no use for a file between
+them — which is how `xrf-engine`'s compress step packs:
+
+```powershell
+xrf-cli archive pack --path target\gamedata --dest target\db --name configs `
+  --include-directory configs --include-directory spawns `
+  --include-file gamemtl.xr `
+  --exclude-extension "*.txt" `
+  --header "auto_load=true" --header "entry_point=$fs_root$\gamedata\"
+```
+
+`--include-directory` and `--exclude-directory` take a directory with everything below it. Their `-shallow` twins carry
+the other half of the dialect's `path = <bool>`, whose meaning differs per side: a shallow include packs a directory's
+own files while still listing its subdirectories, and a shallow exclude drops only the directory it names while its
+contents still pack. `--header` takes `<key>=<value>`, split at the first `=` so a value may hold its own, and naming
+any entry replaces the default header rather than merging into it.
+
+**`--config` and these options cannot be combined.** Two sources for one selection would need a precedence rule, and
+inventing one would be another thing to know before you could say what an archive holds; the parser refuses instead. Run
+options — `--store`, `--xdb`, `--max-size`, `--no-skip-list`, `--force` — layer over either mode.
 
 ### Compared with xrCompress
 
