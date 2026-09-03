@@ -1,36 +1,37 @@
 # Archive CLI
 
-Archive commands work with X-Ray `.db` database archives.
+Use the archive commands to pack a `gamedata` directory into X-Ray `.db` files, inspect an existing archive, or unpack
+and verify it. Start with `archive pack` when you are building a database; use the read commands when you only need to
+examine one.
 
-## Packing
+## Pack an archive
 
-`archive pack` builds database archives from a folder, replacing the `xrCompress` tool of the original SDK.
+Pack a `gamedata` tree with a name and destination of your choice:
 
 ```powershell
 xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata
 ```
 
-A set that fits in one volume is written as `<name>.db`; a larger one splits into `<name>.db0`, `<name>.db1` and so on.
-The engine mounts any file whose extension starts with `db` or `xdb`, so the index is a convenience rather than a
-requirement. Files the engine expects compressed are compressed and the rest are stored, matching what the engine loads.
-Identical files are stored once and referenced twice.
+The command compresses file types the engine normally compresses and stores the rest. It writes one volume as
+`gamedata.db`; when the archive needs more than one volume, it writes `gamedata.db0`, `gamedata.db1`, and so on.
 
-Give the archive a `[header]`. Without one the engine assumes a `.db` is an encrypted Shadow of Chernobyl archive and
-decrypts it into nonsense; `--xdb` is the other way to say an archive is not that.
+By default, a volume can be up to 1900 MB and receives a header that mounts its contents at `$fs_root$\gamedata\`. That
+is the usual setting for a `gamedata` archive. To use a different mount point, supply the complete header yourself:
 
-### Replacing an existing set
+```powershell
+xrf-cli archive pack --path target\levels --dest target\db --name levels `
+  --header 'auto_load=true' --header 'entry_point=$fs_root$\levels\'
+```
 
-A destination that already holds volumes of the same name is refused, and `--force` is how you say to replace them.
-Packing writes each volume at its final name, so a forced run that fails or is stopped partway leaves neither the
-previous set nor a complete new one. A run that was not forced takes back the volumes it made, so a failure leaves the
-destination as it found it. Volumes of a different set name in the same directory are never touched: packing `gamedata`
-and `textures` into one folder is ordinary.
+Each `--header` value is `key=value`. Supplying any header entries replaces the default header, so include both
+`auto_load` and `entry_point` when you need the standard behavior with a different entry point.
 
-### Configuration file
+### Choose what to pack
 
-Without `--config` the whole folder is packed.
+Without selection options, the command packs the whole source directory. Use a configuration file when the selection is
+shared or checked in; use command-line options for a one-off build. They cannot be combined.
 
-`.ltx` uses the same dialect `xrCompress` accepted:
+An `.ltx` configuration uses the `xrCompress` dialect:
 
 ```ini
 [options]
@@ -48,12 +49,16 @@ auto_load = true
 entry_point = $fs_root$\gamedata\
 ```
 
-`[include_folders]` and `[exclude_folders]` map a path to whether it applies recursively; `.\` names the packed root.
-`[include_files]` lists names one per line. `[header]` is written into the archive verbatim, and its `entry_point` is
-where the engine mounts the contents, so an archive of a `gamedata` tree needs it.
+```powershell
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
+  --config pack.ltx
+```
 
-`.json` says the same thing in a shape automation can produce without knowing that dialect. The packed root is the empty
-path rather than `.\`, and header keys keep the engine's own spelling because it is the engine that reads them:
+In `[include_folders]` and `[exclude_folders]`, `true` applies to the directory and everything below it; `false` applies
+only to the named directory. Use `.\` for the packed root. An `.ltx` or `.json` configuration may contain selection
+rules and a header only. Source path, destination, volume name, and run options remain on the command line.
+
+A JSON configuration for the same selection looks like this:
 
 ```json
 {
@@ -70,41 +75,37 @@ path rather than `.\`, and header keys keep the engine's own spelling because it
 }
 ```
 
-An unknown key is refused rather than ignored, so a misspelled field cannot quietly pack a different archive than the
-file describes. A field the file omits leaves whatever the caller already held, exactly as an absent LTX section does.
+```powershell
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
+  --config pack.json
+```
 
-Either format carries the selection rules and the header, and nothing else: the source, the destination, the volume
-name, and the run options belong to the invocation.
-
-### Naming the selection directly
-
-The same rules can be given as options, for a caller that already holds the values and has no use for a file between
-them — which is how `xrf-engine`'s compress step packs:
+For a direct selection, repeat the relevant option:
 
 ```powershell
 xrf-cli archive pack --path target\gamedata --dest target\db --name configs `
   --include-directory configs --include-directory spawns `
-  --include-file gamemtl.xr `
-  --exclude-extension "*.txt" `
-  --header "auto_load=true" --header "entry_point=$fs_root$\gamedata\"
+  --include-file gamemtl.xr --exclude-extension '*.txt'
 ```
 
-`--include-directory` and `--exclude-directory` take a directory with everything below it. Their `-shallow` twins carry
-the other half of the dialect's `path = <bool>`, whose meaning differs per side: a shallow include packs a directory's
-own files while still listing its subdirectories, and a shallow exclude drops only the directory it names while its
-contents still pack. `--header` takes `<key>=<value>`, split at the first `=` so a value may hold its own, and naming
-any entry replaces the default header rather than merging into it.
+`--include-directory-shallow` includes a directory's files but not the files in its child directories.
+`--exclude-directory-shallow` excludes the named directory only; its contents can still be packed. All paths are
+relative to `--path`.
 
-**`--config` and these options cannot be combined.** Two sources for one selection would need a precedence rule, and
-inventing one would be another thing to know before you could say what an archive holds; the parser refuses instead. Run
-options — `--store`, `--xdb`, `--max-size`, `--no-skip-list`, `--force` — layer over either mode.
+### Common packing options
 
-### Compared with xrCompress
+- Use `--store` to store every file without compression.
+- Use `--max-size <MB>` to choose a volume cap from 1 through 1900 MB. `--oversized-volumes` permits a larger cap only
+  for an engine fork that supports it.
+- Use `--xdb` to create `.xdb` volumes.
+- Use `--no-skip-list` to retain editor and source leftovers that the normal engine-build skip list excludes.
+- Use `--verbose` to see every selected, skipped, stored, compressed, and deduplicated file while packing.
 
-Both tools packing the same tree with the same configuration, on one machine, as the median of interleaved runs. The
-`-fast` setting is the one that matches what the packer does; the xrCompress default trades speed for a smaller archive.
-Each result is wall-clock time / peak RAM. Time is in seconds (`s`); peak RAM is the highest sampled resident memory in
-megabytes (`MB`).
+### Performance compared with xrCompress
+
+These are median results from interleaved runs of both tools on the same machine and source tree. `xrCompress -fast`
+uses the compression mode that matches `archive pack`; the xrCompress default trades time for a smaller archive. Each
+time/RAM value is wall-clock seconds and peak resident memory in megabytes.
 
 | Input                                    | `archive pack` time / peak RAM (s / MB) | `xrCompress -fast` time / peak RAM (s / MB) |
 | ---------------------------------------- | --------------------------------------- | ------------------------------------------- |
@@ -113,64 +114,84 @@ megabytes (`MB`).
 | 1,017 mesh files, 275 MB                 | 0.17 s / 28 MB                          | 1.07 s / 115 MB                             |
 | Vanilla gamedata, 36,925 files, 4.69 GB  | 4.6 s / 180 MB                          | 16.8 s / 275 MB                             |
 
-Archive size, where the input holds anything compressible:
+For inputs that contain compressible files, these are the resulting archive sizes:
 
 | Input                              | `archive pack` | `xrCompress -fast` | `xrCompress` |
 | ---------------------------------- | -------------- | ------------------ | ------------ |
 | 1,657 config files, 9.89 MB        | 2.00 MB        | 2.49 MB            | 1.93 MB      |
 | Anomaly configs and scripts, 35 MB | 8.57 MB        | 10.63 MB           | 8.26 MB      |
 
-The archives are interchangeable: packed from one tree by either tool, they unpack to byte-identical files.
+Archives packed from the same source by either tool unpack to byte-identical files.
 
-## Unpacking
+### Replace an existing archive
 
-`archive unpack` opens an archive project and exports the contained files to a folder. Relative destination paths are
-resolved from the current working directory.
+Packing refuses to overwrite volumes with the same name. Add `--force` only when replacing that set is intended:
 
 ```powershell
-xrf-cli archive unpack --path .\db\configs.db0 --dest .\unpacked\configs
-xrf-cli archive unpack --path .\db\textures.db0 --dest .\unpacked\textures -j 8
-xrf-cli archive unpack --path .\db\sounds.db0 --dry
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata --force
 ```
 
-`--dry` still reads the archive metadata but writes no files. Use it to confirm that a database can be opened before
-spending time on a full unpack.
+`--force` is destructive. If that run fails partway through, the previous set cannot be restored automatically. A
+non-forced run removes any volumes it created when it fails, leaving an existing different-named set alone.
 
-The source path must point to a readable X-Ray database archive. If the destination already contains files, choose a new
-folder or clean it before running the command.
+## Inspect or extract files
 
-### Speed and memory
+For `info`, `list`, `find`, `extract`, and `verify`, `--path` may name one volume or a directory. A volume reads only
+that file; a directory reads all `.db` and `.xdb` volumes below it as one merged archive set.
 
-Each result is wall-clock time / peak RAM. Time is in seconds (`s`); peak RAM is the highest sampled resident memory in
-megabytes (`MB`).
+```powershell
+# Check the number of volumes, entries, and their sizes.
+xrf-cli archive info --path .\db
+
+# List file paths, or search their names without unpacking.
+xrf-cli archive list --path .\db --files
+xrf-cli archive find --path .\db --query wpn_ak74 --files
+
+# Extract one logical file, or an entire logical directory.
+xrf-cli archive extract --path .\db --file textures\wpn\wpn_ak74.dds --dest .\ak74.dds
+xrf-cli archive extract --path .\db --directory configs --dest .\extracted-configs
+```
+
+`list --verbose` and `find --verbose` show a file's sizes and source volume. If identical files share one stored
+payload, they also name the other paths that read those bytes.
+
+## Unpack an archive
+
+Unpack a complete volume set by giving its containing directory:
+
+```powershell
+xrf-cli archive unpack --path .\db --dest .\unpacked\gamedata
+```
+
+To unpack one volume by itself, pass the volume path instead. `--dry` opens the archive and prints its summary without
+writing files. Use `-j` to control the worker count, for example `-j 8` or `-j 50%`.
+
+```powershell
+xrf-cli archive unpack --path .\db\configs.db --dest .\unpacked\configs --dry
+```
+
+Use a new or empty destination directory. Existing files can otherwise be replaced while the archive is unpacked.
+
+### Unpacking speed and memory
+
+These results use the same measurement method. The default run uses the available worker count; `-j 1` is the
+single-worker comparison.
 
 | Archive                                 | `archive unpack` time / peak RAM (s / MB) | `-j 1` time / peak RAM (s / MB) |
 | --------------------------------------- | ----------------------------------------- | ------------------------------- |
 | Vanilla configs, 1,657 files, 2.00 MB   | 0.20 s / 12 MB                            | 0.40 s / 10 MB                  |
 | Vanilla gamedata, 36,925 files, 4.48 GB | 6.1 s / 28 MB                             | 12.3 s / 21 MB                  |
 
-## Reading without unpacking
+## Verify an archive
 
-`archive info`, `archive list`, and `archive find` describe a volume or a whole set without writing anything, and
-`archive extract` pulls out one file or one directory.
-
-```powershell
-xrf-cli archive info --path .\db
-xrf-cli archive list --path .\db\configs.db0 --files
-xrf-cli archive find --path .\db --query wpn_ak74
-xrf-cli archive extract --path .\db --file textures\wpn\wpn_ak74.dds --dest .\ak74.dds
-```
-
-A path naming one volume reads that volume alone; a path naming a directory reads every volume it holds as one set.
-
-## Verifying
-
-`archive verify` reads every payload back and checks its decompression and CRC, so a set that opens but cannot be read
-is reported rather than discovered later by the engine.
+Verify every file after packing or copying an archive:
 
 ```powershell
-xrf-cli archive verify --path .\db --json
+xrf-cli archive verify --path .\db
 ```
+
+The command reads every payload, checks decompression, and validates its CRC. It reports damaged files as failures; use
+`--json` or `--report archive-verify.json` when another tool needs the result.
 
 ## Command reference
 
