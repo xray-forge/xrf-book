@@ -23,6 +23,9 @@ xrf-cli sprite unpack-equipment --system-ltx ./configs/system.ltx --source ./tex
 xrf-cli sprite pack-equipment --system-ltx ./configs/system.ltx --source ./textures_unpacked/ui/ui_icon_equipment --output ./textures/ui/ui_icon_equipment.dds --strict
 ```
 
+Every command that reads `system.ltx` accepts `--dltx`, which resolves it with the Monolith/Anomaly patch dialect so the
+icon grid matches what a patched install actually declares. See [LTX CLI](ltx.md#the-dltx-patch-dialect).
+
 `sprite pack-equipment` also accepts `--gamedata <path>` for resource lookup, plus `-v, --verbose` and `-s, --strict`.
 `sprite unpack-equipment` supports `-v, --verbose`.
 

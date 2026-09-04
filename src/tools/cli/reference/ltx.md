@@ -29,12 +29,13 @@ Command for verification of ltx and ini files
 xrf-cli ltx verify [OPTIONS] --path <path>
 ```
 
-| Option              | Required | Default | Description                                                                        |
-| ------------------- | -------- | ------- | ---------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx |
-| `-s, --silent`      |          |         | Turn off logging                                                                   |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                            |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr               |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                              |
+| Option              | Required | Default | Description                                                                                         |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx                  |
+| `--dltx`            |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
+| `-s, --silent`      |          |         | Turn off logging                                                                                    |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                             |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                               |
 
 <!-- ANCHOR_END: commands -->

@@ -30,6 +30,16 @@ LuaJIT syntax dialect.
 If `--ignore` is omitted, the command ignores common repository and unpacked-source entries: `.git`, `.idea`,
 `particles_unpacked`, `textures_unpacked`, `.gitignore`, `.gitattributes`, `README.md`, and `LICENSE`.
 
+## Patched installations
+
+`--dltx` resolves configs with the Monolith/Anomaly patch dialect, so every check that reads a config sees the values
+the game would load rather than the unpatched ones. Needed for Anomaly, GAMMA and other Monolith-based installs; leave
+it off for vanilla and OpenXRay trees. See [LTX CLI](ltx.md#the-dltx-patch-dialect).
+
+```powershell
+xrf-cli gamedata verify "C:/games/anomaly" --dltx
+```
+
 ## Checks and rules
 
 A check is a group of related verification, selected with `--checks`. Inside a check, each individual violation is

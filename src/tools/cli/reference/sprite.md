@@ -32,17 +32,18 @@ Command to pack an equipment sprite from separate icon files
 xrf-cli sprite pack-equipment [OPTIONS] --system-ltx <system-ltx> --source <source> --output <output>
 ```
 
-| Option                      | Required | Default | Description                                                          |
-| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                |
-| `--source <source>`         | yes      |         | Path to source folder with section icons                             |
-| `--output <output>`         | yes      |         | Path to output dds file                                              |
-| `--gamedata <gamedata>`     |          |         | Path to gamedata folder for resources usage                          |
-| `--strict`                  |          |         | Turn on strict mode                                                  |
-| `-s, --silent`              |          |         | Turn off logging                                                     |
-| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
-| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
+| Option                      | Required | Default | Description                                                                                         |
+| --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
+| `--source <source>`         | yes      |         | Path to source folder with section icons                                                            |
+| `--output <output>`         | yes      |         | Path to output dds file                                                                             |
+| `--gamedata <gamedata>`     |          |         | Path to gamedata folder for resources usage                                                         |
+| `--strict`                  |          |         | Turn on strict mode                                                                                 |
+| `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
+| `-s, --silent`              |          |         | Turn off logging                                                                                    |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                                                             |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                                               |
 
 ## `xrf-cli sprite unpack-description`
 
@@ -73,15 +74,16 @@ Command to unpack separate icon files out of an equipment sprite
 xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --source <source> --output <output>
 ```
 
-| Option                      | Required | Default | Description                                                          |
-| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                |
-| `--source <source>`         | yes      |         | Path to source dds file                                              |
-| `--output <output>`         | yes      |         | Path to output folder for sections icons                             |
-| `-s, --silent`              |          |         | Turn off logging                                                     |
-| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
-| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
+| Option                      | Required | Default | Description                                                                                         |
+| --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
+| `--source <source>`         | yes      |         | Path to source dds file                                                                             |
+| `--output <output>`         | yes      |         | Path to output folder for sections icons                                                            |
+| `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
+| `-s, --silent`              |          |         | Turn off logging                                                                                    |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                                                             |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                                               |
 
 ## `xrf-cli sprite verify-equipment`
 
@@ -91,12 +93,13 @@ Command to check an equipment sprite's inventory icon grid rects for overlaps
 xrf-cli sprite verify-equipment [OPTIONS] --system-ltx <system-ltx>
 ```
 
-| Option                      | Required | Default | Description                                                          |
-| --------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                |
-| `-s, --silent`              |          |         | Turn off logging                                                     |
-| `-v, --verbose`             |          |         | Turn on verbose logging                                              |
-| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                |
+| Option                      | Required | Default | Description                                                                                         |
+| --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
+| `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
+| `-s, --silent`              |          |         | Turn off logging                                                                                    |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                                                             |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                                               |
 
 <!-- ANCHOR_END: commands -->

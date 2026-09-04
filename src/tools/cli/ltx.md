@@ -28,6 +28,41 @@ valid without one. A scheme can use `$strict = true` when its own section shape 
 
 Scheme definitions are documented in [Script config schemes](../../script_engine/configs_scheme.md).
 
+## The DLTX patch dialect
+
+Anomaly and its Monolith-based descendants let an addon patch a config without editing it, by dropping a
+`mod_<base>_*.ltx` beside it. `--dltx` reads configs under those rules; without it, a patch file is refused and the
+error names the flag.
+
+```powershell
+xrf-cli ltx verify --path "C:/games/anomaly" --dltx
+xrf-cli gamedata verify "C:/games/anomaly" --dltx
+```
+
+DLTX is not vanilla LTX with patches applied on top. It changes how base data resolves even when no patch file exists:
+
+| Behaviour         | Standard LTX                  | `--dltx`                                                    |
+| ----------------- | ----------------------------- | ----------------------------------------------------------- |
+| Include priority  | Read order                    | By depth, so a root file beats a file it includes           |
+| Inheritance       | Parent must be declared first | Resolved after the whole tree is read, forward refs allowed |
+| Missing parent    | Refuses                       | Contributes nothing, and XRF warns where the game is silent |
+| Duplicate section | Refuses                       | Refuses, unless marked an override with `![section]`        |
+
+Patch operations, all Monolith-specific:
+
+| Statement      | Effect                                                  |
+| -------------- | ------------------------------------------------------- |
+| `![section]`   | Override an existing section                            |
+| `@[section]`   | Override it, creating it first when nothing declares it |
+| `!![section]`  | Delete it, after everything else resolves               |
+| `!key`         | Delete a field                                          |
+| `>key = a, b`  | Append to a comma list                                  |
+| `<key = a, b`  | Remove from a comma list                                |
+| `[section]:!p` | Drop an inherited parent                                |
+
+When several patch files touch the same field, the **alphabetically last one wins**, and a patch file always outranks
+the base tree.
+
 ## Command reference
 
 {{#include reference/ltx.md:commands}}
