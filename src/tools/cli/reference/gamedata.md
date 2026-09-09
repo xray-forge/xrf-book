@@ -39,8 +39,8 @@ xrf-cli gamedata verify [OPTIONS] <ROOT>
 | `-i, --ignore <ignore>...` |          |         | Ignored assets in the gamedata root. Accepts multiple values separated by `,`.                      |
 | `--checks <checks>...`     |          |         | List of checks to perform. Accepts multiple values separated by `,`.                                |
 | `--strict`                 |          |         | Fully validate expensive asset payloads                                                             |
-| `--dltx`                   |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
 | `--trace-reads`            |          |         | Account for every asset read, reporting redundancy against unique paths                             |
+| `--dltx`                   |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
 | `-j, --jobs <JOBS>`        |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                    |
 | `-s, --silent`             |          |         | Turn off logging                                                                                    |
 | `-v, --verbose`            |          |         | Turn on verbose logging                                                                             |

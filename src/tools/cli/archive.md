@@ -16,15 +16,19 @@ The command compresses file types the engine normally compresses and stores the 
 `gamedata.db`; when the archive needs more than one volume, it writes `gamedata.db0`, `gamedata.db1`, and so on.
 
 By default, a volume can be up to 1900 MB and receives a header that mounts its contents at `$fs_root$\gamedata\`. That
-is the usual setting for a `gamedata` archive. To use a different mount point, supply the complete header yourself:
+is the usual setting for a `gamedata` archive. To add or change one entry, name it:
 
 ```powershell
-xrf-cli archive pack --path target\levels --dest target\db --name levels `
-  --header 'auto_load=true' --header 'entry_point=$fs_root$\levels\'
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
+  --header 'creator="Modder"' --header 'link="www.moddb.com/mods/my-mod"'
 ```
 
-Each `--header` value is `key=value`. Supplying any header entries replaces the default header, so include both
-`auto_load` and `entry_point` when you need the standard behavior with a different entry point.
+Each `--header` value is `key=value`, merged over the default header, so naming `creator` keeps `auto_load` and
+`entry_point`. `level_name`, `level_ver`, `creator`, and `link` are the entries mod templates conventionally carry; they
+are yours to set and the engine ignores them.
+
+The engine reads `auto_load` and `entry_point` without checking whether they are present, so a volume missing either
+stops the game on load rather than mounting in the wrong place.
 
 ### Choose what to pack
 
@@ -133,6 +137,57 @@ xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata --f
 
 `--force` is destructive. If that run fails partway through, the previous set cannot be restored automatically. A
 non-forced run removes any volumes it created when it fails, leaving an existing different-named set alone.
+
+## Build a patch
+
+`archive pack-patch` creates `.db` volumes containing added and modified files. To package edits from a game's loose
+`gamedata\`, point at the installation:
+
+```powershell
+xrf-cli archive pack-patch --input 'C:\Games\Anomaly' --dest target\patch --name mypatch
+```
+
+Without `--target`, the command compares the installation's archives with its loose files. Unchanged copies are omitted,
+and archived files absent from `gamedata\` remain untouched. The installation must contain archives and loose files to
+compare.
+
+Write outside the input and target trees; destinations inside either are refused. Copy the resulting volumes to a
+directory mounted after the base archives in `fsgame.ltx`, usually `db\patches\`.
+
+Loose files in the player's `gamedata\` take priority over patch archives. Distribute loose replacements when those
+files need updating.
+
+A patch cannot remove a file. `CLocatorAPI::Register` only ever overwrites a descriptor, so deleting content means
+shipping a tree rather than a patch.
+
+### Deliver a tree of your own
+
+Use `--target` to deliver files from a separate folder:
+
+```powershell
+xrf-cli archive pack-patch --input 'C:\Games\Anomaly' --target C:\work\mymod\gamedata `
+  --dest target\patch --name mypatch
+```
+
+For a loose target, name the `gamedata` directory itself, with paths such as `configs\` and `textures\` directly inside
+it. Naming its parent adds an unwanted `gamedata\` prefix to archive entries.
+
+### Preview before writing
+
+Use `--dry-run` to compare without writing volumes. Add `--report` to save every changed entry:
+
+```powershell
+xrf-cli archive pack-patch --input 'C:\Games\Anomaly' --dry-run --report patch-preview.json
+```
+
+The size shown is the total unpacked payload; the final archive size is known only after writing.
+
+- `--include configs` limits both sides to a logical prefix.
+- `--ignore configs\debug` excludes a prefix, even when included.
+- `--exclude-extension '*.txt'` excludes matching file extensions.
+- `--verify-payload` reads and compares both payloads when their sizes and checksums match.
+
+The three filter options are repeatable.
 
 ## Inspect or extract files
 

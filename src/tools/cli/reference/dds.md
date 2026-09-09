@@ -4,6 +4,28 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli dds convert`
+
+Command to re-encode a dds file into another format, with its mip chain rebuilt
+
+```txt
+xrf-cli dds convert [OPTIONS] --format <format> <SOURCE> <DESTINATION>
+```
+
+| Option                      | Required | Default  | Description                                                                                                                                                                                                                                     |
+| --------------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<SOURCE>`                  | yes      |          | Path of the dds file to read                                                                                                                                                                                                                    |
+| `<DESTINATION>`             | yes      |          | Path of the dds file to write                                                                                                                                                                                                                   |
+| `--format <format>`         | yes      |          | Format to write, of the five worth offering for an X-Ray texture. Possible values: `bc1`, `bc2`, `bc3`, `bc7`, `rgba8`.                                                                                                                         |
+| `--mip-filter <mip-filter>` |          | `kaiser` | Kernel the mip chain is reduced with, from the X-Ray converter's own family. Possible values: `point`, `box`, `triangle`, `quadratic`, `cubic`, `catrom`, `mitchell`, `gaussian`, `sinc`, `bessel`, `hanning`, `hamming`, `blackman`, `kaiser`. |
+| `--quality <quality>`       |          | `slow`   | How hard the encoder works; `slow` costs seconds on BC7 and pennies on the rest. Possible values: `fast`, `normal`, `slow`.                                                                                                                     |
+| `--no-mipmaps`              |          |          | Write only the base level, for a texture the engine never minifies                                                                                                                                                                              |
+| `--compare`                 |          |          | Also report what every other candidate format would have cost, which is four more encodes                                                                                                                                                       |
+| `-s, --silent`              |          |          | Turn off logging                                                                                                                                                                                                                                |
+| `-v, --verbose`             |          |          | Turn on verbose logging                                                                                                                                                                                                                         |
+| `--json`                    |          |          | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                            |
+| `--report <PATH>`           |          |          | Write the run's JSON report to a file                                                                                                                                                                                                           |
+
 ## `xrf-cli dds crop`
 
 Command to crop a rectangular region out of a dds file into a new dds file
@@ -42,5 +64,28 @@ xrf-cli dds info [OPTIONS] --path <path>
 | `-v, --verbose`     |          |         | Turn on verbose logging                                              |
 | `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
 | `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+
+## `xrf-cli dds make-bump`
+
+Command to generate the `_bump` and `_bump#` pair a bumped surface binds, from a height map
+
+```txt
+xrf-cli dds make-bump [OPTIONS] <HEIGHT> <DESTINATION>
+```
+
+| Option                              | Required | Default | Description                                                                                                                                                                                                                                     |
+| ----------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<HEIGHT>`                          | yes      |         | Path of the image the relief is read from, averaged across its colour channels                                                                                                                                                                  |
+| `<DESTINATION>`                     | yes      |         | Path of the texture the pair belongs to, without the `_bump` suffix or an extension                                                                                                                                                             |
+| `--gloss <gloss>`                   |          |         | Path of a gloss mask, averaged across its colour channels                                                                                                                                                                                       |
+| `--gloss-constant <gloss-constant>` |          |         | One gloss level for the whole surface, from 0 to 1, for a texture with no mask                                                                                                                                                                  |
+| `--normal-map <normal-map>`         |          |         | Path of a normal map to use instead of deriving one from the height, of the same size                                                                                                                                                           |
+| `--mip-filter <mip-filter>`         |          | `box`   | Kernel the mip chain is reduced with, from the X-Ray converter's own family. Possible values: `point`, `box`, `triangle`, `quadratic`, `cubic`, `catrom`, `mitchell`, `gaussian`, `sinc`, `bessel`, `hanning`, `hamming`, `blackman`, `kaiser`. |
+| `--quality <quality>`               |          | `slow`  | How hard the encoder works; `slow` costs seconds on BC7 and pennies on the rest. Possible values: `fast`, `normal`, `slow`.                                                                                                                     |
+| `--virtual-height <virtual-height>` |          | `0.05`  | Relief depth the normals are derived at, `bump_virtual_height` of the descriptor                                                                                                                                                                |
+| `-s, --silent`                      |          |         | Turn off logging                                                                                                                                                                                                                                |
+| `-v, --verbose`                     |          |         | Turn on verbose logging                                                                                                                                                                                                                         |
+| `--json`                            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                            |
+| `--report <PATH>`                   |          |         | Write the run's JSON report to a file                                                                                                                                                                                                           |
 
 <!-- ANCHOR_END: commands -->
