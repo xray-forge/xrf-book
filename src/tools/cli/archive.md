@@ -9,7 +9,7 @@ examine one.
 Pack a `gamedata` tree with a name and destination of your choice:
 
 ```powershell
-xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata
 ```
 
 The command compresses file types the engine normally compresses and stores the rest. It writes one volume as
@@ -19,7 +19,7 @@ By default, a volume can be up to 1900 MB and receives a header that mounts its 
 is the usual setting for a `gamedata` archive. To add or change one entry, name it:
 
 ```powershell
-xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata `
   --header 'creator="Modder"' --header 'link="www.moddb.com/mods/my-mod"'
 ```
 
@@ -54,7 +54,7 @@ entry_point = $fs_root$\gamedata\
 ```
 
 ```powershell
-xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata `
   --config pack.ltx
 ```
 
@@ -80,21 +80,21 @@ A JSON configuration for the same selection looks like this:
 ```
 
 ```powershell
-xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata `
   --config pack.json
 ```
 
 For a direct selection, repeat the relevant option:
 
 ```powershell
-xrf-cli archive pack --path target\gamedata --dest target\db --name configs `
+xrf-cli archive pack target\gamedata --dest target\db --name configs `
   --include-directory configs --include-directory spawns `
   --include-file gamemtl.xr --exclude-extension '*.txt'
 ```
 
 `--include-directory-shallow` includes a directory's files but not the files in its child directories.
 `--exclude-directory-shallow` excludes the named directory only; its contents can still be packed. All paths are
-relative to `--path`.
+relative to the source.
 
 ### Common packing options
 
@@ -132,7 +132,7 @@ Archives packed from the same source by either tool unpack to byte-identical fil
 Packing refuses to overwrite volumes with the same name. Add `--force` only when replacing that set is intended:
 
 ```powershell
-xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata --force
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata --force
 ```
 
 `--force` is destructive. If that run fails partway through, the previous set cannot be restored automatically. A
@@ -144,7 +144,7 @@ non-forced run removes any volumes it created when it fails, leaving an existing
 `gamedata\`, point at the installation:
 
 ```powershell
-xrf-cli archive pack-patch --input 'C:\Games\Anomaly' --dest target\patch --name mypatch
+xrf-cli archive pack-patch 'C:\Games\Anomaly' --dest target\patch --name mypatch
 ```
 
 Without `--target`, the command compares the installation's archives with its loose files. Unchanged copies are omitted,
@@ -165,7 +165,7 @@ shipping a tree rather than a patch.
 Use `--target` to deliver files from a separate folder:
 
 ```powershell
-xrf-cli archive pack-patch --input 'C:\Games\Anomaly' --target C:\work\mymod\gamedata `
+xrf-cli archive pack-patch 'C:\Games\Anomaly' --target C:\work\mymod\gamedata `
   --dest target\patch --name mypatch
 ```
 
@@ -177,7 +177,7 @@ it. Naming its parent adds an unwanted `gamedata\` prefix to archive entries.
 Use `--dry-run` to compare without writing volumes. Add `--report` to save every changed entry:
 
 ```powershell
-xrf-cli archive pack-patch --input 'C:\Games\Anomaly' --dry-run --report patch-preview.json
+xrf-cli archive pack-patch 'C:\Games\Anomaly' --dry-run --report patch-preview.json
 ```
 
 The size shown is the total unpacked payload; the final archive size is known only after writing.
