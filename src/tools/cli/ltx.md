@@ -1,7 +1,7 @@
 # LTX CLI
 
-LTX commands format and verify `.ltx` and `.ini` config files. Use them for standalone config projects or when you need
-the lower-level tool behind the engine repository's `format ltx` and `verify ltx` commands.
+LTX commands inspect, format, and verify `.ltx` and `.ini` config files. Use them for standalone config projects or when
+you need the lower-level tool behind the engine repository's `format ltx` and `verify ltx` commands.
 
 ## Formatting
 
@@ -23,10 +23,23 @@ errors.
 xrf-cli ltx verify --path ./gamedata/configs
 ```
 
-Only sections that declare `$schema` are checked against a scheme. Other sections, including array-style sections, are
+Only sections that declare `$scheme` are checked against a scheme. Other sections, including array-style sections, are
 valid without one. A scheme can use `$strict = true` when its own section shape is fully known.
 
 Scheme definitions are documented in [Script config schemes](../../script_engine/configs_scheme.md).
+
+## Inspecting configs
+
+Use `ltx list` to list config files and their includers. Use `ltx inspect` to see a resolved section's values and where
+each value was written:
+
+```powershell
+xrf-cli ltx list --path ./gamedata/configs
+xrf-cli ltx inspect wpn_ak74 --path ./gamedata/configs
+```
+
+If several entry points declare the section, select one with `--entry system.ltx`. Both commands accept `--dltx` for
+patched installations.
 
 ## The DLTX patch dialect
 

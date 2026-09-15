@@ -12,7 +12,7 @@ starts with `-nojit`.
 XRF can have TypeScript declarations for a library even when a specific engine executable does not load that library.
 Always separate:
 
-- compile-time declarations in `src/typedefs`;
+- compile-time declarations shipped in `xray16/typedefs`;
 - runtime modules actually opened by the engine;
 - modules shipped in the selected gamedata or Lua environment.
 
@@ -28,7 +28,7 @@ directory. Keep runtime `require(...)` names aligned with the emitted Lua script
 
 When adding a dependency on a Lua module:
 
-1. check the TypeScript declaration under `src/typedefs`;
+1. check the TypeScript declaration under `xray16/typedefs` (source: `xrf-xray16-sdk/typedefs`);
 2. check whether the target executable opens or ships the module;
 3. run the game with the same executable that will ship to users;
 4. keep fallback behavior for optional modules.

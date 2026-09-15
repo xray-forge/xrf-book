@@ -41,7 +41,7 @@ Field support depends on the active scheme. Check the scheme implementation befo
 Condlists call short names, but the registered functions live under global namespaces:
 
 - `{=actor_has_item(wpn_pm)}` calls `xr_conditions.actor_has_item`;
-- `%=give_inited_task(task_id)%` calls `xr_effects.give_inited_task`.
+- `%=give_task(task_id)%` calls `xr_effects.give_task`.
 
 Search both the short config name and the full extern name before renaming a condition or effect.
 

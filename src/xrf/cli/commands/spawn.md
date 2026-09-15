@@ -13,7 +13,7 @@ npm run cli -- spawn unpack
 | Source      | `src/resources/spawns/all.spawn` |
 | Destination | `target/all_spawn`               |
 
-The command delegates to `cli/bin/tools/xrf-cli unpack-spawn`.
+The command delegates to `cli/bin/tools/xrf-cli spawn unpack`.
 
 ## Options
 

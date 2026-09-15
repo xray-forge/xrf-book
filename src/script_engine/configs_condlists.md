@@ -37,7 +37,7 @@ Function parameters use colon separators:
 Effects live inside `%...%`:
 
 ```ltx
-%=give_inited_task(jup_b1_task) +jup_b1_started -jup_b1_waiting%
+%=give_task(jup_b1_task) +jup_b1_started -jup_b1_waiting%
 ```
 
 Inside effects:
@@ -76,8 +76,8 @@ When a condlist does not behave as expected:
 
 1. identify the caller, such as a scheme switch, task field, dialog phrase, or smart terrain job;
 2. check whether the caller expects a returned section/value or only side effects;
-3. search for the condition under `src/engine/scripts/declarations/conditions`;
-4. search for the effect under `src/engine/scripts/declarations/effects`;
+3. search for the condition under `src/engine/declarations/conditions`;
+4. search for the effect under `src/engine/declarations/effects`;
 5. add or update tests for parser helpers when generated syntax changes.
 
 Keep side effects guarded with info portions when the same condlist can be evaluated repeatedly.

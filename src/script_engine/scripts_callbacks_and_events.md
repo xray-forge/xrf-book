@@ -5,17 +5,19 @@ publish-subscribe layer for sharing lifecycle changes between managers, binders,
 
 ## External callbacks
 
-External callbacks live under `src/engine/scripts/declarations/callbacks` and are loaded by `registerExternals()`.
+External callbacks live under `src/engine/declarations/callbacks` and are loaded by `registerExternals()`.
 
-| Module         | Examples                                                                             |
-| -------------- | ------------------------------------------------------------------------------------ |
-| `actor.ts`     | actor condition notifications, travel dialog callbacks                               |
-| `game.ts`      | save/load hooks, level input, visual memory, trade, loadout, outro, class unregister |
-| `interface.ts` | load-screen tips, inventory upgrades, actor menu, PDA, weapon UI parameters          |
-| `custom.ts`    | sleep, surge, achievement, task, and cutscene callbacks under `engine.*`             |
+| Module                                                                                                | Examples                                                 |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `on_actor_*.ts`, `travel_callbacks.ts`                                                                | Actor condition notifications and travel dialogs.        |
+| `alife_storage_manager.ts`, `level_input.ts`, `visual_memory_manager.ts`                              | Save/load, input, and visual memory.                     |
+| `loadscreen.ts`, `inventory_upgrades.ts`, `actor_menu*.ts`, `pda.ts`, `ui_wpn_params.ts`              | Engine-facing UI callbacks.                              |
+| `on_*sleep*.ts`, `surge_survive_*.ts`, `check_achievement.ts`, `is_task_*.ts`, `effector_callback.ts` | Sleep, surge, achievement, task, and cutscene callbacks. |
 
 The declarations use `extern(name, value)` to register global functions or modules. Config files and engine code call
 those names from Lua.
+
+Other callbacks include `trade_manager.ts`, `ai_stalker.ts` for loadout, `outro.ts`, and `on_unregister.ts`.
 
 ## Binder callbacks
 

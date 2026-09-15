@@ -77,4 +77,4 @@ because JIT compilation can change the measured call pattern.
 
 Common AI debug toggles are listed in the X-Ray engine command reference:
 
-[AI debug console commands](../game_engine/console_commands.md#ai-debug-console-commands)
+[AI debug console commands](../game_engine/console_commands.md#ai-debug-commands)

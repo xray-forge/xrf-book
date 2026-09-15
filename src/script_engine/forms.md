@@ -51,7 +51,7 @@ When changing a form:
 Run a focused UI build after form changes:
 
 ```powershell
-npm run cli build -- --filter ui
+npm run cli -- build --include ui
 ```
 
 Do not edit generated XML under `target/`.

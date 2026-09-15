@@ -1,7 +1,7 @@
 # Dialog configs
 
 Dialog configs define conversation XML and the script predicates/actions used by dialog phrases. XRF keeps dialog data
-under `src/engine/configs/gameplay` and dialog externs under `src/engine/scripts/declarations/dialogs`.
+under `src/engine/configs/gameplay` and dialog externs under `src/engine/declarations/dialogs`.
 
 Use this page when you need to add a phrase, wire a phrase to script, or check why a dialog option is not visible.
 
@@ -23,11 +23,9 @@ Dialog text lives in translation files such as:
 
 Script callbacks live in:
 
-- `src/engine/scripts/declarations/dialogs/dialogs.ts`
-- `src/engine/scripts/declarations/dialogs/dialogs_zaton.ts`
-- `src/engine/scripts/declarations/dialogs/dialogs_jupiter.ts`
-- `src/engine/scripts/declarations/dialogs/dialogs_pripyat.ts`
-- `src/engine/scripts/declarations/dialogs/dialog_manager.ts`
+- `src/engine/declarations/dialogs/generic.ts`, `object.ts`, and `world.ts` for shared dialog callbacks;
+- `src/engine/declarations/dialogs/zaton`, `jupiter`, `pripyat`, and `quests` for quest callbacks;
+- `src/engine/declarations/dialogs/dialog_manager` for generic dialog categories and phrase state.
 
 Generic dialog state is handled by `src/engine/core/managers/dialogs/DialogManager.ts`. The manager tracks phrase
 priority tables, disabled phrases, and generic phrase categories such as hello, job, anomalies, and information.
@@ -35,10 +33,10 @@ priority tables, disabled phrases, and generic phrase categories such as hello, 
 ## Runtime hooks
 
 Dialog XML can call script functions through registered dialog externs. XRF registers these from
-`src/engine/scripts/declarations/dialogs`. The global script entry point loads `externals_registrator`, and the
-registrator exposes `dialogs`, `dialogs_zaton`, `dialogs_jupiter`, `dialogs_pripyat`, and `dialog_manager`.
+`src/engine/declarations/dialogs`. The global script entry point loads `externals_registrator`, and the registrator
+exposes `dialogs`, `dialogs_zaton`, `dialogs_jupiter`, `dialogs_pripyat`, and `dialog_manager`.
 
-`dialog_manager.ts` also exports callbacks used by generated generic dialogs. Examples include:
+Files under `dialogs/dialog_manager` also register callbacks used by generated generic dialogs. Examples include:
 
 - `dialog_manager.init_new_dialog`;
 - `dialog_manager.fill_priority_hello_table`;
@@ -68,8 +66,8 @@ For a script-backed phrase:
 3. update tests beside the declaration when the callback has logic;
 4. run a focused test for the declaration file, then run config verification if XML changed.
 
-Use location-specific declaration files when the condition belongs to a level quest. Use `dialog_manager.ts` for generic
-dialog category behavior only.
+Use location-specific declaration folders when the condition belongs to a level quest. Use `dialogs/dialog_manager` for
+generic dialog category behavior only.
 
 ## Generated XML
 

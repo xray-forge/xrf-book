@@ -1,7 +1,7 @@
 # LTX scheme
 
-`src/engine/configs/$scheme` contains validation schemas for LTX configs. The `verify-ltx` tool uses these files to
-check includes, inheritance, field names, and field types.
+`src/engine/configs/$scheme` contains validation schemas for LTX configs. The `xrf-cli ltx verify` command uses these
+files to check includes, inheritance, field names, and field types.
 
 The root file is `scheme.ltx`. It includes category schemas such as `base.scheme.ltx`, `script.scheme.ltx`,
 `environment.scheme.ltx`, `items.scheme.ltx`, `weapons.scheme.ltx`, and `zone.scheme.ltx`.
@@ -12,13 +12,13 @@ A schema section starts with a section name. Use inheritance when several config
 
 ```ltx
 [$item_weapon]:$item,$item_weapon_sounds,$item_weapon_params
-strict = true
+$strict = true
 ammo_class = ?string[]
 ammo_mag_size = ?u32
 weapon_class = ?enum:assault_rifle,shotgun,sniper_rifle,heavy_weapon,pistol,grenade,misc
 ```
 
-Schema section names commonly start with `$` to separate schemas from game config sections.
+Schema section names must start with `$`. A game config section selects its schema with `$scheme = $item_weapon`.
 
 ## Field syntax
 
@@ -52,11 +52,12 @@ Common schema types:
 - `bool`
 - `vector`
 - `enum`
-- `unknown`
-- `any`
+- `rgb`
+- `rgba`
+- `const:<value>`
 
-Prefer the narrowest type that matches the engine behavior. Use `unknown` or `any` only when the field is intentionally
-untyped or still being investigated.
+Prefer the narrowest type that matches the engine behavior. The parser rejects unsupported types, including `unknown`
+and `any`.
 
 ## Arrays, enums, and tuples
 
@@ -83,7 +84,7 @@ hit_power = ?tuple:f32,f32,f32,f32
 
 ## Strict sections
 
-`strict = true` means fields not described by the schema are validation errors unless a wildcard rule covers them. Use
+`$strict = true` means fields not described by the schema are validation errors unless a wildcard rule covers them. Use
 strict schemas for stable config formats such as weapons, weather, and script definitions.
 
 Leave strict mode off only when the config format is intentionally open-ended or not fully modeled yet.

@@ -35,7 +35,7 @@ clears the flag.
 active = hit@guard
 
 [hit@guard]
-on_info = walker@angry %=give_info(guard_was_hit)%
+on_info = walker@angry %+guard_was_hit%
 ```
 
 ## Notes

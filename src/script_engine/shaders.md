@@ -15,7 +15,7 @@ forms reference shader names.
 | `src/resources/shaders/shared`                | Shared include files used by shader source.     |
 | `src/engine/configs/**/*.ltx`                 | Config references to shader names.              |
 | `src/engine/forms/**/*.tsx` and static UI XML | UI texture nodes can set a `shader` attribute.  |
-| `src/engine/lib/constants/roots.ts`           | Defines the `$game_shaders$` root alias.        |
+| `src/engine/constants/roots.ts`               | Defines the `$game_shaders$` root alias.        |
 
 The base resource directory also contains other static asset folders such as `anims`, `levels`, `sounds`, `spawns`, and
 `textures`. Shader files follow the same static-resource build path as those folders.

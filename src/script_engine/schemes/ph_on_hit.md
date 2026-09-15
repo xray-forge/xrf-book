@@ -36,7 +36,7 @@ implementation.
 active = ph_on_hit@crate
 
 [ph_on_hit@crate]
-on_info = ph_idle@damaged %=give_info(crate_was_hit)%
+on_info = ph_idle@damaged %+crate_was_hit%
 ```
 
 ## Notes

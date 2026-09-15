@@ -26,7 +26,7 @@ xrf-cli sprite pack-equipment --system-ltx ./configs/system.ltx --source ./textu
 Every command that reads `system.ltx` accepts `--dltx`, which resolves it with the Monolith/Anomaly patch dialect so the
 icon grid matches what a patched install actually declares. See [LTX CLI](ltx.md#the-dltx-patch-dialect).
 
-`sprite pack-equipment` also accepts `--gamedata <path>` for resource lookup, plus `-v, --verbose` and `-s, --strict`.
+`sprite pack-equipment` also accepts `--gamedata <path>` for resource lookup, plus `-v, --verbose` and `--strict`.
 `sprite unpack-equipment` supports `-v, --verbose`.
 
 Both commands act only on sections with `$inventory_icon = true` and all four grid fields: `inv_grid_x`, `inv_grid_y`,
@@ -66,8 +66,8 @@ xrf-cli sprite pack-description --description ./configs/ui/textures_descr/ui_act
 ```
 
 Description commands require `--description` and `--base`. If `--output` is omitted, output defaults to the base path.
-Both support `-v, --verbose` and `-s, --strict`. Unpacking spreads its sheets across workers and takes `-j, --jobs`;
-packing is sequential and does not.
+Both support `-v, --verbose` and `--strict`. The `-s` flag means `--silent`, not strict mode. Unpacking spreads its
+sheets across workers and takes `-j, --jobs`; packing is sequential and does not.
 
 A description can name several sheets; both commands rewrite all of them by default. Repeat `--file <name>` to select
 one or more. Use the declared path (`ui\ui_actor_weapons`) with either separator, or an unambiguous bare name

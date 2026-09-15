@@ -33,7 +33,7 @@ The scheme is event-driven. It does not run a regular update loop and does not e
 active = ph_on_death@barrel
 
 [ph_on_death@barrel]
-on_info = ph_idle@dead %=give_info(barrel_destroyed)%
+on_info = ph_idle@dead %+barrel_destroyed%
 ```
 
 ## Notes

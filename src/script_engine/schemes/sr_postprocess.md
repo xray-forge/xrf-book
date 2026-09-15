@@ -25,7 +25,8 @@ Type: number. Required. Default: none.
 
 Damage accumulation rate while the actor is inside.
 
-The section also supports common switch fields such as `on_info`, `on_timer`, and actor-zone checks.
+Common switch fields are parsed, but switching away calls `PostProcessController.deactivate()`, which currently aborts.
+Keep this section active; leaving the zone already ramps the effect down and stops damage accumulation.
 
 ## Behavior
 
@@ -51,12 +52,9 @@ active = sr_postprocess@hazard
 intensity = 40
 intensity_speed = 8
 hit_intensity = 0.02
-on_actor_outside = sr_idle@cooldown
 ```
 
 ## Notes
 
 - `intensity` and `intensity_speed` are percent-style config values.
-- Deactivation is not implemented in the current manager and aborts if called.
 - The hit direction is zero and impulse is `0`.
-- Use a switch to a non-postprocess section when the restrictor should stop controlling the effect.

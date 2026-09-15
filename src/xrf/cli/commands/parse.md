@@ -32,7 +32,7 @@ npm run cli -- parse dir_as_json src/resources/textures --no-extension
 Use `dir_as_json` when another script needs a compact index of files under a resource folder. The command writes
 generated support data under `target/parsed`, so treat the result as disposable build output.
 
-Use `xrf-cli export-externs` when checking the script declaration surface exposed by conditions, effects, and dialogs.
+Use `xrf-cli externs export` when checking the script declaration surface exposed by conditions, effects, and dialogs.
 
 ## Failure notes
 

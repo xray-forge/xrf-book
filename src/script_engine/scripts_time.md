@@ -1,7 +1,7 @@
 # Time
 
-Time helpers live in `src/engine/core/utils/time.ts`. They format game time, convert weather periods, advance game time,
-and serialize X-Ray `CTime` values for save data.
+Time helpers live in `xrf-xray16-sdk/src/lib/utils/time.ts`. They format game time, convert weather periods, advance
+game time, and serialize X-Ray `CTime` values for save data.
 
 ## Formatting
 

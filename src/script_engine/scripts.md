@@ -68,7 +68,7 @@ and `STATE_Read`.
 
 ## What to edit
 
-- Add new engine callbacks under `src/engine/scripts/declarations`.
+- Add new engine callbacks under `src/engine/declarations`.
 - Add new object lifecycle behavior under `src/engine/core/binders`.
 - Add cross-object systems under `src/engine/core/managers`.
 - Add runtime object registries under `src/engine/core/database` only when the state is shared across modules.

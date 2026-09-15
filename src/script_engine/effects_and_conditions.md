@@ -9,24 +9,24 @@ Effects are registered under `xr_effects`. Conditions are registered under `xr_c
 
 | Source area                                            | Purpose                                                          |
 | ------------------------------------------------------ | ---------------------------------------------------------------- |
-| `src/engine/scripts/declarations/effects`              | Effect functions called from `%...%` condlist actions.           |
-| `src/engine/scripts/declarations/conditions`           | Boolean condition functions called from `{...}` condlist checks. |
+| `src/engine/declarations/effects`                      | Effect functions called from `%...%` condlist actions.           |
+| `src/engine/declarations/conditions`                   | Boolean condition functions called from `{...}` condlist checks. |
 | `src/engine/scripts/register/externals_registrator.ts` | Loads declaration modules and prevents duplicate registration.   |
-| `src/engine/core/utils/binding.ts`                     | Implements `extern(...)` and nested global registration.         |
-| `src/engine/core/utils/ini`                            | Runtime condlist parsing and execution.                          |
+| `xrf-xray16-sdk/src/lib/utils/binding.ts`              | Implements `extern(...)`, imported from `xray16/lib`.            |
+| `src/engine/core/ini`                                  | Runtime condlist parsing and execution.                          |
 
 ## Config names
 
 Configs call short names:
 
 ```ltx
-on_info = {=actor_has_item(af_oasis_heart)} %=give_inited_task(jup_b16_task)%
+on_info = {=actor_has_item(af_oasis_heart)} %=give_task(jup_b16_task)%
 ```
 
 The registered globals include the namespace:
 
 - `actor_has_item` resolves to `xr_conditions.actor_has_item`;
-- `give_inited_task` resolves to `xr_effects.give_inited_task`.
+- `give_task` resolves to `xr_effects.give_task`.
 
 Search both names before changing an effect or condition.
 
@@ -57,8 +57,8 @@ Effect and condition files have focused Jest tests beside the declarations. When
 test:
 
 ```powershell
-npm test -- src/engine/scripts/declarations/effects
-npm test -- src/engine/scripts/declarations/conditions
+npm test -- src/engine/declarations/effects
+npm test -- src/engine/declarations/conditions
 ```
 
 For config changes that call the function, also run:

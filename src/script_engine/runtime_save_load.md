@@ -29,7 +29,7 @@ Client manager state is saved and loaded through:
 Server manager state currently goes through `SimulationManager`.
 
 `SaveManager` also handles `alife_storage_manager` callbacks exposed from
-`src/engine/scripts/declarations/callbacks/game.ts`.
+`src/engine/declarations/callbacks/alife_storage_manager.ts`.
 
 ## Dynamic save data
 

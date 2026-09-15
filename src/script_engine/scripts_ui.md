@@ -7,12 +7,12 @@ This page covers runtime scripts. Form source generation is covered in the Forms
 
 ## Source layout
 
-| Source                                                   | Purpose                                        |
-| -------------------------------------------------------- | ---------------------------------------------- |
-| `src/engine/core/ui`                                     | Runtime UI classes                             |
-| `src/engine/core/utils/ui`                               | XML loading and element initialization helpers |
-| `src/engine/forms`                                       | TSX/static XML form sources                    |
-| `src/engine/scripts/declarations/callbacks/interface.ts` | Engine-facing UI callbacks                     |
+| Source                              | Purpose                                        |
+| ----------------------------------- | ---------------------------------------------- |
+| `src/engine/core/ui`                | Runtime UI classes                             |
+| `src/engine/core/utils/ui`          | XML loading and element initialization helpers |
+| `src/engine/forms`                  | TSX/static XML form sources                    |
+| `src/engine/declarations/callbacks` | Engine-facing UI callbacks                     |
 
 ## XML loading
 
@@ -55,14 +55,14 @@ These classes load XML by selector names. If an XML element name changes, update
 
 ## Interface externals
 
-`interface.ts` registers engine-facing modules such as:
+Separate callback files register engine-facing modules:
 
-- `loadscreen`;
-- `inventory_upgrades`;
-- `actor_menu`;
-- `actor_menu_inventory`;
-- `pda`;
-- `ui_wpn_params`.
+- `loadscreen.ts` registers `loadscreen`;
+- `inventory_upgrades.ts` registers `inventory_upgrades`;
+- `actor_menu.ts` registers `actor_menu`;
+- `actor_menu_inventory.ts` registers `actor_menu_inventory`;
+- `pda.ts` registers `pda`;
+- `ui_wpn_params.ts` registers `ui_wpn_params`.
 
 These callbacks connect UI XML or C++ UI code to managers such as `LoadScreenManager`, `UpgradesManager`,
 `ActorInventoryMenuManager`, `TradeManager`, and `PdaManager`.
