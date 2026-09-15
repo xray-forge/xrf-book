@@ -5,19 +5,21 @@ you need the lower-level tool behind the engine repository's `format ltx` and `v
 
 ## Formatting
 
-`ltx format` formats one file or every LTX file under a folder. `--check` reports what is unformatted instead of
-rewriting it, and answers 3 when anything is; single-file mode formats the file.
+`ltx format` formats selected loose config files. `--check` writes nothing and exits 3 when any selected file needs
+formatting, including when the input is a single file. From a project containing `gamedata/configs`:
 
 ```powershell
 xrf-cli ltx format --path ./gamedata/configs
 xrf-cli ltx format --path ./gamedata/configs --check
 ```
 
+When the input resolves through an installation, archived configs are listed as declined because they cannot be
+rewritten in place. Review that list before treating a formatting run as coverage of the whole config set.
+
 ## Verifying
 
-`ltx verify` verifies an LTX project folder, including its schemes and case-sensitive include paths. It expects a
-directory rather than a single file, and fails when includes, inheritance, section fields, or scheme validation produce
-errors.
+`ltx verify` checks an LTX project folder, including schemes and case-sensitive include paths. Supply a directory;
+include, inheritance, section-field, and scheme errors fail verification.
 
 ```powershell
 xrf-cli ltx verify --path ./gamedata/configs
@@ -38,8 +40,9 @@ xrf-cli ltx list --path ./gamedata/configs
 xrf-cli ltx inspect wpn_ak74 --path ./gamedata/configs
 ```
 
-If several entry points declare the section, select one with `--entry system.ltx`. Both commands accept `--dltx` for
-patched installations.
+Use the resolved values and their source locations to distinguish a wrong declaration from a later override. If several
+entry points declare the section, select one with `--entry system.ltx`. Both commands accept `--dltx` for patched
+installations.
 
 ## The DLTX patch dialect
 
@@ -54,7 +57,7 @@ xrf-cli gamedata verify "C:/games/anomaly" --dltx
 
 DLTX is not vanilla LTX with patches applied on top. It changes how base data resolves even when no patch file exists:
 
-| Behaviour         | Standard LTX                  | `--dltx`                                                    |
+| Behavior          | Standard LTX                  | `--dltx`                                                    |
 | ----------------- | ----------------------------- | ----------------------------------------------------------- |
 | Include priority  | Read order                    | By depth, so a root file beats a file it includes           |
 | Inheritance       | Parent must be declared first | Resolved after the whole tree is read, forward refs allowed |

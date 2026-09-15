@@ -1,148 +1,155 @@
 # Gamedata CLI
 
-Gamedata commands validate one assembled gamedata directory. Run them after building gamedata and before launching or
-packaging it.
+Gamedata commands verify assembled assets and show which files a game installation resolves. Run verification after a
+build or asset import, before launching or packaging the result.
 
 ## `gamedata verify`
 
+From a project containing `target/gamedata`:
+
 ```powershell
-xrf-cli gamedata verify ./target/gamedata
+xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json
 ```
 
-`ROOT` is the required positional path to the assembled gamedata directory. The command reads configs from
-`ROOT/configs` and requires `ROOT/configs/system.ltx`.
+The positional root must be an existing gamedata directory or an installation declaring its mounted sources. The
+resolved tree must contain `configs/system.ltx`; it may come from a loose file or an archive.
 
-If `--checks` is omitted, all checks run. `--strict` fully validates expensive asset payloads; it is long-only, because
-`-s` means `--silent` on every command.
+All asset checks run unless `--checks` selects a subset. Add `--strict` to fully validate expensive payloads and apply
+the checks' stricter content requirements:
 
-`-j, --jobs` bounds how much of the machine the sweep uses; see the [execution](./cli.md#execution) conventions. The
-verdict does not depend on it — the same tree produces the same findings and the same report at any width — so `-j 1` is
-how you make a run somebody else can reproduce.
+```powershell
+xrf-cli gamedata verify ./target/gamedata --checks scripts,ltx
+xrf-cli gamedata verify ./target/gamedata --checks sounds --strict
+```
 
-`--trace-reads` accounts for every asset the run physically reads and adds a `reads` block to the report. It answers
-whether a sweep reads the same bytes more than once, which no duration can show. It costs a lock on the read path, so it
-is asked for when measuring rather than left on.
+`--jobs` controls parallel work; `-j 1` makes execution sequential. Worker count should not change the findings for
+unchanged input, but durations, cache statistics, and execution metadata can differ.
 
-Accepted check names are `animations`, `levels`, `ltx`, `meshes`, `particles`, `particles-usage`, `scripts`, `shaders`,
-`sounds`, `spawns`, `textures`, `weapons`, and `weathers`. The script check parses emitted `.script` files with the
-LuaJIT syntax dialect.
-
-If `--ignore` is omitted, the command ignores common repository and unpacked-source entries: `.git`, `.idea`,
-`particles_unpacked`, `textures_unpacked`, `.gitignore`, `.gitattributes`, `README.md`, and `LICENSE`.
+By default the run ignores `.git`, `.idea`, `particles_unpacked`, `textures_unpacked`, `.gitignore`, `.gitattributes`,
+`README.md`, and `LICENSE`. Supplying `--ignore` replaces this list; include every exclusion the run still needs.
 
 ## Patched installations
 
-`--dltx` resolves configs with the Monolith/Anomaly patch dialect, so every check that reads a config sees the values
-the game would load rather than the unpatched ones. Needed for Anomaly, GAMMA and other Monolith-based installs; leave
-it off for vanilla and OpenXRay trees. See [LTX CLI](ltx.md#the-dltx-patch-dialect).
+For Anomaly and Monolith-based installations, enable the [DLTX dialect](ltx.md#the-dltx-patch-dialect):
 
 ```powershell
-xrf-cli gamedata verify "C:/games/anomaly" --dltx
+xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
 ```
+
+Checks then resolve patched config values. Leave `--dltx` off for standard vanilla or OpenXRay LTX trees.
+
+## Inspect resolved assets
+
+Use `gamedata list` to locate a winning file and inspect files hidden by higher-priority mounts:
+
+```powershell
+xrf-cli gamedata list --path "C:/Games/Anomaly" --prefix textures --shadowed `
+  --report ./asset-list.json
+```
+
+The default source mode searches for a containing installation. Use `--source directory` to inspect only a loose tree,
+or `--loose` to omit archived entries. Repeat `--path` to layer roots, highest priority first.
+
+Console output shows at most 40 entries per section; the report retains the full list. Review skipped-source warnings as
+well as the winning paths: a successfully produced listing may still be incomplete.
 
 ## Checks and rules
 
-A check is a group of related verification, selected with `--checks`. Inside a check, each individual violation is
-attributed to a rule, and the rule identifier is what appears in findings and in the JSON report. Rule identifiers are
-`<check>.<rule>`:
+Select checks by their group names: `animations`, `levels`, `ltx`, `meshes`, `particles`, `particles-usage`, `scripts`,
+`shaders`, `sounds`, `spawns`, `textures`, `weapons`, and `weathers`.
 
-| Check             | Rules                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `animations`      | `animations.player-hud`, `animations.hud-item`, `animations.motion-collision`                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `levels`          | `levels.ai-guid`, `levels.ai-node-count`, `levels.ai-version`, `levels.cform-version`, `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.graph-duplicate`, `levels.graph-guid`, `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`, `levels.missing-bundle`, `levels.missing-file`, `levels.orphan-bundle`, `levels.roster-conflict`, `levels.shader-reference`, `levels.shaders-chunk`, `levels.texture-reference`, `levels.undeclared-map` |
-| `ltx`             | `ltx.formatting`, `ltx.schema`, `ltx.verification`                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `meshes`          | `meshes.path`, `meshes.read`, `meshes.validation`, `meshes.motion-label`, `meshes.motion-read`, `meshes.motion-validation`, `meshes.shader-library`                                                                                                                                                                                                                                                                                                                                                        |
-| `particles`       | `particles.library`, `particles.texture`                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `particles-usage` | `particles-usage.reference`, `particles-usage.spawn`, `particles-usage.spawn-custom-data`                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `scripts`         | `scripts.path`, `scripts.read`, `scripts.syntax`                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `shaders`         | `shaders.renderer-root`, `shaders.lua-syntax`, `shaders.source-read`, `shaders.source-invalid`, `shaders.include-missing`, `shaders.include-cycle`, `shaders.include-syntax`                                                                                                                                                                                                                                                                                                                               |
-| `sounds`          | `sounds.files`, `sounds.references`                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `spawns`          | `spawns.path`, `spawns.read`                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `textures`        | `textures.path`, `textures.read`, `textures.dds`, `textures.bump`                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `weapons`         | `weapons.validation`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `weathers`        | `weathers.definitions`, `weathers.files`, `weathers.validation`                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+Findings carry a stable rule identifier. These groups expose the following rules:
 
-`checks.execution` is reported when a check itself fails to run, rather than when content is invalid.
+- **Animations:** `animations.hud-item`, `animations.motion-collision`, `animations.player-hud`.
+- **Levels:** `levels.ai-guid`, `levels.ai-node-count`, `levels.ai-version`, `levels.cform-version`,
+  `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.graph-duplicate`, `levels.graph-guid`,
+  `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`, `levels.missing-bundle`,
+  `levels.missing-file`, `levels.orphan-bundle`, `levels.roster-conflict`, `levels.shader-reference`,
+  `levels.shaders-chunk`, `levels.texture-reference`, `levels.undeclared-map`.
+- **LTX:** `ltx.formatting`, `ltx.schema`, `ltx.verification`.
+- **Meshes:** `meshes.chunk-residue`, `meshes.motion-label`, `meshes.motion-read`, `meshes.motion-validation`,
+  `meshes.path`, `meshes.read`, `meshes.shader-library`, `meshes.validation`.
+- **Particles:** `particles.library`, `particles.texture`.
+- **Particle usage:** `particles-usage.reference`, `particles-usage.spawn`, `particles-usage.spawn-custom-data`.
+- **Scripts:** `scripts.path`, `scripts.read`, `scripts.syntax`. Syntax checks use the LuaJIT dialect.
+- **Shaders:** `shaders.include-cycle`, `shaders.include-missing`, `shaders.include-syntax`, `shaders.lua-syntax`,
+  `shaders.renderer-root`, `shaders.source-invalid`, `shaders.source-read`.
+- **Sounds:** `sounds.files`, `sounds.references`.
+- **Spawns:** `spawns.path`, `spawns.read`.
+- **Textures:** `textures.bump`, `textures.bump-companion`, `textures.bump-declaration`, `textures.path`,
+  `textures.read`, `textures.dds`.
+- **Weapons:** `weapons.validation`.
+- **Weathers:** `weathers.definitions`, `weathers.files`, `weathers.validation`.
 
-The animation rules validate player HUD and item motions. Missing item motions are allowed where the engine falls back
-to `idle`; duplicate motion names across banks in one HUD namespace are reported because their resolution is ambiguous.
+Two checks always run and cannot be selected or suppressed with `--checks`: `collisions.unreachable` reports logical
+path collisions, and `coverage.skipped-mount` reports declared sources that could not be opened. `checks.execution`
+identifies a check that failed to execute.
 
-`textures.bump` resolves the bump each `.thm` declares the way `CTextureDescrMngr::LoadTHM` does, by the name in the
-descriptor rather than by a `_bump` suffix convention. A name that resolves to nothing still takes the `_bump` shader
-path, because `bump_exist()` only checks the name is non-empty: the loader substitutes `ed\ed_dummy_bump` and logs
-`! Fallback to default bump map` on every load, so the surface is flat and the log is noisy. Importing a texture under a
-new path is the usual way to produce one, since the copied descriptor keeps pointing into the source layout. Repoint it
-with `thm patch-bump --to`, or `thm patch-bump --off` when the bump does not exist and is not going to.
+### Interpret common findings
+
+Animation validation allows missing item motions where the engine falls back to `idle`. Duplicate motion names across
+banks in one HUD namespace are reported because lookup is ambiguous.
+
+For `meshes.chunk-residue`, inspect the model and use [`ogf fix`](ogf.md#ogf-fix) for recognized unread tails.
+
+For textures, distinguish three repairs:
+
+| Rule                        | Meaning and action                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `textures.bump`             | A declared bump does not resolve. Restore the file, repoint the descriptor, or disable the declaration. |
+| `textures.bump-companion`   | The bump exists but its `#` companion is missing. Restore or generate the pair.                         |
+| `textures.bump-declaration` | The descriptor carries a declaration the engine does not use. Correct the descriptor.                   |
+
+Companion and unused-declaration findings are reported in normal mode but fail verification only under `--strict`. See
+[THM bump declarations](thm.md) for descriptor edits and [DDS bump generation](dds.md#generate-a-bump-pair) for missing
+texture pairs.
 
 ## JSON report
 
-Pass `--report` to write the result for CI or other tooling, or `--json` to put it on standard output for a pipe:
+The saved file uses the [shared report envelope](cli.md#reporting). Its `result` contains `checks`, overall `status`,
+`duration`, `cache`, and `skippedMounts`. `reads` is included only with `--trace-reads`.
 
-```powershell
-xrf-cli gamedata verify ./target/gamedata --checks sounds,weathers --report ./verification-report.json
-```
-
-The file carries the [shared report envelope](cli.md#reporting), whose own fields are described there. What this command
-found is the `result` object inside it:
+Each check has its own status, duration, summary, verification type, and findings. This illustrative finding shows the
+fields used to locate and classify a problem:
 
 ```json
 {
-  "cache": { "entries": 41, "bytes": 22593488, "hits": 25572, "misses": 42481, "refused": 0 },
-  "checks": [
-    {
-      "duration": 114,
-      "findings": [],
-      "status": "passed",
-      "summary": "122/122 weather files valid",
-      "verificationType": "weathers"
-    }
-  ],
-  "duration": 311,
-  "status": "passed"
+  "assetPath": "textures/tile/wall.thm",
+  "message": "Example: the declared bump texture could not be resolved",
+  "ruleId": "textures.bump"
 }
 ```
 
-`status` is one of `passed`, `failed`, `error`, `incomplete`, or `skipped`. The top-level status is the most severe
-individual status. `incomplete` means a check could cover only part of its expected input. Durations are whole
-milliseconds, and a check's is `null` when it did not run.
+`assetPath` is root-relative when available and `null` when the finding has no asset subject. `message` is
+human-readable; use `ruleId` for automated classification. Findings are ordered by asset path, rule, and message.
 
-`cache` reports what the run retained and how well it served reads. `hits + misses` counts every parsed asset the run
-asked for, and `hits` is the work retention saved; a kind the run does not retain still counts a miss, because the store
-is consulted before the retention policy is. A non-zero `refused` means a byte ceiling stopped retention partway, which
-would otherwise look like an unexplained slowdown.
+Statuses are `passed`, `failed`, `error`, `incomplete`, or `skipped`; the overall status reflects the most severe check
+result. A check's duration is `null` when it did not run; measured durations are whole milliseconds. `skippedMounts`
+identifies declared sources omitted because they could not be opened.
 
-`reads` appears only with `--trace-reads`, and reports `paths`, `reads`, `bytes`, `unique_bytes` as `uniqueBytes`, and a
-capped `hottest` list of the most-read paths. The gap between `bytes` and `uniqueBytes` is the redundant work; `paths`
-is the untruncated count, so the capped list never reads as a complete one.
+### Inspect cache and read costs
 
-Each entry of `findings` describes one violation:
+`cache` reports retained entries and bytes, hits, misses, and refusals. Hits plus misses count parsed-asset requests,
+including misses for asset kinds the cache does not retain. A non-zero `refused` count means the byte ceiling prevented
+retention.
 
-| Field       | Meaning                                  |
-| ----------- | ---------------------------------------- |
-| `ruleId`    | Rule identifier from the table above.    |
-| `assetPath` | Root-relative asset path. May be absent. |
-| `message`   | Human-readable description.              |
-
-Findings are ordered by asset path, rule, then message, so two reports over the same gamedata can be compared directly.
-
-## Examples
+Add read tracing when investigating repeated I/O:
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata
-xrf-cli gamedata verify ./target/gamedata --checks scripts,ltx
-xrf-cli gamedata verify ./target/gamedata --checks weathers
-xrf-cli gamedata verify ./target/gamedata --checks sounds --strict
-xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json
-xrf-cli gamedata verify ./target/gamedata --ignore .git,textures_unpacked --strict
+xrf-cli gamedata verify ./target/gamedata --trace-reads --report ./read-report.json
 ```
+
+`reads` reports `paths`, `reads`, `bytes`, `uniqueBytes`, and the 25 hottest paths. The difference between total and
+unique bytes exposes repeated reads. The path count covers the whole run even though the hottest-path list is capped.
+Tracing adds synchronization on the read path; compare timings with the same tracing setting.
 
 ## Result
 
-The command exits with a non-zero status unless the overall result is `passed`, including when verification is skipped
-or incomplete. In normal logging mode it prints each failure message before exiting.
+A fully passed result exits 0. Invalid content exits 3; error, incomplete, and skipped results exit 1. In particular,
+missing mounted sources cannot produce a clean verification verdict merely because the remaining assets passed.
 
-The command validates the files present in the assembled tree, including generated scripts and configs. It does not
-validate source repositories or files that were not included in the build.
+Verification covers the resolved assets in the selected scope, including generated scripts and configs. It does not
+validate source files omitted from the build or replace testing the resulting game behavior.
 
 ## Command reference
 

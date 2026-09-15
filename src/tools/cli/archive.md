@@ -1,15 +1,19 @@
 # Archive CLI
 
-Use the archive commands to pack a `gamedata` directory into X-Ray `.db` files, inspect an existing archive, or unpack
-and verify it. Start with `archive pack` when you are building a database; use the read commands when you only need to
-examine one.
+Archive commands package gamedata into X-Ray `.db` or `.xdb` volumes, inspect their contents, and extract or verify
+stored files. Use `pack` for a full distribution and `pack-patch` for added or modified files relative to an
+installation.
+
+Packing examples run from a project containing `target/gamedata`. Inspection and unpacking examples use a `db` directory
+in the current working directory. Source paths and output destinations are separate.
 
 ## Pack an archive
 
-Pack a `gamedata` tree with a name and destination of your choice:
+Pack the assembled tree, then verify the written volumes:
 
 ```powershell
 xrf-cli archive pack target\gamedata --dest target\db --name gamedata
+xrf-cli archive verify --path target\db
 ```
 
 The command compresses file types the engine normally compresses and stores the rest. It writes one volume as
@@ -27,8 +31,8 @@ Each `--header` value is `key=value`, merged over the default header, so naming 
 `entry_point`. `level_name`, `level_ver`, `creator`, and `link` are the entries mod templates conventionally carry; they
 are yours to set and the engine ignores them.
 
-The engine reads `auto_load` and `entry_point` without checking whether they are present, so a volume missing either
-stops the game on load rather than mounting in the wrong place.
+The engine requires `auto_load` and `entry_point`; a volume missing either can stop the game on load. Packing validates
+the effective header before writing, including values supplied through a configuration file.
 
 ### Choose what to pack
 
@@ -54,8 +58,7 @@ entry_point = $fs_root$\gamedata\
 ```
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata `
-  --config pack.ltx
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata --config pack.ltx
 ```
 
 In `[include_folders]` and `[exclude_folders]`, `true` applies to the directory and everything below it; `false` applies
@@ -80,16 +83,15 @@ A JSON configuration for the same selection looks like this:
 ```
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata `
-  --config pack.json
+xrf-cli archive pack target\gamedata --dest target\db --name gamedata --config pack.json
 ```
 
 For a direct selection, repeat the relevant option:
 
 ```powershell
 xrf-cli archive pack target\gamedata --dest target\db --name configs `
-  --include-directory configs --include-directory spawns `
-  --include-file gamemtl.xr --exclude-extension '*.txt'
+  --include-directory configs --include-directory spawns --include-file gamemtl.xr `
+  --exclude-extension '*.txt'
 ```
 
 `--include-directory-shallow` includes a directory's files but not the files in its child directories.
@@ -125,7 +127,7 @@ For inputs that contain compressible files, these are the resulting archive size
 | 1,657 config files, 9.89 MB        | 2.00 MB        | 2.49 MB            | 1.93 MB      |
 | Anomaly configs and scripts, 35 MB | 8.57 MB        | 10.63 MB           | 8.26 MB      |
 
-Archives packed from the same source by either tool unpack to byte-identical files.
+In these comparisons, archives packed from the same source by either tool unpacked to byte-identical files.
 
 ### Replace an existing archive
 
@@ -135,8 +137,9 @@ Packing refuses to overwrite volumes with the same name. Add `--force` only when
 xrf-cli archive pack target\gamedata --dest target\db --name gamedata --force
 ```
 
-`--force` is destructive. If that run fails partway through, the previous set cannot be restored automatically. A
-non-forced run removes any volumes it created when it fails, leaving an existing different-named set alone.
+`--force` replaces volumes as it writes and cannot restore the previous set after a partial failure. It also does not
+prune higher-numbered volumes left by a larger previous build. Prefer a fresh output directory, verify its complete set,
+then replace the old distribution. A non-forced failed run removes the volumes it created.
 
 ## Build a patch
 
@@ -157,8 +160,8 @@ directory mounted after the base archives in `fsgame.ltx`, usually `db\patches\`
 Loose files in the player's `gamedata\` take priority over patch archives. Distribute loose replacements when those
 files need updating.
 
-A patch cannot remove a file. `CLocatorAPI::Register` only ever overwrites a descriptor, so deleting content means
-shipping a tree rather than a patch.
+A patch cannot remove a base file: archive registration can replace an entry but has no deletion marker. Removing
+content requires replacing or removing it from the installed base distribution.
 
 ### Deliver a tree of your own
 
@@ -215,8 +218,11 @@ payload, they also name the other paths that read those bytes.
 Unpack a complete volume set by giving its containing directory:
 
 ```powershell
-xrf-cli archive unpack --path .\db --dest .\unpacked\gamedata
+xrf-cli archive unpack --path .\db --dest .\unpacked
 ```
+
+The archive's mount prefix is retained beneath the destination. An archive packed with the default gamedata header
+therefore writes files under `unpacked/gamedata`, rather than directly under `unpacked`.
 
 To unpack one volume by itself, pass the volume path instead. `--dry` opens the archive and prints its summary without
 writing files. Use `-j` to control the worker count, for example `-j 8` or `-j 50%`.
@@ -246,7 +252,8 @@ xrf-cli archive verify --path .\db
 ```
 
 The command reads every payload, checks decompression, and validates its CRC. It reports damaged files as failures; use
-`--json` or `--report archive-verify.json` when another tool needs the result.
+`--report archive-verify.json` to save the findings. Successful archive verification establishes payload integrity; run
+[gamedata verification](gamedata.md) to check the files' formats and references in their installed context.
 
 ## Command reference
 

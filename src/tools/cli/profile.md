@@ -1,63 +1,69 @@
 # Profile
 
-`profile run` measures one invocation across one or more builds and reports what it found as a report envelope.
+`profile run` measures repeated executions of a command and compares builds within the same session. It reports
+wall-clock duration and sampled memory use.
+
+## Measure a command
+
+From an `xrf-tools` checkout with a release binary and an assembled `target/gamedata` tree:
 
 ```powershell
-xrf-cli profile run -b .\target\release\xrf-cli.exe -- gamedata verify .\target\gamedata
+xrf-cli profile run -b ./target/release/xrf-cli.exe --report ./profile-report.json `
+  -- gamedata verify ./target/gamedata
 ```
 
-Everything after `--` is passed unchanged to every binary. The measured command's own output is discarded, so what it
-prints never lands in the profiling run.
+Everything after `--` is passed unchanged to the measured binary. Relative paths use the current directory. The child's
+stdout and stderr are discarded; measurements are returned in the profiling command's report.
 
-## Why it is not a stopwatch
-
-Two correct runs of the same binary over a large tree differ by up to a second. Timing a command once, changing
-something, and timing it again measures the difference between two moments as much as between two builds. The command
-exists to remove the ways that goes wrong:
-
-- **Rounds are interleaved.** With more than one `--binary`, every build runs once before any build runs twice. Running
-  all rounds of one and then all of the other compares two machine states — file cache, background load, thermal
-  headroom — and has produced apparent differences of 10–16% that were not real.
-- **The first round is discarded.** A cold file cache costs up to twice the warm figure. `--warmup` controls how many
-  rounds are thrown away; one is enough, because the second touch of the same tree is already warm.
-- **The median is reported, not the mean.** A mean is dragged by the single round where something else woke up. The
-  median of an even number of rounds is the lower of the two middle rounds, so every figure quoted is one that a round
-  actually produced.
-- **Every round is reported.** `runs` carries each measurement in execution order, so the spread is visible rather than
-  hidden behind the median.
-
-## Memory
-
-`peakBytes` is the largest resident set seen while the command ran, and `meanBytes` is the average across the samples.
-Both are reported as the median of the per-round values, the same way the duration is.
-
-Read them together. A low mean under a high peak is a transient allocation — something built, used and dropped. Two
-similar figures are a process that held on to what it touched. The peak alone cannot tell those apart, and that is the
-difference between an allocation worth chasing and one that is already free.
+The default is one warmup round followed by five measured rounds. Every invocation performs the command's normal side
+effects, including warmups. Use a read-only command for a repeatable comparison, or restore its inputs between sessions.
 
 ## Comparing builds
 
-Repeat `--binary`. The first one named is the baseline, and every other reports `deltaPercent` against it — negative is
-faster.
+Repeat `--binary` to compare builds. In this example, `old/xrf-cli.exe` is a previously saved build and
+`target/release/xrf-cli.exe` is the candidate:
 
 ```powershell
-xrf-cli profile run -b .\old\xrf-cli.exe -b .\target\release\xrf-cli.exe --rounds 5 -- gamedata verify .\target\gamedata
+xrf-cli profile run -b ./old/xrf-cli.exe -b ./target/release/xrf-cli.exe --rounds 5 `
+  --report ./comparison.json -- gamedata verify ./target/gamedata
 ```
 
-Comparisons are only ever made **within one session**. There is no saved baseline to compare against later, and that is
-deliberate: a measurement taken last week against one taken today is exactly the non-interleaved comparison described
-above, with more time between the halves rather than less. To compare against an older build, measure it now, beside the
-new one.
+The first binary is the baseline. Other binaries report `deltaPercent` against its median duration; negative values mean
+faster execution. Each binary is identified by its own `--version` output, independently of the adjacent checkout.
 
-Each build is identified by its own `--version` output rather than by the checkout it sits next to, because a local
-build is routinely older than the source beside it and only the binary knows which commit it came from.
+Use the same corpus, arguments, worker settings, and machine for all builds. Compare old and new binaries in one
+session: this command does not load a historical baseline.
+
+## Why it is not a stopwatch
+
+Rounds are interleaved: each binary runs once, in the supplied order, before the next round starts. This limits the
+effect of changing file caches, background load, and thermal conditions, but does not eliminate measurement noise.
+
+`--warmup` controls how many initial rounds are discarded. Increase it when the workload needs more time to stabilize;
+one warmup does not guarantee a warm or steady system.
+
+The summary uses medians. With an even number of rounds, it selects the lower middle value. Individual measurements
+remain in `runs` in execution order, so inspect their spread before attributing a small difference to a code change.
+
+## Memory
+
+Memory is sampled about every 20 ms for the measured child process, excluding its descendants:
+
+- `peakBytes` is the largest observed resident set in a round.
+- `meanBytes` is the average resident set across that round's samples.
+- Summary values are independent medians of the per-round measurements.
+
+Short-lived allocations can fall between samples. A missing measurement means no usable sample was collected, not zero
+memory use. These are resident-memory figures, not total allocations or CPU utilization.
+
+A high peak with a lower mean suggests transient memory use; similar values suggest sustained residency. Neither alone
+proves whether the program released a particular allocation.
 
 ## Exit codes
 
-The run succeeds when the measurement succeeded. A measured command that fails its own check does not fail the profiling
-run — verifying real gamedata reports findings as a matter of course — but every exit code observed is recorded in
-`exitCodes`. More than one value there means the command changed behaviour partway through the session, and its median
-is describing two different pieces of work.
+Profiling succeeds when measurement succeeds, even if a measured command returns a failure code. Inspect each build's
+`exitCodes` before comparing its timing: a fast failure may have done less work. Multiple observed codes mean the
+command's outcome varied during the session.
 
 ## Command reference
 

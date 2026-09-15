@@ -1,15 +1,16 @@
 # Tools CLI
 
-The Rust `xrf-cli` binary provides repeatable asset inspection, conversion, packing, unpacking, formatting, and
-verification outside the engine repository wrapper.
+The Rust `xrf-cli` binary inspects, converts, packs, and verifies X-Ray assets. Use it directly for asset workflows and
+automation; the engine repository's `npm run cli -- ...` wrapper exposes selected operations.
+
+Commands have a group and an operation. To inspect a command's accepted arguments:
 
 ```powershell
-xrf-cli <group> <command> --help
+xrf-cli archive pack --help
 ```
 
-Every command belongs to a group, so operations read as `xrf-cli archive pack` or `xrf-cli gamedata verify`. The engine
-CLI wraps selected operations through `npm run cli -- ...`; use `xrf-cli` directly for scripts and format-specific
-workflows.
+Examples in this chapter assume `xrf-cli` is on `PATH`. Relative paths resolve from the current directory; each workflow
+identifies its input layout.
 
 ## Command groups
 
@@ -17,103 +18,77 @@ workflows.
 
 ## Reporting
 
-Four options are available on every command.
+| Option            | Effect                                                            |
+| ----------------- | ----------------------------------------------------------------- |
+| `-s, --silent`    | Suppress ordinary logging; a failed run still reports failure.    |
+| `-v, --verbose`   | Include command-specific detail.                                  |
+| `--json`          | Write one JSON report to stdout and human output to stderr.       |
+| `--report <PATH>` | Write the same JSON report to a file; human output stays enabled. |
 
-| Option            | Effect                                                                            |
-| ----------------- | --------------------------------------------------------------------------------- |
-| `-s, --silent`    | Say nothing but the fact that a run failed.                                       |
-| `-v, --verbose`   | Say more than a normal run does.                                                  |
-| `--json`          | Write one JSON report to standard output and move human output to standard error. |
-| `--report <PATH>` | Write the same JSON report to a file, leaving human output alone.                 |
+`--silent` conflicts with `--verbose`; `--json` conflicts with `--report`. Rust logging also honors `RUST_LOG`.
 
-`--silent` and `--verbose` cannot be combined, and neither can `--json` and `--report`; either pair is a usage error.
-Rust logging honours `RUST_LOG` when it is set.
-
-`--json` is what a script or an agent should use: standard output carries exactly one JSON document and nothing else, so
-it can be piped straight into a parser.
+Prefer a report file for large verification runs. Capture the exit code immediately after the command, then read the
+fields needed for the decision. From a project containing `target/gamedata`:
 
 ```powershell
-xrf-cli gamedata verify .\target\gamedata --json | ConvertFrom-Json
+xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json 2>$null
+$verificationExit = $LASTEXITCODE
+$report = Get-Content ./verification-report.json -Raw | ConvertFrom-Json
+$report.result.status
+$verificationExit
 ```
 
-The document is the same in either mode:
+Use `--json` when a consumer needs a stdout pipe. Neither report mode limits the number of findings.
 
-```json
-{
-  "build": {
-    "version": "0.1.0",
-    "kind": "optimized",
-    "commit": "791cd5014b9fa842e3e47419e22dcce023474784",
-    "reference": "main",
-    "isDirty": false,
-    "builtAt": "2026-08-28T09:14:02Z",
-    "target": "x86_64-pc-windows-msvc",
-    "rustc": "rustc 1.97.1",
-    "profile": "release",
-    "optimization": "opt-level=s, lto=true, codegen-units=1",
-    "runId": null
-  },
-  "command": ["gamedata", "verify"],
-  "duration": 1204,
-  "error": null,
-  "execution": { "workers": 8, "origin": "auto" },
-  "exitCode": 0,
-  "outcome": "success",
-  "result": {}
-}
-```
+The report is an envelope around a command-specific `result`:
 
-`outcome` is `success`, `checkFailed`, or `executionFailed`, and `exitCode` is the code the process then exits with.
-`result` carries whatever the command found, in that command's own shape, and is `null` for a command that reports no
-structured result yet. A failing run still produces the document, so a check that judged its input invalid reports the
-findings explaining the verdict rather than only a non-zero exit.
+| Field       | Meaning                                                                                  |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| `build`     | Binary version, commit, build settings, dirty state, and CI run identity when available. |
+| `command`   | Group and operation names.                                                               |
+| `duration`  | Total duration in whole milliseconds.                                                    |
+| `execution` | Worker count and how it was selected.                                                    |
+| `exitCode`  | Command exit code.                                                                       |
+| `outcome`   | `success`, `checkFailed`, or `executionFailed`.                                          |
+| `error`     | Failure details, or `null` on success.                                                   |
+| `result`    | The command's structured answer; it is `null` when no structured answer was produced.    |
 
-`build` says which binary produced the document. A report outlives the run that wrote it, so comparing two of them —
-across releases, or against a result someone else reported — means knowing what each was measured with. `isDirty`
-separates a report from a released commit from one produced by a working tree that merely started at that commit, and
-`runId` names the workflow run for a binary that came from CI rather than a developer's machine.
+A failed check still reports its findings. Argument parsing failures occur before command execution and do not produce
+an envelope. If writing the report fails, the process exits 1; an existing report at that path may belong to an earlier
+run. Check the process result and report freshness before using a saved answer.
 
-`execution` says how wide the run was, for the same reason and on every report: comparing two of them means knowing how
-much of each machine was used. See below.
+Keep `build` and `execution` when comparing reports: different binaries or worker counts can explain different results
+and timings.
 
 ## Execution
 
-Commands with work to spread take `-j, --jobs`. It is not on every command, because a command with no parallel work has
-nothing to bound.
+Commands that support parallel work accept `-j, --jobs`:
 
-| Value        | Meaning                                                       |
-| ------------ | ------------------------------------------------------------- |
-| `auto`       | Whatever the machine offers. The default when `-j` is absent. |
-| `<count>`    | Exactly that many workers. `1` is a real sequential run.      |
-| `<percent>%` | That share of the machine, rounded down, never below one.     |
+| Value            | Meaning                                                                             |
+| ---------------- | ----------------------------------------------------------------------------------- |
+| `auto`           | Use the machine's available parallelism; the default.                               |
+| A positive count | Use that many workers. `1` runs sequentially.                                       |
+| A percentage     | Use that share of available parallelism, rounded down with a minimum of one worker. |
 
 ```powershell
-xrf-cli gamedata verify .\target\gamedata -j 50%
+xrf-cli gamedata verify ./target/gamedata -j 50%
 ```
+
+Commands without parallel work do not accept `--jobs`.
 
 ## Exit codes
 
-| Code | Meaning                                             |
-| ---- | --------------------------------------------------- |
-| 0    | Success.                                            |
-| 1    | The command could not do its job.                   |
-| 2    | The invocation was rejected before the command ran. |
-| 3    | A check ran and judged its input invalid.           |
+| Code | Meaning                                                              |
+| ---- | -------------------------------------------------------------------- |
+| 0    | The command succeeded.                                               |
+| 1    | Execution failed or verification could not reach a complete verdict. |
+| 2    | The invocation was rejected before the command ran.                  |
+| 3    | A check ran and judged its input invalid.                            |
 
-Only `verify` commands and `--check` or `--strict` modes answer 3, and only for content they judged. An unreadable file,
-a refused write, or a check that reached no verdict answers 1. A requested report that cannot be written also answers 1,
-whatever the command itself decided, so a script never reads a previous run's report as this run's answer.
+A command's `--strict` behavior is specific to that command. Consult its guide before treating every strict failure as
+exit 3; refused writes and execution errors still use exit 1.
 
 ## Command reference
 
-Each group page carries its own guidance first and a generated command reference after it. The reference comes from the
-command definitions themselves, so an option added to the tool reaches this book without anyone rewriting a table:
-
-```powershell
-npm run cli:reference
-npm run format
-```
-
-The first regenerates `src/tools/cli/reference/` and needs the `xrf-tools` repository checked out beside this one; the
-second brings the new pages into this book's formatting. Those pages are never edited by hand: a correction to an
-option's description belongs in the command definition it came from.
+Each group page combines authored workflow guidance with reference generated from the command definitions. Correct
+option descriptions in the source command, then follow [the reference-generation workflow](docs.md).

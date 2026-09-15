@@ -1,16 +1,31 @@
 # Dialog CLI
 
-`dialog info` reads dialog XML and reports its contents and findings.
+`dialog info` checks dialog XML structure and summarizes the dialog graph. Use it after changing phrases or links, or to
+inspect an imported dialog set. See [dialog configuration](../../script_engine/configs_dialogs.md) for authoring rules.
+
+## Inspect a dialog set
+
+From a project containing an assembled `gamedata` directory:
 
 ```powershell
-xrf-cli dialog info --path ./gamedata --prefix configs/gameplay
+xrf-cli dialog info --path ./gamedata --source directory --strict --report ./dialog-report.json
 ```
 
-Repeat `--path` to layer roots, highest priority first. Use `--source directory` to read a loose folder without
-searching for a containing installation. Add `--strict` to fail when dialog data is unreadable or does not match the
-schema.
+`--source directory` selects the loose tree explicitly. The default, `containing-installation`, can discover the game
+installation around the supplied path. Repeat `--path` for layered roots, with the highest-priority root first;
+`--prefix` narrows the virtual path scope.
 
-For authoring dialog phrases and callbacks, see [Dialog configs](../../script_engine/configs_dialogs.md).
+The summary covers files, dialogs, phrases, and links, including empty dialogs, final phrases, missing text, and phrases
+outside a phrase list. Use `--verbose` for individual findings or inspect `result` in the saved report.
+
+## Interpret the result
+
+Without `--strict`, completed inspection can return exit 0 even when it finds invalid dialogs. With `--strict`, those
+findings produce exit 3. An error, incomplete inspection, or skipped input produces exit 1, including when no dialog
+files were selected.
+
+These checks establish structural consistency. Review the conversation in game to verify its conditions, scripting, and
+intended flow.
 
 ## Command reference
 
