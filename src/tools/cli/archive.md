@@ -16,6 +16,18 @@ xrf-cli archive pack target\gamedata --dest target\db --name gamedata
 xrf-cli archive verify --path target\db
 ```
 
+Example output excerpt — pack an archive:
+
+```text
+Packed 29 file(s) into 1 volume(s) in 23 ms
+Phases: 10 ms collecting, 13 ms writing, 0 ms finalizing
+Summary: 14 compressed, 15 stored, 0 aliased, 0 skipped
+Size: 2.37 MB source, 2.37 MB written
+Speed: 103 MB/s
+```
+
+Exit code: `0`.
+
 The command compresses file types the engine normally compresses and stores the rest. It writes one volume as
 `gamedata.db`; when the archive needs more than one volume, it writes `gamedata.db0`, `gamedata.db1`, and so on.
 
@@ -250,6 +262,14 @@ Verify every file after packing or copying an archive:
 ```powershell
 xrf-cli archive verify --path .\db
 ```
+
+Example output — verify an archive:
+
+```text
+Verified 29 file(s) in 29 ms
+```
+
+Exit code: `0`.
 
 The command reads every payload, checks decompression, and validates its CRC. It reports damaged files as failures; use
 `--report archive-verify.json` to save the findings. Successful archive verification establishes payload integrity; run

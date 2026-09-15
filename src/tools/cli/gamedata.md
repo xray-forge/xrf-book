@@ -11,6 +11,18 @@ From a project containing `target/gamedata`:
 xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json
 ```
 
+Example output excerpt — verify textures:
+
+```text
+Verify textures:
+Verified gamedata textures in 6 ms, 3/3 textures valid; 0/0 declared bumps resolved
+
+Project gamedata is valid
+Gamedata project verified in 9 ms
+```
+
+Exit code: `0`.
+
 The positional root must be an existing gamedata directory or an installation declaring its mounted sources. The
 resolved tree must contain `configs/system.ltx`; it may come from a loose file or an archive.
 
@@ -46,6 +58,20 @@ Use `gamedata list` to locate a winning file and inspect files hidden by higher-
 xrf-cli gamedata list --path "C:/Games/Anomaly" --prefix textures --shadowed `
   --report ./asset-list.json
 ```
+
+Example output — list textures:
+
+```text
+Listing ./gamedata
+  Directory ./gamedata (gamedata)
+  textures\act_cat_bump.thm [./gamedata]
+  textures\prop_lampa_g.dds [./gamedata]
+  textures\ui\ui_test_sheet.dds [./gamedata]
+  textures\ui_empty.dds [./gamedata]
+4 asset(s) across 1 mount(s) in 1 ms
+```
+
+Exit code: `0`.
 
 The default source mode searches for a containing installation. Use `--source directory` to inspect only a loose tree,
 or `--loose` to omit archived entries. Repeat `--path` to layer roots, highest priority first.
@@ -109,16 +135,19 @@ texture pairs.
 The saved file uses the [shared report envelope](cli.md#reporting). Its `result` contains `checks`, overall `status`,
 `duration`, `cache`, and `skippedMounts`. `reads` is included only with `--trace-reads`.
 
-Each check has its own status, duration, summary, verification type, and findings. This illustrative finding shows the
-fields used to locate and classify a problem:
+Each check has its own status, duration, summary, verification type, and findings.
+
+Example report finding — inspect a missing mesh dependency:
 
 ```json
 {
-  "assetPath": "textures/tile/wall.thm",
-  "message": "Example: the declared bump texture could not be resolved",
-  "ruleId": "textures.bump"
+  "assetPath": "meshes/ogf/dev_bolt_hud.ogf",
+  "message": "Mesh references missing motion 'dynamics\\devices\\dev_bolt\\dev_bolt_hud_animation'",
+  "ruleId": "meshes.motion-validation"
 }
 ```
+
+Exit code: `3`. The referenced animation bank is missing.
 
 `assetPath` is root-relative when available and `null` when the finding has no asset subject. `message` is
 human-readable; use `ruleId` for automated classification. Findings are ordered by asset path, rule, and message.

@@ -10,7 +10,7 @@ xrf-cli archive pack --help
 ```
 
 Examples in this chapter assume `xrf-cli` is on `PATH`. Relative paths resolve from the current directory; each workflow
-identifies its input layout.
+identifies its input layout. Output blocks show demo runs; paths, counts, and timings depend on the input and machine.
 
 ## Command groups
 

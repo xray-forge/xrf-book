@@ -14,6 +14,19 @@ Inspect a model before changing its references:
 xrf-cli ogf info --path ./meshes/example.ogf
 ```
 
+Example output excerpt — inspect model texture references:
+
+```text
+Bones: 1
+[0] name: lod
+[0] parent:
+OGF children (1):
+[0] texture name: wpn\wpn_pm
+[0] shader name: models\model
+```
+
+Exit code: `0`.
+
 The output includes available header and bounds data, textures and shaders, description metadata, bones and parents,
 motion references, and progressive levels of detail. It also reports unparsed chunk ids and nested child visuals.
 
@@ -102,6 +115,23 @@ xrf-cli ogf fix --path ./meshes --dry-run
 xrf-cli ogf fix --path ./meshes/actors/stalker_zombied/stalker_zombied_bandit2a_face1.ogf
 xrf-cli ogf fix --path ./meshes/wpn_m1891.ogf --dest ./fixed/wpn_m1891.ogf
 ```
+
+Example output excerpt — remove unread model bytes:
+
+```text
+Fixing ogf visual ./gamedata/meshes/ogf/residue_split_motion_ref.ogf
+Normalize ./gamedata/meshes/ogf/residue_split_motion_ref.ogf: 34 bytes the engine never reads
+Ogf visual written into ./fixed.ogf
+Normalized 1 of 1 visual(s), 34 bytes discarded, 0 unchanged, 0 failed
+```
+
+Stderr:
+
+```text
+Discarding uncounted motion reference 'actors\stalker_scenario_animation' from ./gamedata/meshes/ogf/residue_split_motion_ref.ogf
+```
+
+Exit code: `0`. This model contains 34 unread bytes. The source is retained and fixed.ogf receives the repaired model.
 
 Directories are scanned recursively in path order. `--dest` is supported only for a single file; `--jobs` controls
 directory-sweep parallelism.

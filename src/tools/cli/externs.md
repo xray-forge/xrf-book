@@ -16,6 +16,14 @@ xrf-cli externs export src/engine/declarations `
   --output target/parsed/externs.html
 ```
 
+Example output — export declarations:
+
+```text
+Exported 3 externs to './extern.json'.
+```
+
+Exit code: `0`.
+
 Exit code `0` means the export succeeded. Open the resulting HTML file to browse namespaces and declarations. Manifest
 source paths are relative to the declarations root.
 

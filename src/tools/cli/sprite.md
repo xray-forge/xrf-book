@@ -57,6 +57,14 @@ A partial overlap is different: widening a `1 × 1` icon to `2 × 1` can cover a
 later write replacing shared pixels. Run verification before and after changing grid positions or dimensions, then
 inspect the resulting sheet.
 
+Example output — check the icon grid:
+
+```text
+Inventory icon grid is clean, no overlapping rects
+```
+
+Exit code: `0`.
+
 ## Description sprites
 
 Unpack sheets named by an XML texture description:
@@ -65,6 +73,15 @@ Unpack sheets named by an XML texture description:
 xrf-cli sprite unpack-description --description ./configs/ui/textures_descr/ui_actor.xml `
   --base ./textures --output ./textures_unpacked
 ```
+
+Example output excerpt — unpack a sprite sheet:
+
+```text
+Unpacking for 1 files
+Unpacked 1 files
+```
+
+Exit code: `0`.
 
 After editing the extracted images, pack them back:
 

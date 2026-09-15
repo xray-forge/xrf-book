@@ -13,6 +13,14 @@ xrf-cli docs generate --output ./cli-reference
 xrf-cli docs generate --output ./cli-reference --check
 ```
 
+Example output — generate command reference:
+
+```text
+Generated 16 documentation pages in ./cli-reference
+```
+
+Exit code: `0`.
+
 The first command writes an index and group pages. The second performs a read-only comparison against what the current
 binary would generate: exit 0 means they match, and exit 3 means a page is missing, outdated, or unexpected. Comparison
 normalizes CRLF to LF.

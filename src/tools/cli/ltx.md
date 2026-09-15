@@ -13,6 +13,23 @@ xrf-cli ltx format --path ./gamedata/configs
 xrf-cli ltx format --path ./gamedata/configs --check
 ```
 
+Example output — check an unformatted LTX file:
+
+```text
+Checking 1 ltx file(s) from 1 provided path(s)
+Checking 1 file(s)
+Not formatted: ./ltx-unformatted/spacing.ltx
+```
+
+Stderr:
+
+```text
+Format issues with 1/1 files in 2 ms
+Check failed: 1 finding(s)
+```
+
+Exit code: `3`.
+
 When the input resolves through an installation, archived configs are listed as declined because they cannot be
 rewritten in place. Review that list before treating a formatting run as coverage of the whole config set.
 
@@ -39,6 +56,22 @@ each value was written:
 xrf-cli ltx list --path ./gamedata/configs
 xrf-cli ltx inspect wpn_ak74 --path ./gamedata/configs
 ```
+
+Example output — inspect a DLTX override:
+
+```text
+Inspect path: ./gamedata-dltx/configs
+[wpn_ak74] resolved from system.ltx (dltx)
+  declared in items\w_ak74.ltx
+  inherits wpn_base
+  $scheme    = $wpn_patched          set by w_ak74.ltx (depth 1)
+  ammo_class = ammo_a,ammo_b,ammo_c  set by mod_system_aaa.ltx ('>', depth -200)
+  cost       = 9000                  set by mod_system_xxx.ltx (depth -400)
+  patched_by = mod_system_xxx.ltx    set by mod_system_xxx.ltx (depth -400)
+4 field(s), 0 diagnostic(s)
+```
+
+Exit code: `0`. The later patch supplies cost = 9000; the output names the file that supplied each value.
 
 Use the resolved values and their source locations to distinguish a wrong declaration from a later override. If several
 entry points declare the section, select one with `--entry system.ltx`. Both commands accept `--dltx` for patched

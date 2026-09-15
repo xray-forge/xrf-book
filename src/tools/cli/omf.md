@@ -20,6 +20,20 @@ definition names.
 xrf-cli omf info --path ./meshes/example.omf --verbose
 ```
 
+Example output — inspect a motion bank:
+
+```text
+Read omf file ./gamedata/meshes/omf/wpn_mp5_hud_animation.omf
+Omf file information
+Version: 4
+Motions: 3 mp5_shoot,idle,mp5_reload
+Bones total: 7
+Parts: default
+Part 'default' bones: wpn_body,body,trigger,zatvor,lock,wpn_silencer,magazin
+```
+
+Exit code: `0`.
+
 Inspection is read-only. It reports the version, motions, bone count, animation parts, and bones assigned to each part.
 Verbose output adds per-motion keyframe counts, flags, speed, power, accrue, and falloff.
 
@@ -43,6 +57,14 @@ xrf-cli omf repack --path ./meshes/example.omf --dest ./meshes/example.repacked.
 xrf-cli omf repack --path ./meshes/example.omf --verify
 xrf-cli omf repack --path ./meshes
 ```
+
+Example output — verify byte-identical serialization:
+
+```text
+Byte identical: ./gamedata/meshes/omf/wpn_mp5_hud_animation.omf
+```
+
+Exit code: `0`. Verbose mode makes the successful comparison visible.
 
 The writer preserves chunk order and nested motion chunk ids. Verification requires byte-identical output, making it
 useful after changing OMF parsing or serialization. A mismatch or processing error produces a non-zero exit code;

@@ -12,6 +12,24 @@ xrf-cli spawn info --path ./all.spawn
 xrf-cli spawn unpack --path ./all.spawn --dest ./all_spawn
 ```
 
+Example output excerpt — inspect spawn data:
+
+```text
+Spawn file information:
+Version: 10
+GUID: a117405b-0a2e-a781-4ab5-f7aa88ae759c
+Levels count: 5
+Objects count: 262
+Artefact spawn points: 256
+Patrols: 4636
+Level version: 10
+Level graph vertices: 934
+Level graph points: 512
+Level graph edges: 2568
+```
+
+Exit code: `0`.
+
 `info` reports the header and counts of objects, artifact spawns, patrols, and graph entries. After editing the exported
 representation:
 

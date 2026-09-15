@@ -13,6 +13,18 @@ xrf-cli particle info --path ./particles.xr
 xrf-cli particle unpack --path ./particles.xr --dest ./particles_unpacked
 ```
 
+Example output — inspect particles:
+
+```text
+Read particle file ./gamedata/particles.xr
+Particles file information:
+Version: 1
+Effects count: 921
+Groups count: 350
+```
+
+Exit code: `0`.
+
 Edit the exported files, then validate and pack them:
 
 ```powershell

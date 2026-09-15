@@ -13,6 +13,22 @@ separate output paths when keeping the originals.
 xrf-cli dds info --path ./textures/ui/ui_icon_equipment.dds
 ```
 
+Example output — inspect a DDS sheet:
+
+```text
+Read dds file ./gamedata/textures/ui/ui_test_sheet.dds
+File size: 16512 (16.1 KB)
+Metadata size: 128
+Data size: 16384 (16 KB)
+Size: 256 x 64
+Mipmap: 1 - 16
+Linear size: 16384
+Block size: 16
+D3D format: DXT5
+```
+
+Exit code: `0`.
+
 The report includes dimensions, mipmaps, file and pixel-data sizes, compression, block size, bits per pixel, and known
 FourCC or D3D/DXGI formats. Pitch or linear size is included when present. Inspect these fields before selecting an
 output format or diagnosing a texture that the renderer cannot load.
@@ -25,6 +41,14 @@ Crop a single icon when its source sheet has no compatible inventory config:
 xrf-cli dds crop --source ./textures/ui/ui_icon_equipment.dds --output ./wpn_ak74.png `
   --x 1000 --y 0 --width 250 --height 100
 ```
+
+Example output — crop a region:
+
+```text
+Wrote 16x16 region from 0:0 of ./gamedata/textures/ui/ui_test_sheet.dds to ./height.png
+```
+
+Exit code: `0`.
 
 Coordinates and dimensions are pixels, measured from the top left. The source must contain the entire rectangle;
 out-of-bounds regions are rejected.
@@ -54,6 +78,14 @@ xrf-cli dds convert ./source.dds ./texture.dds --format bc3
 xrf-cli dds info --path ./texture.dds
 ```
 
+Example output — convert a DDS texture:
+
+```text
+Converted ./gamedata/textures/ui/ui_test_sheet.dds to ./converted.dds as BC3 (DXT5), 9 levels, 22032 bytes
+```
+
+Exit code: `0`.
+
 Accepted formats are `bc1`, `bc2`, `bc3`, `bc7`, and `rgba8`. Choose a format supported by the target renderer and
 appropriate for the texture's alpha and quality requirements.
 
@@ -72,6 +104,14 @@ From a working directory containing a height image, generate the two DDS files u
 ```powershell
 xrf-cli dds make-bump ./height.png ./textures/tile/wall --gloss-constant 0.5
 ```
+
+Example output — generate a bump pair:
+
+```text
+Generated .\wall_bump.dds and .\wall_bump#.dds from ./height.png
+```
+
+Exit code: `0`.
 
 The destination is a base path without an extension or `_bump` suffix. This example writes `textures/tile/wall_bump.dds`
 and `textures/tile/wall_bump#.dds`.

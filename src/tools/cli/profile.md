@@ -12,6 +12,19 @@ xrf-cli profile run -b ./target/release/xrf-cli.exe --report ./profile-report.js
   -- gamedata verify ./target/gamedata
 ```
 
+Example output — profile a command:
+
+```text
+Profiling dds info --path ./gamedata/textures/ui/ui_test_sheet.dds
+1 binaries, 3 rounds after 1 warmup, interleaved
+round 1/3 xrf-cli: 10 ms
+round 2/3 xrf-cli: 9 ms
+round 3/3 xrf-cli: 11 ms
+xrf-cli: median 10 ms, peak 11.8 MB / mean 11.8 MB
+```
+
+Exit code: `0`. Timings vary between runs.
+
 Everything after `--` is passed unchanged to the measured binary. Relative paths use the current directory. The child's
 stdout and stderr are discarded; measurements are returned in the profiling command's report.
 

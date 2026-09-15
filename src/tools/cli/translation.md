@@ -27,6 +27,23 @@ xrf-cli translation format --path ./translations
 xrf-cli translation format --path ./translations --check
 ```
 
+Example output — check unformatted JSON sources:
+
+```text
+Checking 2 translation source(s)
+Not formatted: ./translations\st_items.json
+Not formatted: ./translations\st_ui.json
+```
+
+Stderr:
+
+```text
+Format issues with 2/2 translation source(s) in 2 ms
+Check failed: 2 finding(s)
+```
+
+Exit code: `3`.
+
 The formatter sorts ids and language keys naturally, uses two-space indentation, and adds a trailing newline. Natural
 order places `st_thanks2` before `st_thanks10`, and `ammo-5.45x39-ap` before `ammo-11.43x23-fmj`. Check mode writes
 nothing and exits 3 when selected files need formatting.
@@ -60,6 +77,16 @@ Compile JSON sources into one XML string table per source and selected language,
 xrf-cli translation build --path ./translations --output ./gamedata/configs/text --language ukr
 ```
 
+Example output — build Ukrainian string tables:
+
+```text
+Building translations in ./translations (ContainingInstallation), language - ukr, sorted - true
+Building 2 translation source(s)
+Built translation files in 2 ms
+```
+
+Exit code: `0`.
+
 A missing translation compiles to its id. The report summarizes tables written and ids compiled per language.
 
 Build and verify accept a single source file or roots read through the virtual file system. Layered roots resolve
@@ -74,6 +101,24 @@ Check completeness for a language:
 xrf-cli translation verify --path ./translations --language ukr --strict `
   --report ./translation-report.json
 ```
+
+Example output — find missing Ukrainian text:
+
+```text
+Verifying translations in ./translations (ContainingInstallation), language - ukr
+Verifying 2 translation source(s)
+Verified translation files in 0 ms, 4 checked, 2 missing
+```
+
+Stderr:
+
+```text
+Translation key missing: st_medkit_name ukr in st_items.json
+Translation key missing: st_ui_quit ukr in st_ui.json
+Check failed: 2 finding(s)
+```
+
+Exit code: `3`. Both the absent key and the explicit null are reported as missing.
 
 Both an absent language key and an explicit `null` count as missing. Without `--strict`, missing translations are
 reported while a completed check succeeds. With `--strict`, those gaps produce exit 3.

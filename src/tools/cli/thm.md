@@ -14,6 +14,20 @@ xrf-cli thm patch-bump --path ./textures/wpn/wpn_pm/wpn_pm.thm --to "wpn\wpn_pm\
 xrf-cli thm patch-bump --path ./textures/wpn/wpn_pm/wpn_pm.thm --to "wpn\wpn_pm\wpn_pm_bump"
 ```
 
+Example report result — preview a bump-name change:
+
+```json
+{
+  "isDryRun": true,
+  "originalSize": 138,
+  "patchedSize": 154,
+  "previousMode": 1,
+  "previousName": ""
+}
+```
+
+Exit code: `0`. This dry run changes no file. The report shows a 16-byte increase for the requested name.
+
 The first command validates and reports the proposed change; the second rewrites the descriptor in place. The stored
 name is relative to `textures`, uses backslashes, and omits the extension.
 
