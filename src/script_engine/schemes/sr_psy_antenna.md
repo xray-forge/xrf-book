@@ -52,7 +52,7 @@ Sets the manager `noMumble` flag.
 
 Type: string. Optional. Default: `wound`.
 
-Hit type used by the manager.
+`chemical` hits with a chemical burn, any other value with a telepathic hit.
 
 ### `hit_freq`
 
@@ -71,7 +71,8 @@ When the actor enters the zone, the manager:
 - copies `no_static`, `no_mumble`, `hit_type`, and `hit_freq` to the shared manager;
 - starts the configured postprocess if it is not `nil`.
 
-When the actor leaves or the scheme deactivates, those additive values are subtracted and fake indicators are disabled.
+When the actor leaves or the scheme deactivates, those additive values are subtracted. Fake indicators turn off once the
+actor is in no psy antenna zone.
 
 The manager saves its inside/outside state in portable storage under key `inside`.
 
