@@ -37,7 +37,7 @@ Restrictor lifecycle code gives visited info portions when the actor reaches the
 
 ## Travel
 
-`TravelManager.isSmartAvailableToReach` rejects smart terrain travel targets on the current level when
+`isTravelRouteAvailable` from the travel manager utils rejects smart terrain travel targets on the current level when
 `REQUIRE_SMART_TERRAIN_VISIT` is enabled and the terrain has not been visited.
 
 ## Saved data
