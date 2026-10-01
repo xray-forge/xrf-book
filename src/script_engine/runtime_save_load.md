@@ -17,6 +17,7 @@ Client manager state is saved and loaded through:
 - `WeatherManager`;
 - `ReleaseBodyManager`;
 - `SurgeManager`;
+- `ArtefactManager`;
 - `PsyAntennaManager`;
 - `SoundManager`;
 - `StatisticsManager`;
