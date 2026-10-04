@@ -1,8 +1,9 @@
 # Dialog CLI
 
 `dialog info` checks dialog XML structure and summarizes the dialog graph. Use it after changing phrases or links, or to
-inspect an imported dialog set. `dialog list` lists dialogs, or the ones an NPC offers, and `dialog inspect` explains
-one dialog phrase by phrase. See [dialog configuration](../../script_engine/configs_dialogs.md) for authoring rules.
+inspect an imported dialog set. `dialog list` lists dialogs, or the ones an NPC offers, `dialog inspect` explains one
+dialog phrase by phrase, and `dialog find` shows where dialogs use an info portion or a script function. See
+[dialog configuration](../../script_engine/configs_dialogs.md) for authoring rules.
 
 ## Inspect a dialog set
 
@@ -78,6 +79,37 @@ xrf-cli dialog inspect zat_b33_stalker_snag_about_cache_dialog --path ./gamedata
 Each phrase prints as `[id] line -> next ids | effects`, the effects being its info portions, preconditions and actions.
 A dialog declared by more than one file is read from the first and the others are named; `--file` picks one by its
 logical path. The report carries every element of every phrase in document order.
+
+## Find where an info portion or function is used
+
+```powershell
+xrf-cli dialog find --path ./gamedata --source directory --info zat_b3_tech_drink_first_time --functor give_toolkit_1
+```
+
+Example output — in the xrf build:
+
+```text
+Info portion 'zat_b3_tech_drink_first_time': given 0, taken 0, checked 2
+  configs\gameplay\dialogs_zaton.xml zat_b3_stalker_tech_start [1111] dont_has_info zat_b3_tech_drink_first_time
+  configs\gameplay\dialogs_zaton.xml zat_b3_stalker_tech_start [1112] has_info zat_b3_tech_drink_first_time
+  configs\gameplay\dialogs_zaton.xml zat_b3_stalker_tech_drink_1 [0] has_info zat_b3_tech_drink_first_time (never read: the entry phrase's own condition)
+No dialog gives 'zat_b3_tech_drink_first_time'; scripts, logic and tasks may still give it
+Function 'give_toolkit_1': 2 references
+  configs\gameplay\dialogs_jupiter.xml jup_b217_stalker_tech_instruments [11] action dialogs_zaton.give_toolkit_1
+  configs\gameplay\dialogs_zaton.xml zat_b3_stalker_tech_instruments [11] action dialogs_zaton.give_toolkit_1
+Found 5 references
+```
+
+Repeat `--info` and `--functor` to search for several names at once. Each line names the file, the dialog, the phrase in
+brackets or `dialog` for the dialog's own conditions, and the element. A function given without a module, such as
+`give_toolkit_1`, matches it in any module; `dialogs_zaton.give_toolkit_1` matches that module only.
+
+The game decides whether to offer a dialog from the conditions written on the dialog itself, then says its first phrase,
+`0`, without checking that phrase's own conditions. Such a condition is marked "never read", unless another phrase leads
+back to phrase `0`. The drink above opens whenever the actor carries vodka, whatever its phrase `0` asks.
+
+The warning only covers dialogs: scripts, logic sections and tasks can still give the portion. A name nothing mentions
+is not an error, and the run still exits 0.
 
 ## Command reference
 

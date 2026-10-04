@@ -4,6 +4,26 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli dialog find`
+
+Find every dialog and phrase naming an info portion or a script function, and what each does with it
+
+```txt
+xrf-cli dialog find [OPTIONS] --path <path>... <--info <info>|--functor <functor>>
+```
+
+| Option                   | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------ | -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>...`   | yes      |                           | Root holding dialog xml. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                                                    |
+| `--source <source>`      |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
+| `--prefix <prefix>`      |          |                           | Limit to one logical subtree, such as configs\gameplay                                                                                                                                                                                                                                                                                                    |
+| `--info <info>...`       |          |                           | Info portion to find where dialogs check, give or take it. Repeat to find several                                                                                                                                                                                                                                                                         |
+| `--functor <functor>...` |          |                           | Script function to find where dialogs call it, as module.function or a bare function name in any module. Repeat to find several                                                                                                                                                                                                                           |
+| `-s, --silent`           |          |                           | Turn off logging                                                                                                                                                                                                                                                                                                                                          |
+| `-v, --verbose`          |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                                                                                   |
+| `--json`                 |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                                                                      |
+| `--report <PATH>`        |          |                           | Write the run's JSON report to a file                                                                                                                                                                                                                                                                                                                     |
+
 ## `xrf-cli dialog info`
 
 Command to read dialog xml and report what it holds
