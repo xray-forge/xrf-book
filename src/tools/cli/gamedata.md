@@ -50,6 +50,17 @@ xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
 
 Checks then resolve patched config values. Leave `--dltx` off for standard vanilla or OpenXRay LTX trees.
 
+Anomaly's Monolith engine also reads some configs differently from OpenXRay. Its weather keyframes carry no sun angles,
+for example, because it positions the sun from a table instead. Name the engine the tree targets with `--engine`. The
+default is `vanilla` (OpenXRay and Call of Pripyat); use `extended` for Anomaly:
+
+```powershell
+xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --engine extended --report ./anomaly-report.json
+```
+
+The two options are independent: `--dltx` picks how configs are resolved, and `--engine` picks how the resolved values
+are read.
+
 ## Inspect resolved assets
 
 Use `gamedata list` to locate a winning file and inspect files hidden by higher-priority mounts:
@@ -81,12 +92,22 @@ well as the winning paths: a successfully produced listing may still be incomple
 
 ## Checks and rules
 
-Select checks by their group names: `animations`, `levels`, `ltx`, `meshes`, `particles`, `particles-usage`, `scripts`,
-`shaders`, `sounds`, `spawns`, `textures`, `weapons`, and `weathers`.
+Select checks by their group names: `animations`, `environment`, `levels`, `ltx`, `meshes`, `particles`,
+`particles-usage`, `scripts`, `shaders`, `sounds`, `spawns`, `textures`, and `weapons`.
 
 Findings carry a stable rule identifier. These groups expose the following rules:
 
 - **Animations:** `animations.hud-item`, `animations.motion-collision`, `animations.player-hud`.
+- **Environment:** `environment.engine`, `environment.reference`, `environment.convention`, `environment.asset`. This
+  check covers everything under `configs\environment` that the engine reads: weather cycles and effects, suns,
+  thunderbolts, ambients with their sound channels and effects, and Anomaly's sun table.
+  - `environment.engine`: something the engine refuses to load, or reads as something other than what is written, such
+    as a short vector read with zeros.
+  - `environment.reference`: a section names another section the engine cannot find.
+  - `environment.convention`: something the engine loads but warns about or silently corrects, such as a colour outside
+    its checked range, a clamped value, or text after a number. Problems in a definition that nothing references are
+    reported under this rule too, because the engine never loads that definition.
+  - `environment.asset`: a sky or clouds texture that the game does not contain.
 - **Levels:** `levels.ai-guid`, `levels.ai-node-count`, `levels.ai-version`, `levels.cform-version`,
   `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.graph-duplicate`, `levels.graph-guid`,
   `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`, `levels.missing-bundle`,
@@ -105,11 +126,15 @@ Findings carry a stable rule identifier. These groups expose the following rules
 - **Textures:** `textures.bump`, `textures.bump-companion`, `textures.bump-declaration`, `textures.path`,
   `textures.read`, `textures.dds`.
 - **Weapons:** `weapons.validation`.
-- **Weathers:** `weathers.definitions`, `weathers.files`, `weathers.validation`.
 
-Two checks always run and cannot be selected or suppressed with `--checks`: `collisions.unreachable` reports logical
-path collisions, and `coverage.skipped-mount` reports declared sources that could not be opened. `checks.execution`
+Two checks always run and cannot be selected or suppressed with `--checks`: `collisions.unreachable` reports files no
+lookup can reach, and `coverage.skipped-mount` reports declared sources that could not be opened. `checks.execution`
 identifies a check that failed to execute.
+
+A collision is two files of one source folding to a single engine identity, where nothing ranks them and one simply
+cannot be read. It is not the same as an override: a patch volume or a loose `gamedata` file claiming a path a
+lower-priority source also holds is the arrangement working as intended, has a defined winner, and never fails a
+verdict. Use `gamedata list --shadowed` to see those.
 
 ### Interpret common findings
 
