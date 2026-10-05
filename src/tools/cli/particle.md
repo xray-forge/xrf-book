@@ -37,6 +37,39 @@ xrf-cli particle verify --path ./particles.rebuilt.xr
 After installing the rebuilt file, use [gamedata verification](gamedata.md) to check the library in its asset context,
 and inspect the affected effects in game.
 
+## Look up effects and groups
+
+```powershell
+xrf-cli particle list --path ./particles.xr --kind group --name campfire
+xrf-cli particle find --path ./particles.xr --texture pfx/pfx_splash_02 --effect explosions\effects\campfire_sparks
+xrf-cli particle inspect --path ./particles.xr explosions\campfire_boar_grill
+```
+
+`list` names every effect and group, or those of one kind or whose name holds a text: an effect with its shader,
+textures, particle limit and action types, a group with its effects and the children they spawn. `find` answers which
+effects sample a texture or draw with a shader or run an action type, and which groups play an effect or spawn it as a
+child, each match with every way it matched. A texture matches in any case, with either slash and with or without its
+extension, as the engine finds it. `inspect` explains one effect (sprite, flags, frames, collision, actions) or group
+(each effect's time window, flags and children), and reports it whole with `--json` or `--report`. A name nothing holds
+fails with exit code `1`, naming the names that contain it.
+
+Example output — explain a group:
+
+```text
+group explosions\campfire_boar_grill
+  time limit: none, loops
+  effects: 5
+    0. explosions\effects\campfire_boar_grill_smoke from 0 s to 0 s (Enabled)
+    1. explosions\effects\campfire_boar_grill_sparks from 0.5 s to 0 s (Enabled)
+    2. explosions\effects\fire_distort from 0 s to 0 s (Enabled)
+    3. explosions\effects\campfire_boar_grill_vacuum from 0 s to 0 s (Enabled)
+    4. explosions\effects\campfire_boar_grill_drop from 0 s to 0 s (Enabled, OnBirthChild, OnDeadChild)
+       on birth: explosions\effects\campfire_boar_grill_drop_smoke
+       on death: explosions\effects\campfire_boar_grill_drop_sparks
+```
+
+Exit code: `0`.
+
 ## Re-serialize a library
 
 ```powershell

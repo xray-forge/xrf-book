@@ -4,6 +4,26 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli particle find`
+
+Find the effects drawing with a texture or shader or running an action, and the groups playing an effect
+
+```txt
+xrf-cli particle find [OPTIONS] --path <path> <--texture <texture>|--shader <shader>|--action <action>|--effect <effect>>
+```
+
+| Option                   | Required | Default | Description                                                                                                            |
+| ------------------------ | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`      | yes      |         | Path to the particle library, particles.xr                                                                             |
+| `--texture <texture>...` |          |         | Texture to find the effects sampling, with or without its extension. Repeat to find several                            |
+| `--shader <shader>...`   |          |         | Shader to find the effects drawing with, such as particles\add. Repeat to find several                                 |
+| `--action <action>...`   |          |         | Action type to find the effects running, as the unpacked library names it, such as TargetColor. Repeat to find several |
+| `--effect <effect>...`   |          |         | Effect to find the groups playing or spawning it. Repeat to find several                                               |
+| `-s, --silent`           |          |         | Turn off logging                                                                                                       |
+| `-v, --verbose`          |          |         | Turn on verbose logging                                                                                                |
+| `--json`                 |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                   |
+| `--report <PATH>`        |          |         | Write the run's JSON report to a file                                                                                  |
+
 ## `xrf-cli particle info`
 
 Command to print information about provided particle file
@@ -14,11 +34,46 @@ xrf-cli particle info [OPTIONS] --path <path>
 
 | Option              | Required | Default | Description                                                          |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to particle file                                                |
+| `-p, --path <path>` | yes      |         | Path to the particle library, particles.xr                           |
 | `-s, --silent`      |          |         | Turn off logging                                                     |
 | `-v, --verbose`     |          |         | Turn on verbose logging                                              |
 | `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
 | `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+
+## `xrf-cli particle inspect`
+
+Explain one effect or group: its sprite, frames and actions, or the effects it plays and spawns
+
+```txt
+xrf-cli particle inspect [OPTIONS] --path <path> <name>
+```
+
+| Option              | Required | Default | Description                                                                                 |
+| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to the particle library, particles.xr                                                  |
+| `<name>`            | yes      |         | Name of the effect or group, in any case and with either slash, such as explosions\campfire |
+| `-s, --silent`      |          |         | Turn off logging                                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                       |
+
+## `xrf-cli particle list`
+
+List the effects and groups a particle library holds, with what each draws and plays
+
+```txt
+xrf-cli particle list [OPTIONS] --path <path>
+```
+
+| Option              | Required | Default | Description                                                                                                     |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to the particle library, particles.xr                                                                      |
+| `--kind <kind>`     |          |         | List only effects or only groups. Possible values: `effect`, `group`.                                           |
+| `--name <name>`     |          |         | List only names containing this text, in any case and with either slash, such as campfire or explosions\effects |
+| `-s, --silent`      |          |         | Turn off logging                                                                                                |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                         |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                            |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                           |
 
 ## `xrf-cli particle pack`
 
