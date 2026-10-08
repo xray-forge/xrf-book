@@ -51,8 +51,11 @@ xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
 Checks then resolve patched config values. Leave `--dltx` off for standard vanilla or OpenXRay LTX trees.
 
 Anomaly's Monolith engine also reads some configs differently from OpenXRay. Its weather keyframes carry no sun angles,
-for example, because it positions the sun from a table instead. Name the engine the tree targets with `--engine`. The
-default is `vanilla` (OpenXRay and Call of Pripyat); use `extended` for Anomaly:
+for example, because it positions the sun from a table instead. By default, `--engine auto` detects the engine from the
+tree: Anomaly's launcher or renderer executables, its `$warfare_presets$` mount in `fsgame.ltx`, or its
+`[weather_cycles]` graph in `configs/environment/dynamic_weather_graphs.ltx` mark it `extended`; anything else reads as
+`vanilla` (OpenXRay and Call of Pripyat). The report names the evidence. Name the engine explicitly when the tree shows
+none of these:
 
 ```powershell
 xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --engine extended --report ./anomaly-report.json
