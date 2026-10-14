@@ -126,8 +126,8 @@ Findings carry a stable rule identifier. These groups expose the following rules
   `shaders.renderer-root`, `shaders.source-invalid`, `shaders.source-read`.
 - **Sounds:** `sounds.files`, `sounds.references`.
 - **Spawns:** `spawns.path`, `spawns.read`.
-- **Textures:** `textures.bump`, `textures.bump-companion`, `textures.bump-declaration`, `textures.path`,
-  `textures.read`, `textures.dds`.
+- **Textures:** `textures.bump`, `textures.bump-companion`, `textures.bump-declaration`, `textures.chunk-residue`,
+  `textures.path`, `textures.read`, `textures.dds`.
 - **Weapons:** `weapons.validation`.
 
 Two checks always run and cannot be selected or suppressed with `--checks`: `collisions.unreachable` reports files no
@@ -146,17 +146,18 @@ banks in one HUD namespace are reported because lookup is ambiguous.
 
 For `meshes.chunk-residue`, inspect the model and use [`ogf fix`](ogf.md#ogf-fix) for recognized unread tails.
 
-For textures, distinguish three repairs:
+For textures, distinguish four repairs:
 
 | Rule                        | Meaning and action                                                                                      |
 | --------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `textures.bump`             | A declared bump does not resolve. Restore the file, repoint the descriptor, or disable the declaration. |
 | `textures.bump-companion`   | The bump exists but its `#` companion is missing. Restore or generate the pair.                         |
 | `textures.bump-declaration` | The descriptor carries a declaration the engine does not use. Correct the descriptor.                   |
+| `textures.chunk-residue`    | A descriptor chunk is longer than its fields. The engine ignores the bytes; resave the descriptor.      |
 
-Companion and unused-declaration findings are reported in normal mode but fail verification only under `--strict`. See
-[THM bump declarations](thm.md) for descriptor edits and [DDS bump generation](dds.md#generate-a-bump-pair) for missing
-texture pairs.
+Companion, unused-declaration and chunk-residue findings are reported in normal mode but fail verification only under
+`--strict`. See [THM bump declarations](thm.md) for descriptor edits and
+[DDS bump generation](dds.md#generate-a-bump-pair) for missing texture pairs.
 
 ## JSON report
 
