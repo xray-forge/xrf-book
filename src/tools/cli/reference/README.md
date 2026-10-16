@@ -3,7 +3,7 @@
 # XRF CLI command reference
 
 Reference for `xrf-cli` subcommands, generated from the clap command definitions. This directory is fully generated:
-rebuild it with `cargo make docs-cli` instead of editing pages.
+rebuild it with `cargo make doc-cli` instead of editing pages.
 
 <!-- ANCHOR: groups -->
 
