@@ -12,16 +12,17 @@ Extract one archive file or directory without unpacking the complete set
 xrf-cli archive extract [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option                    | Required | Default | Description                                                             |
-| ------------------------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `-p, --path <path>`       | yes      |         | Path to an archive volume or a directory containing volumes             |
-| `--file <file>`           |          |         | Exact logical path of one archive file; --dest is the output file       |
-| `--directory <directory>` |          |         | Logical directory to extract; --dest receives that directory's contents |
-| `-d, --dest <dest>`       | yes      |         | Output file for --file, or output directory for --directory             |
-| `-s, --silent`            |          |         | Turn off logging                                                        |
-| `-v, --verbose`           |          |         | Turn on verbose logging                                                 |
-| `--json`                  |          |         | Write the run's JSON report to stdout, moving human output to stderr    |
-| `--report <PATH>`         |          |         | Write the run's JSON report to a file                                   |
+| Option                    | Required | Default | Description                                                                      |
+| ------------------------- | -------- | ------- | -------------------------------------------------------------------------------- |
+| `-p, --path <path>`       | yes      |         | Path to an archive volume or a directory containing volumes                      |
+| `--file <file>`           |          |         | Exact logical path of one archive file; --dest is the output file                |
+| `--directory <directory>` |          |         | Logical directory to extract; --dest receives that directory's contents          |
+| `-d, --dest <dest>`       | yes      |         | Output file for --file, or output directory for --directory                      |
+| `-j, --jobs <JOBS>`       |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%' |
+| `-s, --silent`            |          |         | Turn off logging                                                                 |
+| `-v, --verbose`           |          |         | Turn on verbose logging                                                          |
+| `--json`                  |          |         | Write the run's JSON report to stdout, moving human output to stderr             |
+| `--report <PATH>`         |          |         | Write the run's JSON report to a file                                            |
 
 ## `xrf-cli archive find`
 
