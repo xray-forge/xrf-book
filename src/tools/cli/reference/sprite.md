@@ -12,17 +12,18 @@ Command to pack the sprites a texture description xml declares
 xrf-cli sprite pack-description [OPTIONS] --description <description> --base <base>
 ```
 
-| Option                        | Required | Default | Description                                                                         |
-| ----------------------------- | -------- | ------- | ----------------------------------------------------------------------------------- |
-| `--description <description>` | yes      |         | Path to XML file describing textures                                                |
-| `--base <base>`               | yes      |         | Path to base where search for described files                                       |
-| `--output <output>`           |          |         | Path to directory where output dds files                                            |
-| `--file <file>...`            |          |         | Name of a described file to pack, repeatable; packs every described file if omitted |
-| `--strict`                    |          |         | Turn on strict unpack mode                                                          |
-| `-s, --silent`                |          |         | Turn off logging                                                                    |
-| `-v, --verbose`               |          |         | Turn on verbose logging                                                             |
-| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                |
-| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                               |
+| Option                        | Required | Default | Description                                                                                         |
+| ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `--description <description>` | yes      |         | Path to XML file describing textures                                                                |
+| `--base <base>`               | yes      |         | Path to base where search for described files                                                       |
+| `--output <output>`           |          |         | Path to directory where output dds files                                                            |
+| `--file <file>...`            |          |         | Name of a described file to pack, repeatable; packs every described file if omitted                 |
+| `--strict`                    |          |         | Turn on strict unpack mode                                                                          |
+| `--refuse-links`              |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
+| `-s, --silent`                |          |         | Turn off logging                                                                                    |
+| `-v, --verbose`               |          |         | Turn on verbose logging                                                                             |
+| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
+| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                                               |
 
 ## `xrf-cli sprite pack-equipment`
 
@@ -53,18 +54,19 @@ Command to unpack the sprites a texture description xml declares
 xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <base>
 ```
 
-| Option                        | Required | Default | Description                                                                             |
-| ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------- |
-| `--description <description>` | yes      |         | Path to XML file describing textures                                                    |
-| `--base <base>`               | yes      |         | Path to base where search for described files                                           |
-| `--output <output>`           |          |         | Path to output folder for icons                                                         |
-| `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted |
-| `--strict`                    |          |         | Turn on strict unpack mode                                                              |
-| `-j, --jobs <JOBS>`           |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'        |
-| `-s, --silent`                |          |         | Turn off logging                                                                        |
-| `-v, --verbose`               |          |         | Turn on verbose logging                                                                 |
-| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                    |
-| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                                   |
+| Option                        | Required | Default | Description                                                                                         |
+| ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `--description <description>` | yes      |         | Path to XML file describing textures                                                                |
+| `--base <base>`               | yes      |         | Path to base where search for described files                                                       |
+| `--output <output>`           |          |         | Path to output folder for icons                                                                     |
+| `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted             |
+| `--strict`                    |          |         | Turn on strict unpack mode                                                                          |
+| `-j, --jobs <JOBS>`           |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                    |
+| `--refuse-links`              |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
+| `-s, --silent`                |          |         | Turn off logging                                                                                    |
+| `-v, --verbose`               |          |         | Turn on verbose logging                                                                             |
+| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
+| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                                               |
 
 ## `xrf-cli sprite unpack-equipment`
 
@@ -80,6 +82,7 @@ xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --source <so
 | `--source <source>`         | yes      |         | Path to source dds file                                                                             |
 | `--output <output>`         | yes      |         | Path to output folder for sections icons                                                            |
 | `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
+| `--refuse-links`            |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
 | `-s, --silent`              |          |         | Turn off logging                                                                                    |
 | `-v, --verbose`             |          |         | Turn on verbose logging                                                                             |
 | `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
