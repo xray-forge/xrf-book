@@ -100,7 +100,17 @@ Select checks by their group names: `animations`, `environment`, `levels`, `ltx`
 
 Findings carry a stable rule identifier. These groups expose the following rules:
 
-- **Animations:** `animations.hud-item`, `animations.motion-collision`, `animations.player-hud`.
+- **Animations:** `animations.hud-item`, `animations.motion-collision`, `animations.player-hud`,
+  `animations.object-motion-read`, `animations.object-motion-round-trip`, `animations.object-motion-value`,
+  `animations.post-process-read`, `animations.post-process-round-trip`, `animations.post-process-value`. Besides the HUD
+  animations a weapon or device names, this check reads every object motion (`.anm`, `.anm1`) and post-process effect
+  (`.ppe`) the game holds.
+  - `*-read`: the file does not read, for example because it is truncated or declares a version the engine does not
+    load.
+  - `*-round-trip`: the file does not write back to the bytes it was read from. An object motion that carries a chunk
+    besides its motion is the usual case: the engine skips that chunk, and the tools do not keep it.
+  - `*-value`: a channel evaluates to something other than a finite number, at a key, between two keys, or past them
+    where the envelope's behaviour takes over. The finding names the channel and the time, in seconds.
 - **Environment:** `environment.engine`, `environment.reference`, `environment.convention`, `environment.asset`. This
   check covers everything under `configs\environment` that the engine reads: weather cycles and effects, suns,
   thunderbolts, ambients with their sound channels and effects, and Anomaly's sun table.
