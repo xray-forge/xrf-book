@@ -46,14 +46,15 @@ Read a *.spawn and write it packed again
 xrf-cli spawn repack [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed *.spawn                                                       |
-| `-d, --dest <dest>` | yes      |         | Repacked *.spawn written                                             |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Packed *.spawn                                                              |
+| `-d, --dest <dest>` | yes      |         | Repacked *.spawn written                                                    |
+| `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli spawn re-unpack`
 
@@ -63,14 +64,15 @@ Read an unpacked spawn file folder and write it unpacked again
 xrf-cli spawn re-unpack [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Unpacked spawn file folder                                           |
-| `-d, --dest <dest>` | yes      |         | Folder the re-unpacked spawn file is written to                      |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Unpacked spawn file folder                                                  |
+| `-d, --dest <dest>` | yes      |         | Folder the re-unpacked spawn file is written to                             |
+| `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli spawn unpack`
 

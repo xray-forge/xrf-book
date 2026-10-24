@@ -101,14 +101,15 @@ Read a particles.xr and write it packed again
 xrf-cli particle repack [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed particles.xr                                                  |
-| `-d, --dest <dest>` | yes      |         | Repacked particles.xr written                                        |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Packed particles.xr                                                         |
+| `-d, --dest <dest>` | yes      |         | Repacked particles.xr written                                               |
+| `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli particle re-unpack`
 
@@ -118,14 +119,15 @@ Read an unpacked particles file folder and write it unpacked again
 xrf-cli particle re-unpack [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Unpacked particles file folder                                       |
-| `-d, --dest <dest>` | yes      |         | Folder the re-unpacked particles file is written to                  |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Unpacked particles file folder                                              |
+| `-d, --dest <dest>` | yes      |         | Folder the re-unpacked particles file is written to                         |
+| `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli particle unpack`
 
