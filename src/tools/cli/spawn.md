@@ -52,8 +52,8 @@ source or prove that an editing workflow preserved behavior.
 
 ## Failure notes
 
-Packing and unpacking reject existing destinations unless `--force` is supplied. Choose a new destination while
-reviewing edits; use `--force` when replacing that output is intended.
+Every command that writes requires `--dest`. Packing and unpacking reject existing destinations unless `--force` is
+supplied. Choose a new destination while reviewing edits; use `--force` when replacing that output is intended.
 
 If the source cannot be parsed, inspect the reported chunk or format error before editing. Repacking requires a readable
 source and does not repair truncated data.

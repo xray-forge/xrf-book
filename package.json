@@ -4,7 +4,7 @@
   "scripts": {
     "setup": "cargo install mdbook",
     "serve": "mdbook serve --open",
-    "cli:reference": "cd ../xrf-tools && cargo run --quiet -p xrf-cli -- docs generate --output ../xrf-book/src/tools/cli/reference --silent",
+    "cli:reference": "cd ../xrf-tools && cargo run --quiet -p xrf-cli -- docs generate --dest ../xrf-book/src/tools/cli/reference --silent",
     "prepare": "husky cli/.husky",
     "lint:staged": "lint-staged --config cli/hooks/lint-staged.config.mjs --max-arg-length 7000",
     "format": "prettier --write \"**/*.md\"",

@@ -76,8 +76,8 @@ JSON is the only source format. Raw X-Ray XML — a downloaded mod, a gamedata t
 source through [`xrf-cli translation parse`](../tools/cli/translation.md#parse), one language per run:
 
 ```powershell
-xrf-cli translation parse --path <mod or installation> --language eng --output src/engine/translations
-xrf-cli translation parse --path <mod or installation> --language ukr --output src/engine/translations
+xrf-cli translation parse --path <mod or installation> --language eng --dest src/engine/translations
+xrf-cli translation parse --path <mod or installation> --language ukr --dest src/engine/translations
 ```
 
 Running it once per language merges them into one file per table, gives every record an explicit `null` for the

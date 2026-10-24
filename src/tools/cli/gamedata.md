@@ -8,7 +8,7 @@ build or asset import, before launching or packaging the result.
 From a project containing `target/gamedata`:
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json
+xrf-cli gamedata verify --path ./target/gamedata --report ./verification-report.json
 ```
 
 Example output excerpt — verify textures:
@@ -16,36 +16,44 @@ Example output excerpt — verify textures:
 ```text
 Verify textures:
 Verified gamedata textures in 6 ms, 3/3 textures valid; 0/0 declared bumps resolved
-
-Project gamedata is valid
-Gamedata project verified in 9 ms
+Gamedata project checked in 9 ms
+Gamedata project: passed
 ```
 
 Exit code: `0`.
 
-The positional root must be an existing gamedata directory or an installation declaring its mounted sources. The
-resolved tree must contain `configs/system.ltx`; it may come from a loose file or an archive.
+`-p, --path` must name an existing gamedata directory or an installation declaring its mounted sources. The resolved
+tree must contain `configs/system.ltx`; it may come from a loose file or an archive.
 
 All asset checks run unless `--checks` selects a subset. Add `--strict` to fully validate expensive payloads and apply
 the checks' stricter content requirements:
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata --checks scripts,ltx
-xrf-cli gamedata verify ./target/gamedata --checks sounds --strict
+xrf-cli gamedata verify --path ./target/gamedata --checks scripts,ltx
+xrf-cli gamedata verify --path ./target/gamedata --checks sounds --strict
 ```
+
+A check that finds something prints one failure line naming the check, its status, and its finding count. Add
+`--verbose` to print each finding beneath it as `[rule] subject: message`, or read the findings from the
+[report](#json-report).
 
 `--jobs` controls parallel work; `-j 1` makes execution sequential. Worker count should not change the findings for
 unchanged input, but durations, cache statistics, and execution metadata can differ.
 
 By default the run ignores `.git`, `.idea`, `particles_unpacked`, `textures_unpacked`, `.gitignore`, `.gitattributes`,
-`README.md`, and `LICENSE`. Supplying `--ignore` replaces this list; include every exclusion the run still needs.
+`README.md`, and `LICENSE`. Supplying `--ignore` replaces this list; include every exclusion the run still needs. Repeat
+the flag or list several entries after one, separated by spaces:
+
+```powershell
+xrf-cli gamedata verify --path ./target/gamedata --ignore .git textures_unpacked docs
+```
 
 ## Patched installations
 
 For Anomaly and Monolith-based installations, enable the [DLTX dialect](ltx.md#the-dltx-patch-dialect):
 
 ```powershell
-xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
+xrf-cli gamedata verify --path "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
 ```
 
 Checks then resolve patched config values. Leave `--dltx` off for standard vanilla or OpenXRay LTX trees.
@@ -58,7 +66,7 @@ tree: Anomaly's launcher or renderer executables, its `$warfare_presets$` mount 
 none of these:
 
 ```powershell
-xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --engine extended --report ./anomaly-report.json
+xrf-cli gamedata verify --path "C:/Games/Anomaly" --dltx --engine extended --report ./anomaly-report.json
 ```
 
 The two options are independent: `--dltx` picks how configs are resolved, and `--engine` picks how the resolved values
@@ -77,7 +85,7 @@ Example output — list textures:
 
 ```text
 Listing ./gamedata
-  Directory ./gamedata (gamedata)
+  directory ./gamedata (gamedata)
   textures\act_cat_bump.thm [./gamedata]
   textures\prop_lampa_g.dds [./gamedata]
   textures\ui\ui_test_sheet.dds [./gamedata]
@@ -89,6 +97,10 @@ Exit code: `0`.
 
 The default source mode searches for a containing installation. Use `--source directory` to inspect only a loose tree,
 or `--loose` to omit archived entries. Repeat `--path` to layer roots, highest priority first.
+
+Each mount line names the mount's kind, `directory` or `archive`, then its root and label. The report's `mounts` lists
+the same mounts in search order as `{ kind, label, root }` objects, where `root` is the directory, or the directory
+holding the archive volumes.
 
 Console output shows at most 40 entries per section; the report retains the full list. Review skipped-source warnings as
 well as the winning paths: a successfully produced listing may still be incomplete.
@@ -174,25 +186,28 @@ Companion, unused-declaration and chunk-residue findings are reported in normal 
 
 ## JSON report
 
-The saved file uses the [shared report envelope](cli.md#reporting). Its `result` contains `checks`, overall `status`,
-`duration`, `cache`, and `skippedMounts`. `reads` is included only with `--trace-reads`.
+The saved file uses the [shared report envelope](cli.md#reporting). Its `result` contains overall `status`, `checks`,
+`duration`, `engine`, `cache`, and `skippedMounts`. `reads` is included only with `--trace-reads`. `engine` names the
+engine the configs were read as and the evidence that decided it.
 
-Each check has its own status, duration, summary, verification type, and findings.
+Each check is `{ id, status, duration, findings, summary }`. `id` is the check's group name, such as `textures`, and
+`summary` is the check's one-line verdict. Each finding is `{ ruleId, subject, message }`.
 
 Example report finding — inspect a missing mesh dependency:
 
 ```json
 {
-  "assetPath": "meshes/ogf/dev_bolt_hud.ogf",
   "message": "Mesh references missing motion 'dynamics\\devices\\dev_bolt\\dev_bolt_hud_animation'",
-  "ruleId": "meshes.motion-validation"
+  "ruleId": "meshes.motion-validation",
+  "subject": "meshes/ogf/dev_bolt_hud.ogf"
 }
 ```
 
 Exit code: `3`. The referenced animation bank is missing.
 
-`assetPath` is root-relative when available and `null` when the finding has no asset subject. `message` is
-human-readable; use `ruleId` for automated classification. Findings are ordered by asset path, rule, and message.
+`subject` is relative to the verified root when the asset lies beneath it, and `null` when the finding has no asset
+subject. `message` is human-readable; use `ruleId` for automated classification. Findings are ordered by subject, rule,
+and message.
 
 Statuses are `passed`, `failed`, `error`, `incomplete`, or `skipped`; the overall status reflects the most severe check
 result. A check's duration is `null` when it did not run; measured durations are whole milliseconds. `skippedMounts`
@@ -207,7 +222,7 @@ retention.
 Add read tracing when investigating repeated I/O:
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata --trace-reads --report ./read-report.json
+xrf-cli gamedata verify --path ./target/gamedata --trace-reads --report ./read-report.json
 ```
 
 `reads` reports `paths`, `reads`, `bytes`, `uniqueBytes`, and the 25 hottest paths. The difference between total and

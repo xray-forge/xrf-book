@@ -30,6 +30,9 @@ Exit code: `0`.
 The output includes available header and bounds data, textures and shaders, description metadata, bones and parents,
 motion references, and progressive levels of detail. It also reports unparsed chunk ids and nested child visuals.
 
+In a report, `description` is an object: `sourceFile`, `convertor`, `creator`, and `editor` as strings, and `builtAt`,
+`createdAt`, and `editedAt` as the Unix seconds the file stores.
+
 Progressive detail usually belongs to child visuals. Add `--verbose` to see each level's index-buffer offset, triangle
 count, and vertex count.
 
@@ -47,6 +50,10 @@ xrf-cli ogf verify --path ./meshes --root ./gamedata --report ./ogf-report.json
 The command checks model data and resolves texture dependencies. Repeat `--root` for additional lookup roots, searched
 after the visual's own tree. Missing dependencies can make verification incomplete; inspect the report before treating a
 readable model as ready to use.
+
+The report's checks are `ogf.read`, `ogf.geometry`, `ogf.bounds`, and `ogf.textures`, and their findings carry `ogf.*`
+rule identifiers such as `ogf.textures.missing`. A check that finds something prints one failure line; add `--verbose`
+to print each finding.
 
 A passed check exits 0, invalid content exits 3, and error, incomplete, or skipped results exit 1. This is a data check;
 inspect the model in the target renderer to verify its appearance.
@@ -98,10 +105,13 @@ run [gamedata verification](gamedata.md). A model missed during the rename still
 Both reference patchers first apply the model's existing values and require byte-identical output. This guards against
 losing chunks that cannot be reconstructed from parsed geometry.
 
-After writing, the motion patcher requires the requested list to read back; the texture patcher requires the old name to
-be absent and the new name present. A failed read-back check triggers restoration of an in-place source or removal of a
-separate destination. Filesystem write interruptions are not covered by that check; use a separate destination when
-retaining the original is required.
+The patched model is then checked in memory: the motion patcher requires the requested list to read back; the texture
+patcher requires the old name to be absent and the new name present. Only a model that passes is written, staged beside
+the destination and moved into place, so a refused patch leaves the destination as it was and a written one replaces it
+whole.
+
+Both reports carry `previousRefs`, the references the source held before the patch, beside the original and patched
+sizes and `isDryRun`.
 
 ## `ogf fix`
 

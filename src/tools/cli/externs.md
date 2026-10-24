@@ -11,9 +11,8 @@ another declaration tree, replace `src/engine/declarations` with its root.
 This command creates or replaces `target/parsed/externs.html`, creating parent directories when needed:
 
 ```powershell
-xrf-cli externs export src/engine/declarations `
-  --format html `
-  --output target/parsed/externs.html
+xrf-cli externs export --path src/engine/declarations `
+  --dest target/parsed/externs.html
 ```
 
 Example output — export declarations:
@@ -35,22 +34,21 @@ source paths are relative to the declarations root.
 | `xml`  | `<externs><exports>` document.     | LF                   |
 | `html` | Collapsible namespace reference.   | LF                   |
 
-Writing with `--output` requires an explicit `--format`. Use `--line-endings lf` or `--line-endings crlf` to override
-the format's default.
+`-p, --path` names the declarations root and `-d, --dest` names the artifact. The format is inferred from the artifact's
+extension; `--format json`, `--format xml`, or `--format html` overrides it, for example for an artifact with another
+extension. Use `--line-endings lf` or `--line-endings crlf` to override the format's default.
 
 ## Check
 
-Use `--check` to compare an existing artifact with the declarations without writing either. It cannot be combined with
-`--output`.
+Add `--check` to compare the existing `--dest` artifact with the declarations without writing either:
 
 ```powershell
-xrf-cli externs export src/engine/declarations `
-  --check src/engine/declarations/extern.json
+xrf-cli externs export --path src/engine/declarations `
+  --dest src/engine/declarations/extern.json --check
 ```
 
-The check infers the format from the artifact's extension unless `--format` is provided. JSON is compared as parsed
-manifest data; XML and HTML are compared as rendered text with line-ending differences ignored. This check does not
-enforce a line-ending policy.
+The format is chosen the same way as when writing. JSON is compared as parsed manifest data; XML and HTML are compared
+as rendered text with line-ending differences ignored. This check does not enforce a line-ending policy.
 
 Exit code `0` means the artifact matches. Exit code `3` indicates a mismatch or invalid declaration/artifact content;
 inspect the diagnostic before regenerating. An input that cannot be read is an execution failure, exit code `1`. See

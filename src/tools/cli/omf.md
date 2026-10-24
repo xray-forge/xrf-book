@@ -4,7 +4,7 @@ OMF commands inspect animation banks, verify serialization, and filter, rename, 
 adapting an imported bank to the motion names referenced by a weapon or HUD config.
 
 Examples run from a working directory containing the named OMF files and JSON map. Filtering and renaming require an
-explicit destination; duplication rewrites the source unless `--dest` is supplied.
+explicit destination; duplication rewrites the source unless `--dest` or `--dry-run` is supplied.
 
 ## How motions are stored
 
@@ -46,16 +46,18 @@ If a motion is missing, check the bank's names before changing the model or conf
 
 Select the mode by the input and output arguments:
 
-| Input                | Operation                                                              |
-| -------------------- | ---------------------------------------------------------------------- |
-| File with `--dest`   | Read and write a re-serialized copy.                                   |
-| File with `--verify` | Compare re-serialized bytes with the source in memory.                 |
-| Directory            | Recursively verify `.omf` files without writing; `--dest` is rejected. |
+| Input                     | Operation                                                       |
+| ------------------------- | --------------------------------------------------------------- |
+| File with `--dest`        | Read and write a re-serialized copy.                            |
+| File with `--verify`      | Compare re-serialized bytes with the source in memory.          |
+| Directory with `--verify` | Recursively compare every `.omf` file below it without writing. |
+
+`--dest` and `--verify` cannot be combined, and one of them is required. A directory without `--verify` is refused.
 
 ```powershell
 xrf-cli omf repack --path ./meshes/example.omf --dest ./meshes/example.repacked.omf
 xrf-cli omf repack --path ./meshes/example.omf --verify
-xrf-cli omf repack --path ./meshes
+xrf-cli omf repack --path ./meshes --verify
 ```
 
 Example output — verify byte-identical serialization:
@@ -67,11 +69,11 @@ Byte identical: ./gamedata/meshes/omf/wpn_mp5_hud_animation.omf
 Exit code: `0`. Verbose mode makes the successful comparison visible.
 
 The writer preserves chunk order and nested motion chunk ids. Verification requires byte-identical output, making it
-useful after changing OMF parsing or serialization. A mismatch or processing error produces a non-zero exit code;
-directory mode reports both counts.
+useful after changing OMF parsing or serialization. Every verification prints how many files came back byte identical
+and how many failed to read or write. A file whose repacked bytes differ produces exit 3; a file that cannot be read or
+repacked produces exit 1, even when others differ. Each failing file is named in the report's findings.
 
-Without verbose logging, a passing single-file verification is silent and a directory run prints failures and its
-summary. Add `--verbose` to list files that matched.
+Add `--verbose` to list the files that matched.
 
 ## `omf filter-motions`
 
@@ -84,12 +86,13 @@ xrf-cli omf filter-motions --path ./bank.omf --dest ./trimmed.omf --keep idle `
   --keep-prefix ak_74_ pist_
 ```
 
-At least one exact `--keep` name or literal `--keep-prefix` is required. A motion survives if it matches any selector;
-`ak_74_` and `ak74_` select different names. Matching nothing fails before writing.
+At least one exact `--keep` name or literal `--keep-prefix` is required; a command with neither is rejected as a usage
+error, exit 2, before any file is read. A motion survives if it matches any selector; `ak_74_` and `ak74_` select
+different names. Matching nothing fails before writing.
 
 Surviving definitions and payloads retain their pairing, with motion indices renumbered to their new positions. Use a
 separate destination to retain the shared bank for other weapons. Add `--dry-run` to inspect the selection without
-writing, or `--verbose` to list the resulting motions.
+writing, or `--verbose` to list the resulting motions. The report's `isDryRun` records which kind of run it was.
 
 ## `omf rename-motions`
 
@@ -124,9 +127,9 @@ xrf-cli omf duplicate-motion --path ./wpn_hand_pm_hud_animation.omf --from pm_id
   --to pm_idle_bore --play-once
 ```
 
-This example edits the bank in place. Supply `--dest` to keep the original. Both definition and keyframe payload are
-copied into a new paired slot, increasing the file by one motion's payload. An unknown source name or an existing
-destination name is refused.
+This example edits the bank in place. Supply `--dest` to keep the original, or `--dry-run` to validate the copy and
+report it without writing. Both definition and keyframe payload are copied into a new paired slot, increasing the file
+by one motion's payload. An unknown source name or an existing destination name is refused.
 
 `--play-once` sets the stop-at-end flag on the copy while preserving other flags.
 

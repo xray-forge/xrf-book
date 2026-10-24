@@ -38,7 +38,7 @@ output format or diagnosing a texture that the renderer cannot load.
 Crop a single icon when its source sheet has no compatible inventory config:
 
 ```powershell
-xrf-cli dds crop --source ./textures/ui/ui_icon_equipment.dds --output ./wpn_ak74.png `
+xrf-cli dds crop --path ./textures/ui/ui_icon_equipment.dds --dest ./wpn_ak74.png `
   --x 1000 --y 0 --width 250 --height 100
 ```
 
@@ -53,15 +53,15 @@ Exit code: `0`.
 Coordinates and dimensions are pixels, measured from the top left. The source must contain the entire rectangle;
 out-of-bounds regions are rejected.
 
-A `.png` output preserves the decoded pixels without another lossy encode. Any other output extension selects BC3 DDS.
-Prefer PNG for subsequent packing; `sprite pack-equipment` selects `<section>.png` before `<section>.dds`.
+A `.png` destination preserves the decoded pixels without another lossy encode. Any other destination extension selects
+BC3 DDS. Prefer PNG for subsequent packing; `sprite pack-equipment` selects `<section>.png` before `<section>.dds`.
 
 ### Fitting into different bounds
 
 Supply both fit dimensions to resize the crop into a fixed output rectangle:
 
 ```powershell
-xrf-cli dds crop --source ./ui_actor_weapons.dds --output ./upgrade_ak74.png --x 0 --y 400 `
+xrf-cli dds crop --path ./ui_actor_weapons.dds --dest ./upgrade_ak74.png --x 0 --y 400 `
   --width 300 --height 100 --fit-width 295 --fit-height 110
 ```
 
@@ -74,7 +74,7 @@ dimensions, so fit those icons before packing.
 Re-encode an existing DDS texture in an explicit format:
 
 ```powershell
-xrf-cli dds convert ./source.dds ./texture.dds --format bc3
+xrf-cli dds convert --path ./source.dds --dest ./texture.dds --format bc3
 xrf-cli dds info --path ./texture.dds
 ```
 
@@ -86,7 +86,7 @@ Converted ./gamedata/textures/ui/ui_test_sheet.dds to ./converted.dds as BC3 (DX
 
 Exit code: `0`.
 
-Accepted formats are `bc1`, `bc2`, `bc3`, `bc7`, and `rgba8`. Choose a format supported by the target renderer and
+`--format` is one of `bc1`, `bc2`, `bc3`, `rgba8`, and `bc7`. Choose a format supported by the target renderer and
 appropriate for the texture's alpha and quality requirements.
 
 Conversion decodes the base image and rebuilds its mip chain. Use `--no-mipmaps` to write only the base level.
@@ -102,7 +102,7 @@ numerical error alone does not establish acceptable appearance.
 From a working directory containing a height image, generate the two DDS files used by an X-Ray bumped surface:
 
 ```powershell
-xrf-cli dds make-bump ./height.png ./textures/tile/wall --gloss-constant 0.5
+xrf-cli dds make-bump --path ./height.png --dest ./textures/tile/wall --gloss-constant 0.5
 ```
 
 Example output — generate a bump pair:

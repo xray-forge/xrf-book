@@ -85,7 +85,7 @@ error names the flag.
 
 ```powershell
 xrf-cli ltx verify --path "C:/games/anomaly" --dltx
-xrf-cli gamedata verify "C:/games/anomaly" --dltx
+xrf-cli gamedata verify --path "C:/games/anomaly" --dltx
 ```
 
 DLTX is not vanilla LTX with patches applied on top. It changes how base data resolves even when no patch file exists:

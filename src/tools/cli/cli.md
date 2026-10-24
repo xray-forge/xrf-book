@@ -31,7 +31,7 @@ Prefer a report file for large verification runs. Capture the exit code immediat
 fields needed for the decision. From a project containing `target/gamedata`:
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json 2>$null
+xrf-cli gamedata verify --path ./target/gamedata --report ./verification-report.json 2>$null
 $verificationExit = $LASTEXITCODE
 $report = Get-Content ./verification-report.json -Raw | ConvertFrom-Json
 $report.result.status
@@ -53,6 +53,11 @@ The report is an envelope around a command-specific `result`:
 | `error`     | Failure details, or `null` on success.                                                   |
 | `result`    | The command's structured answer; it is `null` when no structured answer was produced.    |
 
+Verification commands — `gamedata verify`, `translation verify`, `ogf verify`, `level verify`, and `dialog info` — share
+one shape inside `result`: an overall `status` and a `checks` list. Each check is `{ id, status, duration, findings }`,
+and each finding is `{ ruleId, subject, message }`. A command adds its own fields beside them, such as a census of what
+it read.
+
 A failed check still reports its findings. Argument parsing failures occur before command execution and do not produce
 an envelope. If writing the report fails, the process exits 1; an existing report at that path may belong to an earlier
 run. Check the process result and report freshness before using a saved answer.
@@ -71,7 +76,7 @@ Commands that support parallel work accept `-j, --jobs`:
 | A percentage     | Use that share of available parallelism, rounded down with a minimum of one worker. |
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata -j 50%
+xrf-cli gamedata verify --path ./target/gamedata -j 50%
 ```
 
 Commands without parallel work do not accept `--jobs`.

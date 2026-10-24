@@ -74,13 +74,13 @@ formatted earlier remain changed. Each replacement is staged as a whole file.
 Compile JSON sources into one XML string table per source and selected language, using that language's code page:
 
 ```powershell
-xrf-cli translation build --path ./translations --output ./gamedata/configs/text --language ukr
+xrf-cli translation build --path ./translations --dest ./gamedata/configs/text --language ukr
 ```
 
 Example output — build Ukrainian string tables:
 
 ```text
-Building translations in ./translations (ContainingInstallation), language - ukr, sorted - true
+Building translations in ./translations (containing-installation), language - ukr, sorted - true
 Building 2 translation source(s)
 Built translation files in 2 ms
 ```
@@ -90,8 +90,8 @@ Exit code: `0`.
 A missing translation compiles to its id. The report summarizes tables written and ids compiled per language.
 
 Build and verify accept a single source file or roots read through the virtual file system. Layered roots resolve
-winning files by priority, including files from mounted archives. The build output is a plain directory and must be
-outside every source root.
+winning files by priority, including files from mounted archives. The `--dest` directory is a plain directory and must
+be outside every source root.
 
 ## Verify
 
@@ -105,7 +105,7 @@ xrf-cli translation verify --path ./translations --language ukr --strict `
 Example output — find missing Ukrainian text:
 
 ```text
-Verifying translations in ./translations (ContainingInstallation), language - ukr
+Verifying translations in ./translations (containing-installation), language - ukr
 Verifying 2 translation source(s)
 Verified translation files in 0 ms, 4 checked, 2 missing
 ```
@@ -123,17 +123,22 @@ Exit code: `3`. Both the absent key and the explicit null are reported as missin
 Both an absent language key and an explicit `null` count as missing. Without `--strict`, missing translations are
 reported while a completed check succeeds. With `--strict`, those gaps produce exit 3.
 
-The report contains a finding per missing id and a `languages` array with summary rows per file and language. Use the
-summary rows to review large imports, then inspect findings for the files being translated. An unreadable source is an
-execution failure; malformed source content can fail verification independently of `--strict`.
+The report's `result` holds `checkedTranslations`, `missingTranslations`, `languages`, `duration`, `status`, and
+`checks`. Its `translations` check carries one `translations.missing` finding per missing id, and `languages` holds a
+summary row per file and language. `status` is `failed` whenever a translation is missing; only `--strict` turns that
+into exit 3. Use the summary rows to review large imports, then inspect findings for the files being translated.
+
+An unreadable source is an execution failure, exit 1. A malformed source fails verification with exit 3 regardless of
+`--strict`; the report then carries the parse error as a single `translations.source` finding, with nothing else
+checked.
 
 ## Parse
 
 Import XML tables once per language into a shared JSON output directory:
 
 ```powershell
-xrf-cli translation parse --path ./stalker-anomaly --language eng --output ./translations
-xrf-cli translation parse --path ./stalker-anomaly --language ukr --output ./translations
+xrf-cli translation parse --path ./stalker-anomaly --language eng --dest ./translations
+xrf-cli translation parse --path ./stalker-anomaly --language ukr --dest ./translations
 ```
 
 XML tables do not declare their language. `--language` labels the imported text, so select the language that the input
@@ -142,9 +147,9 @@ loose trees.
 
 ### What it writes
 
-Each table becomes a JSON source with its subdirectory path preserved. Imports into the same output merge languages. Ids
-and language keys use the same canonical order as [Format](#format), independently of import order. A record missing one
-of the languages represented in its file receives an explicit `null`.
+Each table becomes a JSON source under `--dest` with its subdirectory path preserved. Imports into the same destination
+merge languages. Ids and language keys use the same canonical order as [Format](#format), independently of import order.
+A record missing one of the languages represented in its file receives an explicit `null`.
 
 Existing text that differs from the import is preserved and counted as a conflict. Add `--overwrite` to replace it.
 Reimporting unchanged tables into an unchanged output is idempotent.

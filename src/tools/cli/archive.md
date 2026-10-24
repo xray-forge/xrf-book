@@ -12,7 +12,7 @@ in the current working directory. Source paths and output destinations are separ
 Pack the assembled tree, then verify the written volumes:
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata
 xrf-cli archive verify --path target\db
 ```
 
@@ -35,7 +35,7 @@ By default, a volume can be up to 1900 MB and receives a header that mounts its 
 is the usual setting for a `gamedata` archive. To add or change one entry, name it:
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata `
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata `
   --header 'creator="Modder"' --header 'link="www.moddb.com/mods/my-mod"'
 ```
 
@@ -48,8 +48,8 @@ the effective header before writing, including values supplied through a configu
 
 ### Choose what to pack
 
-Without selection options, the command packs the whole source directory. Use a configuration file when the selection is
-shared or checked in; use command-line options for a one-off build. They cannot be combined.
+Without selection options, the command packs the whole `--path` directory. Use a configuration file when the selection
+is shared or checked in; use command-line options for a one-off build. They cannot be combined.
 
 An `.ltx` configuration uses the `xrCompress` dialect:
 
@@ -70,7 +70,7 @@ entry_point = $fs_root$\gamedata\
 ```
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata --config pack.ltx
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata --config pack.ltx
 ```
 
 In `[include_folders]` and `[exclude_folders]`, `true` applies to the directory and everything below it; `false` applies
@@ -95,13 +95,13 @@ A JSON configuration for the same selection looks like this:
 ```
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata --config pack.json
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata --config pack.json
 ```
 
 For a direct selection, repeat the relevant option:
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name configs `
+xrf-cli archive pack --path target\gamedata --dest target\db --name configs `
   --include-directory configs --include-directory spawns --include-file gamemtl.xr `
   --exclude-extension '*.txt'
 ```
@@ -146,7 +146,7 @@ In these comparisons, archives packed from the same source by either tool unpack
 Packing refuses to overwrite volumes with the same name. Add `--force` only when replacing that set is intended:
 
 ```powershell
-xrf-cli archive pack target\gamedata --dest target\db --name gamedata --force
+xrf-cli archive pack --path target\gamedata --dest target\db --name gamedata --force
 ```
 
 `--force` replaces volumes as it writes and cannot restore the previous set after a partial failure. It also does not
@@ -156,10 +156,10 @@ then replace the old distribution. A non-forced failed run removes the volumes i
 ## Build a patch
 
 `archive pack-patch` creates `.db` volumes containing added and modified files. To package edits from a game's loose
-`gamedata\`, point at the installation:
+`gamedata\`, point `--path` at the installation:
 
 ```powershell
-xrf-cli archive pack-patch 'C:\Games\Anomaly' --dest target\patch --name mypatch
+xrf-cli archive pack-patch --path 'C:\Games\Anomaly' --dest target\patch --name mypatch
 ```
 
 Without `--target`, the command compares the installation's archives with its loose files. Unchanged copies are omitted,
@@ -180,7 +180,7 @@ content requires replacing or removing it from the installed base distribution.
 Use `--target` to deliver files from a separate folder:
 
 ```powershell
-xrf-cli archive pack-patch 'C:\Games\Anomaly' --target C:\work\mymod\gamedata `
+xrf-cli archive pack-patch --path 'C:\Games\Anomaly' --target C:\work\mymod\gamedata `
   --dest target\patch --name mypatch
 ```
 
@@ -192,7 +192,7 @@ it. Naming its parent adds an unwanted `gamedata\` prefix to archive entries.
 Use `--dry-run` to compare without writing volumes. Add `--report` to save every changed entry:
 
 ```powershell
-xrf-cli archive pack-patch 'C:\Games\Anomaly' --dry-run --report patch-preview.json
+xrf-cli archive pack-patch --path 'C:\Games\Anomaly' --dry-run --report patch-preview.json
 ```
 
 The size shown is the total unpacked payload; the final archive size is known only after writing.
@@ -236,12 +236,15 @@ xrf-cli archive unpack --path .\db --dest .\unpacked
 The archive's mount prefix is retained beneath the destination. An archive packed with the default gamedata header
 therefore writes files under `unpacked/gamedata`, rather than directly under `unpacked`.
 
-To unpack one volume by itself, pass the volume path instead. `--dry` opens the archive and prints its summary without
-writing files. Use `-j` to control the worker count, for example `-j 8` or `-j 50%`.
+To unpack one volume by itself, pass the volume path instead. `--dry-run` opens the archive and prints its summary
+without writing files. Use `-j` to control the worker count, for example `-j 8` or `-j 50%`.
 
 ```powershell
-xrf-cli archive unpack --path .\db\configs.db --dest .\unpacked\configs --dry
+xrf-cli archive unpack --path .\db\configs.db --dest .\unpacked\configs --dry-run
 ```
+
+A dry run's report is the summary it printed: `archives`, `files`, `directories` (directory records, which a real run
+creates as folders), `sizeCompressed` and `sizeReal` in bytes, `source`, `destination`, and `isDryRun`.
 
 Use a new or empty destination directory. Existing files can otherwise be replaced while the archive is unpacked.
 

@@ -9,8 +9,8 @@ Run from a directory where `./cli-reference` can hold generated files exclusivel
 and removes unexpected top-level `.md` files in that directory.
 
 ```powershell
-xrf-cli docs generate --output ./cli-reference
-xrf-cli docs generate --output ./cli-reference --check
+xrf-cli docs generate --dest ./cli-reference
+xrf-cli docs generate --dest ./cli-reference --check
 ```
 
 Example output — generate command reference:

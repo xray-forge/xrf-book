@@ -17,8 +17,8 @@ Unpack the equipment sheet into per-section images:
 
 ```powershell
 xrf-cli sprite unpack-equipment --system-ltx ./configs/system.ltx `
-  --source ./textures/ui/ui_icon_equipment.dds `
-  --output ./textures_unpacked/ui/ui_icon_equipment
+  --path ./textures/ui/ui_icon_equipment.dds `
+  --dest ./textures_unpacked/ui/ui_icon_equipment
 ```
 
 Only sections with `$inventory_icon = true` and all four fields—`inv_grid_x`, `inv_grid_y`, `inv_grid_width`, and
@@ -30,8 +30,8 @@ Edit the extracted icons, check the grid, then pack the replacement sheet:
 ```powershell
 xrf-cli sprite verify-equipment --system-ltx ./configs/system.ltx
 xrf-cli sprite pack-equipment --system-ltx ./configs/system.ltx `
-  --source ./textures_unpacked/ui/ui_icon_equipment `
-  --output ./textures/ui/ui_icon_equipment.dds --strict
+  --path ./textures_unpacked/ui/ui_icon_equipment `
+  --dest ./textures/ui/ui_icon_equipment.dds --strict
 ```
 
 Packing prefers `<section>.png` over `<section>.dds`. Icons that differ from the target dimensions are fitted while
@@ -47,7 +47,8 @@ Select it when the layout depends on those patches.
 ### Checking the grid before moving an icon
 
 Grid coordinates use 50 × 50 pixel cells. `verify-equipment` reports partial overlaps between sections, including the
-shared cells and overlap count, and returns a non-zero exit code when it finds them.
+shared cells and overlap count, and exits 3 when it finds them. A system ltx that does not parse also exits 3; its
+report then carries the parse error in `malformed` instead of a list of overlaps.
 
 Identical rectangles are allowed: variants such as `_nimble`, `_snag`, and `pri_a15_` quest copies often share their
 base weapon's slot. Packing can warn when different art targets the same slot, but it does not replace the overlap
@@ -71,7 +72,7 @@ Unpack sheets named by an XML texture description:
 
 ```powershell
 xrf-cli sprite unpack-description --description ./configs/ui/textures_descr/ui_actor.xml `
-  --base ./textures --output ./textures_unpacked
+  --base ./textures --dest ./textures_unpacked
 ```
 
 Example output excerpt — unpack a sprite sheet:
@@ -87,14 +88,20 @@ After editing the extracted images, pack them back:
 
 ```powershell
 xrf-cli sprite pack-description --description ./configs/ui/textures_descr/ui_actor.xml `
-  --base ./textures_unpacked --output ./textures --strict
+  --base ./textures_unpacked --dest ./textures --strict
 ```
 
 Each image must exactly match its declared rectangle; description packing does not rescale. Use
 [DDS fitting](dds.md#fitting-into-different-bounds) when an imported icon needs different bounds.
 
-The description and base path are required. Output defaults to the base path when omitted, so name a separate output
-explicitly when keeping source and result apart. Both commands accept `--strict`; `-s` means `--silent`.
+The description and base path are required. `-d, --dest` defaults to the base path when omitted, so name a separate
+destination explicitly when keeping source and result apart. Both commands accept `--strict`; `-s` means `--silent`.
+Without `--strict`, packing leaves the place of an unreadable sprite empty, and unpacking skips a sheet it cannot read
+or a sprite outside its sheet.
+
+The report records what was written: `base`, `description`, `destination`, `duration`, `files` and `sprites` written,
+and `skippedFiles` and `skippedSprites` passed over. Check the skipped counts after a run without `--strict`; a run that
+skipped part of its input still succeeds.
 
 ### Select sheets from a description
 
@@ -103,7 +110,7 @@ Both commands process every declared sheet by default. Repeat `--file` to narrow
 ```powershell
 xrf-cli sprite pack-description `
   --description ./configs/ui/textures_descr/ui_actor_upgrades.xml --base ./textures_unpacked `
-  --output ./textures --file ui_actor_weapons --strict
+  --dest ./textures --file ui_actor_weapons --strict
 ```
 
 Use a declared path such as `ui\ui_actor_weapons`, with either separator, or an unambiguous bare name such as

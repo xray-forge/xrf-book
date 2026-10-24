@@ -53,6 +53,9 @@ extension, as the engine finds it. `inspect` explains one effect (sprite, flags,
 (each effect's time window, flags and children), and reports it whole with `--json` or `--report`. A name nothing holds
 fails with exit code `1`, naming the names that contain it.
 
+In a report, `list` carries its `entries` and their `total`. Each `find` match lists its reasons as `{ kind, value }`,
+the kind being `texture`, `shader`, `action`, `effect`, `playChild`, `birthChild`, or `deathChild`.
+
 Example output — explain a group:
 
 ```text
@@ -83,8 +86,8 @@ so a hash difference alone does not demonstrate a change to the particle definit
 
 ## Failure notes
 
-Packing rejects an existing output file, and unpacking rejects an existing destination directory, unless `--force` is
-supplied. Use that flag only when replacing the selected output is intended.
+Every command that writes requires `--dest`. Packing rejects an existing output file, and unpacking rejects an existing
+destination directory, unless `--force` is supplied. Use that flag only when replacing the selected output is intended.
 
 A successful read or conversion establishes that the tool accepts the data. It does not establish visual equivalence or
 correct behavior of every effect.

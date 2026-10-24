@@ -16,7 +16,7 @@ xrf-cli dialog info --path ./gamedata --source directory --strict --report ./dia
 Example output excerpt — inspect dialogs:
 
 ```text
-Reading dialogs in ./gamedata (Directory)
+Reading dialogs in ./gamedata (directory)
 Swept 2 files in 7 ms, 0 unreadable, 0 archived
 Dialogs: 4 total, 1 with no phrases, 1 with a priority
 Phrases: 8 total, 5 links, 3 final, 2 without text, 0 outside a phrase list
@@ -67,8 +67,9 @@ everyone. Character descriptions are read with their `#include` lines spliced in
 lists its own conditions under `elements` in the report; whether it is offered right now is for the running game to
 judge.
 
-Without `--profile`, the command lists every dialog in the tree. An unknown profile, or one that resolves to no
-character, exits 1 and names any character files that could not be read.
+Without `--profile`, the command lists every dialog in the tree. The report carries the `dialogs` and their `total`
+either way. An unknown profile, or one that resolves to no character, exits 1 and names any character files that could
+not be read.
 
 ## Explain one dialog
 

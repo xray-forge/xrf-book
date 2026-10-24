@@ -42,8 +42,8 @@ If the surface should have no bump map, clear the declaration:
 xrf-cli thm patch-bump --path ./textures/tile/tile_walls_red_01.thm --off
 ```
 
-`--off` sets the mode to `none` and clears the name, matching the form written by `STextureParams`. Choose either `--to`
-or `--off`; they cannot be combined.
+`--off` sets the mode to `none` and clears the name, matching the form written by `STextureParams`. Give exactly one of
+`--to` or `--off`: a command with neither or both is rejected as a usage error, exit 2.
 
 ## How the engine resolves it
 
@@ -66,7 +66,7 @@ available.
 From the directory containing the assembled `gamedata` tree, verify the resulting references:
 
 ```powershell
-xrf-cli gamedata verify ./gamedata --checks textures --report ./texture-report.json
+xrf-cli gamedata verify --path ./gamedata --checks textures --report ./texture-report.json
 ```
 
 Resolve remaining bump findings before checking the surface in game. Descriptor validation establishes the reference; it

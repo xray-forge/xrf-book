@@ -9,7 +9,7 @@ From an `xrf-tools` checkout with a release binary and an assembled `target/game
 
 ```powershell
 xrf-cli profile run -b ./target/release/xrf-cli.exe --report ./profile-report.json `
-  -- gamedata verify ./target/gamedata
+  -- gamedata verify --path ./target/gamedata
 ```
 
 Example output — profile a command:
@@ -28,8 +28,9 @@ Exit code: `0`. Timings vary between runs.
 Everything after `--` is passed unchanged to the measured binary. Relative paths use the current directory. The child's
 stdout and stderr are discarded; measurements are returned in the profiling command's report.
 
-The default is one warmup round followed by five measured rounds. Every invocation performs the command's normal side
-effects, including warmups. Use a read-only command for a repeatable comparison, or restore its inputs between sessions.
+The default is one warmup round followed by five measured rounds. `--rounds` takes at least one; `--rounds 0` is
+rejected as a usage error, exit 2. Every invocation performs the command's normal side effects, including warmups. Use a
+read-only command for a repeatable comparison, or restore its inputs between sessions.
 
 ## Comparing builds
 
@@ -38,7 +39,7 @@ Repeat `--binary` to compare builds. In this example, `old/xrf-cli.exe` is a pre
 
 ```powershell
 xrf-cli profile run -b ./old/xrf-cli.exe -b ./target/release/xrf-cli.exe --rounds 5 `
-  --report ./comparison.json -- gamedata verify ./target/gamedata
+  --report ./comparison.json -- gamedata verify --path ./target/gamedata
 ```
 
 The first binary is the baseline. Other binaries report `deltaPercent` against its median duration; negative values mean
