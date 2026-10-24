@@ -16,7 +16,8 @@ Use it for tasks that are awkward to do by hand:
 
 - `crates/`: reusable Rust crates for X-Ray formats and project validation.
 - `bin/xrf-cli`: command-line tool.
-- `bin/xrf-app`: Tauri backend for the desktop application.
+- `bin/xrf-app`: Tauri backend for the desktop application: the application itself (`app`), the infrastructure its tools
+  share (`core`), and one crate per tool area (`plugins`).
 - `bin/xrf-ui`: React frontend for the desktop application.
 
 The engine repository uses a bundled tools binary from `cli/bin` for some build and asset operations.
@@ -35,6 +36,6 @@ is the authority on what each tool currently supports.
 Tool behavior comes from the tools workspace, not from the book text:
 
 - CLI commands: `xrf-tools/bin/xrf-cli/src/commands`;
-- desktop backend commands: `xrf-tools/bin/xrf-app/src`;
+- desktop backend commands: `xrf-tools/bin/xrf-app/plugins` and `xrf-tools/bin/xrf-app/core`;
 - desktop frontend routes: `xrf-tools/bin/xrf-ui/src/applications`;
 - reusable format logic: `xrf-tools/crates`.
