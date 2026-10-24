@@ -26,7 +26,7 @@ xrf-cli dialog find [OPTIONS] --path <path>... <--info <info>|--functor <functor
 
 ## `xrf-cli dialog info`
 
-Command to read dialog xml and report what it holds
+Read dialog XML and report what it holds
 
 ```txt
 xrf-cli dialog info [OPTIONS] --path <path>...

@@ -80,17 +80,15 @@ xrf-cli archive list [OPTIONS] --path <path>
 
 ## `xrf-cli archive pack`
 
-Command to pack provided directory into *.db archive volumes
+Pack a directory into *.db archive volumes
 
 ```txt
-xrf-cli archive pack [OPTIONS] <SOURCE>
+xrf-cli archive pack [OPTIONS] --path <path>
 ```
 
 | Option                                                       | Required | Default    | Description                                                                                                    |
 | ------------------------------------------------------------ | -------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
-| `<SOURCE>`                                                   | yes      |            | Directory to pack, normally a gamedata root                                                                    |
-| `-d, --dest <dest>`                                          |          | `packed`   | Path to folder for writing the volumes                                                                         |
-| `-n, --name <name>`                                          |          | `gamedata` | Base name of the volumes, written as &lt;name&gt;.db0, &lt;name&gt;.db1 and so on                              |
+| `-p, --path <path>`                                          | yes      |            | Directory to pack, normally a gamedata root                                                                    |
 | `--config <config>`                                          |          |            | Path to a packing configuration describing what to include, as *.ltx or *.json                                 |
 | `--include-file <include-file>...`                           |          |            | File to pack, named relative to the source, repeatable                                                         |
 | `--include-directory <include-directory>...`                 |          |            | Directory to pack with everything below it, relative to the source, repeatable                                 |
@@ -98,12 +96,14 @@ xrf-cli archive pack [OPTIONS] <SOURCE>
 | `--exclude-directory <exclude-directory>...`                 |          |            | Directory to leave out along with everything below it, repeatable                                              |
 | `--exclude-directory-shallow <exclude-directory-shallow>...` |          |            | Directory to leave out while its contents still pack, repeatable                                               |
 | `--exclude-extension <exclude-extension>...`                 |          |            | Extension pattern that keeps a file out, such as *.txt, repeatable                                             |
+| `--no-skip-list`                                             |          |            | Keep editor and source leftovers the engine build normally drops                                               |
+| `-d, --dest <dest>`                                          |          | `packed`   | Folder the volumes are written to                                                                              |
+| `-n, --name <name>`                                          |          | `gamedata` | Base name of the volumes, written as &lt;name&gt;.db0, &lt;name&gt;.db1 and so on                              |
 | `--header <header>...`                                       |          |            | Header entry written into the archive as &lt;key&gt;=&lt;value&gt;, repeatable, merged over the default header |
 | `--store`                                                    |          |            | Store every file instead of compressing what the engine expects compressed                                     |
 | `--max-size <max-size>`                                      |          |            | Maximum volume size in megabytes, from 1 to 1900                                                               |
 | `--oversized-volumes`                                        |          |            | Let --max-size exceed 1900 MB, which only an engine fork that raised XRP_MAX_SIZE can mount                    |
 | `--xdb`                                                      |          |            | Write volumes with the xdb extension                                                                           |
-| `--no-skip-list`                                             |          |            | Keep editor and source leftovers the engine build normally drops                                               |
 | `-f, --force`                                                |          |            | Replace volumes of the same set the destination already holds                                                  |
 | `-s, --silent`                                               |          |            | Turn off logging                                                                                               |
 | `-v, --verbose`                                              |          |            | Turn on verbose logging                                                                                        |
@@ -112,25 +112,25 @@ xrf-cli archive pack [OPTIONS] <SOURCE>
 
 ## `xrf-cli archive pack-patch`
 
-Command to pack what a gamedata tree changes about an installation into overriding *.db archive volumes
+Pack what a gamedata tree changes about an installation into overriding *.db archive volumes
 
 ```txt
-xrf-cli archive pack-patch [OPTIONS] <SOURCE>
+xrf-cli archive pack-patch [OPTIONS] --path <path>
 ```
 
 | Option                                       | Required | Default  | Description                                                                                                    |
 | -------------------------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `<SOURCE>`                                   | yes      |          | What to patch: an installation, a directory of volumes, or a gamedata tree                                     |
+| `-p, --path <path>`                          | yes      |          | What to patch: an installation, a directory of volumes, or a gamedata tree                                     |
 | `--target <target>`                          |          |          | Tree the patch delivers; omit to use the loose gamedata of the input itself                                    |
-| `-d, --dest <dest>`                          |          | `packed` | Path to folder for writing the volumes                                                                         |
-| `-n, --name <name>`                          |          | `patch`  | Base name of the volumes, written as &lt;name&gt;.db0, &lt;name&gt;.db1 and so on                              |
 | `--dry-run`                                  |          |          | Report the difference and write no volumes                                                                     |
 | `--config <config>`                          |          |          | Path to a patching configuration describing the comparison scope and header, as *.ltx or *.json                |
 | `--include <include>...`                     |          |          | Logical prefix the comparison is restricted to, such as configs, repeatable                                    |
 | `--ignore <ignore>...`                       |          |          | Logical prefix dropped from the comparison, repeatable                                                         |
 | `--exclude-extension <exclude-extension>...` |          |          | Extension pattern that keeps a file out of the comparison, such as *.txt, repeatable                           |
-| `--header <header>...`                       |          |          | Header entry written into the archive as &lt;key&gt;=&lt;value&gt;, repeatable, merged over the default header |
 | `--verify-payload`                           |          |          | Confirm every checksum match by comparing the payloads themselves                                              |
+| `-d, --dest <dest>`                          |          | `packed` | Folder the volumes are written to                                                                              |
+| `-n, --name <name>`                          |          | `patch`  | Base name of the volumes, written as &lt;name&gt;.db0, &lt;name&gt;.db1 and so on                              |
+| `--header <header>...`                       |          |          | Header entry written into the archive as &lt;key&gt;=&lt;value&gt;, repeatable, merged over the default header |
 | `--store`                                    |          |          | Store every file instead of compressing what the engine expects compressed                                     |
 | `--max-size <max-size>`                      |          |          | Maximum volume size in megabytes, from 1 to 1900                                                               |
 | `--oversized-volumes`                        |          |          | Let --max-size exceed 1900 MB, which only an engine fork that raised XRP_MAX_SIZE can mount                    |
@@ -143,7 +143,7 @@ xrf-cli archive pack-patch [OPTIONS] <SOURCE>
 
 ## `xrf-cli archive unpack`
 
-Command to unpack provided *.db into separate files
+Unpack an archive into separate files
 
 ```txt
 xrf-cli archive unpack [OPTIONS] --path <path>
@@ -151,9 +151,9 @@ xrf-cli archive unpack [OPTIONS] --path <path>
 
 | Option              | Required | Default    | Description                                                                                         |
 | ------------------- | -------- | ---------- | --------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |            | Path to *.db file                                                                                   |
-| `-d, --dest <dest>` |          | `unpacked` | Path to folder for exporting                                                                        |
-| `--dry`             |          |            | Run in dry mode without actually unpacking to disk                                                  |
+| `-p, --path <path>` | yes      |            | Path to the *.db archive                                                                            |
+| `-d, --dest <dest>` |          | `unpacked` | Folder to unpack into                                                                               |
+| `--dry-run`         |          |            | Report what would be unpacked without writing anything                                              |
 | `-j, --jobs <JOBS>` |          | `auto`     | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                    |
 | `--refuse-links`    |          |            | Refuse to write through links or junctions already below the destination, instead of following them |
 | `-s, --silent`      |          |            | Turn off logging                                                                                    |

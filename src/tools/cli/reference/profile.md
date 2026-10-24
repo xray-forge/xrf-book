@@ -6,7 +6,7 @@
 
 ## `xrf-cli profile run`
 
-Command to measure one invocation across builds, interleaved
+Measure one invocation across builds, interleaved
 
 ```txt
 xrf-cli profile run [OPTIONS] --binary <binary> -- <arguments>...

@@ -6,7 +6,7 @@
 
 ## `xrf-cli ogf fix`
 
-Command to rewrite ogf visuals into well-formed bytes, changing nothing the engine reads
+Rewrite OGF visuals into well-formed bytes, changing nothing the engine reads
 
 ```txt
 xrf-cli ogf fix [OPTIONS] --path <path>
@@ -25,7 +25,7 @@ xrf-cli ogf fix [OPTIONS] --path <path>
 
 ## `xrf-cli ogf info`
 
-Command to print information about provided ogf file
+Print what an OGF visual holds
 
 ```txt
 xrf-cli ogf info [OPTIONS] --path <path>
@@ -33,7 +33,7 @@ xrf-cli ogf info [OPTIONS] --path <path>
 
 | Option              | Required | Default | Description                                                          |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to ogf file                                                     |
+| `-p, --path <path>` | yes      |         | Path to the OGF file                                                 |
 | `-s, --silent`      |          |         | Turn off logging                                                     |
 | `-v, --verbose`     |          |         | Turn on verbose logging                                              |
 | `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
@@ -41,7 +41,7 @@ xrf-cli ogf info [OPTIONS] --path <path>
 
 ## `xrf-cli ogf patch-motion-refs`
 
-Command to rewrite motion refs of provided ogf file
+Rewrite the motion refs of an OGF visual
 
 ```txt
 xrf-cli ogf patch-motion-refs [OPTIONS] --path <path> --refs <refs>...
@@ -60,7 +60,7 @@ xrf-cli ogf patch-motion-refs [OPTIONS] --path <path> --refs <refs>...
 
 ## `xrf-cli ogf patch-texture-refs`
 
-Command to rename a texture reference of provided ogf file
+Rename a texture reference of an OGF visual
 
 ```txt
 xrf-cli ogf patch-texture-refs [OPTIONS] --path <path> --from <from> --to <to>
@@ -80,7 +80,7 @@ xrf-cli ogf patch-texture-refs [OPTIONS] --path <path> --from <from> --to <to>
 
 ## `xrf-cli ogf verify`
 
-Command to verify ogf visuals can be packed for rendering
+Verify that OGF visuals can be packed for rendering
 
 ```txt
 xrf-cli ogf verify [OPTIONS] --path <path>

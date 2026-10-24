@@ -6,7 +6,7 @@
 
 ## `xrf-cli ltx format`
 
-Command to format ltx and ini files
+Format LTX and INI files
 
 ```txt
 xrf-cli ltx format [OPTIONS] --path <path>...
@@ -59,7 +59,7 @@ xrf-cli ltx list [OPTIONS] --path <path>
 
 ## `xrf-cli ltx verify`
 
-Command for verification of ltx and ini files
+Verify LTX and INI configs
 
 ```txt
 xrf-cli ltx verify [OPTIONS] --path <path>

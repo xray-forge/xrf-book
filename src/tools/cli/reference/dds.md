@@ -6,17 +6,17 @@
 
 ## `xrf-cli dds convert`
 
-Command to re-encode a dds file into another format, with its mip chain rebuilt
+Re-encode a DDS file into another format, with its mip chain rebuilt
 
 ```txt
-xrf-cli dds convert [OPTIONS] --format <format> <SOURCE> <DESTINATION>
+xrf-cli dds convert [OPTIONS] --path <path> --dest <dest> --format <format>
 ```
 
 | Option                      | Required | Default  | Description                                                                                                                                                                                                                                     |
 | --------------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<SOURCE>`                  | yes      |          | Path of the dds file to read                                                                                                                                                                                                                    |
-| `<DESTINATION>`             | yes      |          | Path of the dds file to write                                                                                                                                                                                                                   |
-| `--format <format>`         | yes      |          | Format to write, of the five worth offering for an X-Ray texture. Possible values: `bc1`, `bc2`, `bc3`, `bc7`, `rgba8`.                                                                                                                         |
+| `-p, --path <path>`         | yes      |          | Path of the dds file to read                                                                                                                                                                                                                    |
+| `-d, --dest <dest>`         | yes      |          | Path of the dds file to write                                                                                                                                                                                                                   |
+| `--format <format>`         | yes      |          | Format to write, of the five worth offering for an X-Ray texture. Possible values: `bc1`, `bc2`, `bc3`, `rgba8`, `bc7`.                                                                                                                         |
 | `--mip-filter <mip-filter>` |          | `kaiser` | Kernel the mip chain is reduced with, from the X-Ray converter's own family. Possible values: `point`, `box`, `triangle`, `quadratic`, `cubic`, `catrom`, `mitchell`, `gaussian`, `sinc`, `bessel`, `hanning`, `hamming`, `blackman`, `kaiser`. |
 | `--quality <quality>`       |          | `slow`   | How hard the encoder works; `slow` costs seconds on BC7 and pennies on the rest. Possible values: `fast`, `normal`, `slow`.                                                                                                                     |
 | `--no-mipmaps`              |          |          | Write only the base level, for a texture the engine never minifies                                                                                                                                                                              |
@@ -28,16 +28,16 @@ xrf-cli dds convert [OPTIONS] --format <format> <SOURCE> <DESTINATION>
 
 ## `xrf-cli dds crop`
 
-Command to crop a rectangular region out of a dds file into a new dds file
+Crop a rectangular region out of a DDS file into a new DDS file
 
 ```txt
-xrf-cli dds crop [OPTIONS] --source <source> --output <output> --x <x> --y <y> --width <width> --height <height>
+xrf-cli dds crop [OPTIONS] --path <path> --dest <dest> --x <x> --y <y> --width <width> --height <height>
 ```
 
 | Option                      | Required | Default | Description                                                                 |
 | --------------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `--source <source>`         | yes      |         | Path to the dds file to read the region from                                |
-| `--output <output>`         | yes      |         | Path of the dds file to write                                               |
+| `-p, --path <path>`         | yes      |         | Path to the dds file to read the region from                                |
+| `-d, --dest <dest>`         | yes      |         | Path of the dds file to write                                               |
 | `--x <x>`                   | yes      |         | Left edge of the region, in pixels                                          |
 | `--y <y>`                   | yes      |         | Top edge of the region, in pixels                                           |
 | `--width <width>`           | yes      |         | Width of the region, in pixels                                              |
@@ -51,7 +51,7 @@ xrf-cli dds crop [OPTIONS] --source <source> --output <output> --x <x> --y <y> -
 
 ## `xrf-cli dds info`
 
-Command to print information about provided dds file
+Print what a DDS file holds
 
 ```txt
 xrf-cli dds info [OPTIONS] --path <path>
@@ -67,16 +67,16 @@ xrf-cli dds info [OPTIONS] --path <path>
 
 ## `xrf-cli dds make-bump`
 
-Command to generate the `_bump` and `_bump#` pair a bumped surface binds, from a height map
+Generate the `_bump` and `_bump#` pair a bumped surface binds, from a height map
 
 ```txt
-xrf-cli dds make-bump [OPTIONS] <HEIGHT> <DESTINATION>
+xrf-cli dds make-bump [OPTIONS] --path <path> --dest <dest>
 ```
 
 | Option                              | Required | Default | Description                                                                                                                                                                                                                                     |
 | ----------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<HEIGHT>`                          | yes      |         | Path of the image the relief is read from, averaged across its colour channels                                                                                                                                                                  |
-| `<DESTINATION>`                     | yes      |         | Path of the texture the pair belongs to, without the `_bump` suffix or an extension                                                                                                                                                             |
+| `-p, --path <path>`                 | yes      |         | Path of the height map the relief is read from, averaged across its colour channels                                                                                                                                                             |
+| `-d, --dest <dest>`                 | yes      |         | Path of the texture the pair belongs to, without the `_bump` suffix or an extension                                                                                                                                                             |
 | `--gloss <gloss>`                   |          |         | Path of a gloss mask, averaged across its colour channels                                                                                                                                                                                       |
 | `--gloss-constant <gloss-constant>` |          |         | One gloss level for the whole surface, from 0 to 1, for a texture with no mask                                                                                                                                                                  |
 | `--normal-map <normal-map>`         |          |         | Path of a normal map to use instead of deriving one from the height, of the same size                                                                                                                                                           |

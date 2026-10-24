@@ -6,10 +6,10 @@
 
 ## `xrf-cli translation build`
 
-Command to build translation files into gamedata
+Build translation files into gamedata
 
 ```txt
-xrf-cli translation build [OPTIONS] --path <path>... --output <output>
+xrf-cli translation build [OPTIONS] --path <path>... --dest <dest>
 ```
 
 | Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
@@ -17,8 +17,8 @@ xrf-cli translation build [OPTIONS] --path <path>... --output <output>
 | `-p, --path <path>...`      | yes      |                           | Root holding translation sources, or one source file. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                       |
 | `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
 | `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as translations                                                                                                                                                                                                                                                                                                        |
-| `-o, --output <output>`     | yes      |                           | Path to output translation                                                                                                                                                                                                                                                                                                                                |
-| `-l, --language <language>` |          | `all`                     | Target language to translate                                                                                                                                                                                                                                                                                                                              |
+| `-d, --dest <dest>`         | yes      |                           | Directory the built string tables are written to                                                                                                                                                                                                                                                                                                          |
+| `-l, --language <language>` |          | `all`                     | Language to build, or all of them                                                                                                                                                                                                                                                                                                                         |
 | `--no-sort`                 |          |                           | Preserve source order instead of sorting dynamic translation files                                                                                                                                                                                                                                                                                        |
 | `--refuse-links`            |          |                           | Refuse to write through links or junctions already below the destination, instead of following them                                                                                                                                                                                                                                                       |
 | `-s, --silent`              |          |                           | Turn off logging                                                                                                                                                                                                                                                                                                                                          |
@@ -28,7 +28,7 @@ xrf-cli translation build [OPTIONS] --path <path>... --output <output>
 
 ## `xrf-cli translation format`
 
-Command to normalize json translation sources
+Normalize JSON translation sources
 
 ```txt
 xrf-cli translation format [OPTIONS] --path <path>...
@@ -46,7 +46,7 @@ xrf-cli translation format [OPTIONS] --path <path>...
 
 ## `xrf-cli translation initialize`
 
-Command to initialize translation files
+Initialize translation files
 
 ```txt
 xrf-cli translation initialize [OPTIONS] --path <path>
@@ -62,10 +62,10 @@ xrf-cli translation initialize [OPTIONS] --path <path>
 
 ## `xrf-cli translation parse`
 
-Command to parse xml translations into json sources
+Parse XML translations into JSON sources
 
 ```txt
-xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --output <output>
+xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --dest <dest>
 ```
 
 | Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
@@ -74,7 +74,7 @@ xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --out
 | `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
 | `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as configs\text\eng                                                                                                                                                                                                                                                                                                    |
 | `-l, --language <language>` | yes      |                           | Language every entry read by this run is filed under. Raw xml carries no language, so it is declared rather than guessed                                                                                                                                                                                                                                  |
-| `-o, --output <output>`     | yes      |                           | Directory the json sources are written to, merging with any already there                                                                                                                                                                                                                                                                                 |
+| `-d, --dest <dest>`         | yes      |                           | Directory the json sources are written to, merging with any already there                                                                                                                                                                                                                                                                                 |
 | `--file <file>`             |          |                           | Restrict the run to one string table, by file name                                                                                                                                                                                                                                                                                                        |
 | `--overwrite`               |          |                           | Replace existing text that differs, instead of keeping what is already there                                                                                                                                                                                                                                                                              |
 | `--dry-run`                 |          |                           | Report what would be written without writing it                                                                                                                                                                                                                                                                                                           |
@@ -87,7 +87,7 @@ xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --out
 
 ## `xrf-cli translation verify`
 
-Command to verify translation files integrity
+Verify that translation sources are well formed and translated into every language
 
 ```txt
 xrf-cli translation verify [OPTIONS] --path <path>...
@@ -98,8 +98,8 @@ xrf-cli translation verify [OPTIONS] --path <path>...
 | `-p, --path <path>...`      | yes      |                           | Root holding translation sources, or one source file. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                       |
 | `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
 | `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as translations                                                                                                                                                                                                                                                                                                        |
-| `-l, --language <language>` |          | `all`                     | Target language to translate                                                                                                                                                                                                                                                                                                                              |
-| `--strict`                  |          |                           | Fail with non 0 error code if translation are missing                                                                                                                                                                                                                                                                                                     |
+| `-l, --language <language>` |          | `all`                     | Language to verify, or all of them                                                                                                                                                                                                                                                                                                                        |
+| `--strict`                  |          |                           | Answer with a check failure when any translation is missing                                                                                                                                                                                                                                                                                               |
 | `-s, --silent`              |          |                           | Turn off logging                                                                                                                                                                                                                                                                                                                                          |
 | `-v, --verbose`             |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                                                                                   |
 | `--json`                    |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                                                                      |

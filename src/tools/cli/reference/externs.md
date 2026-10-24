@@ -9,19 +9,19 @@
 Export TypeScript extern declarations as JSON, XML, or HTML
 
 ```txt
-xrf-cli externs export [OPTIONS] <declarations-root>
+xrf-cli externs export [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option                          | Required | Default | Description                                                                                                           |
-| ------------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------- |
-| `<declarations-root>`           | yes      |         | Root directory containing TypeScript declaration sources                                                              |
-| `--format <format>`             |          |         | Output format; required with --output and inferred from --check when omitted. Possible values: `json`, `xml`, `html`. |
-| `--output <output>`             |          |         | Artifact to create or replace                                                                                         |
-| `--check <check>`               |          |         | Existing artifact to verify without writing                                                                           |
-| `--line-endings <line-endings>` |          |         | Override generated line endings. Possible values: `lf`, `crlf`.                                                       |
-| `-s, --silent`                  |          |         | Turn off logging                                                                                                      |
-| `-v, --verbose`                 |          |         | Turn on verbose logging                                                                                               |
-| `--json`                        |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                  |
-| `--report <PATH>`               |          |         | Write the run's JSON report to a file                                                                                 |
+| Option                          | Required | Default | Description                                                                                                   |
+| ------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`             | yes      |         | Root directory containing TypeScript declaration sources                                                      |
+| `-d, --dest <dest>`             | yes      |         | Artifact to create or replace, or with --check to verify                                                      |
+| `-c, --check`                   |          |         | Verify the artifact against the declarations without writing                                                  |
+| `--format <format>`             |          |         | Artifact format, inferred from the artifact's extension when omitted. Possible values: `json`, `xml`, `html`. |
+| `--line-endings <line-endings>` |          |         | Override generated line endings. Possible values: `lf`, `crlf`.                                               |
+| `-s, --silent`                  |          |         | Turn off logging                                                                                              |
+| `-v, --verbose`                 |          |         | Turn on verbose logging                                                                                       |
+| `--json`                        |          |         | Write the run's JSON report to stdout, moving human output to stderr                                          |
+| `--report <PATH>`               |          |         | Write the run's JSON report to a file                                                                         |
 
 <!-- ANCHOR_END: commands -->

@@ -6,10 +6,10 @@
 
 ## `xrf-cli thm patch-bump`
 
-Command to repoint the bump texture reference of provided thm file
+Repoint the bump texture reference of a THM file
 
 ```txt
-xrf-cli thm patch-bump [OPTIONS] --path <path>
+xrf-cli thm patch-bump [OPTIONS] --path <path> <--to <to>|--off>
 ```
 
 | Option              | Required | Default | Description                                                                                                    |

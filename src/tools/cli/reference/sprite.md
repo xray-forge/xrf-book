@@ -6,7 +6,7 @@
 
 ## `xrf-cli sprite pack-description`
 
-Command to pack the sprites a texture description xml declares
+Pack the sprites a texture description xml declares into its sheets
 
 ```txt
 xrf-cli sprite pack-description [OPTIONS] --description <description> --base <base>
@@ -14,11 +14,11 @@ xrf-cli sprite pack-description [OPTIONS] --description <description> --base <ba
 
 | Option                        | Required | Default | Description                                                                                         |
 | ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
-| `--description <description>` | yes      |         | Path to XML file describing textures                                                                |
-| `--base <base>`               | yes      |         | Path to base where search for described files                                                       |
-| `--output <output>`           |          |         | Path to directory where output dds files                                                            |
+| `--description <description>` | yes      |         | Path to the XML file describing the sheets                                                          |
+| `--base <base>`               | yes      |         | Folder the described sprites are read from                                                          |
+| `-d, --dest <dest>`           |          |         | Folder the packed sheets are written to, defaults to the base folder                                |
 | `--file <file>...`            |          |         | Name of a described file to pack, repeatable; packs every described file if omitted                 |
-| `--strict`                    |          |         | Turn on strict unpack mode                                                                          |
+| `--strict`                    |          |         | Fail on a sprite that cannot be read instead of leaving its place empty                             |
 | `--refuse-links`              |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
 | `-s, --silent`                |          |         | Turn off logging                                                                                    |
 | `-v, --verbose`               |          |         | Turn on verbose logging                                                                             |
@@ -27,19 +27,19 @@ xrf-cli sprite pack-description [OPTIONS] --description <description> --base <ba
 
 ## `xrf-cli sprite pack-equipment`
 
-Command to pack an equipment sprite from separate icon files
+Pack an equipment sprite from separate icon files
 
 ```txt
-xrf-cli sprite pack-equipment [OPTIONS] --system-ltx <system-ltx> --source <source> --output <output>
+xrf-cli sprite pack-equipment [OPTIONS] --system-ltx <system-ltx> --path <path> --dest <dest>
 ```
 
 | Option                      | Required | Default | Description                                                                                         |
 | --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
 | `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
-| `--source <source>`         | yes      |         | Path to source folder with section icons                                                            |
-| `--output <output>`         | yes      |         | Path to output dds file                                                                             |
+| `-p, --path <path>`         | yes      |         | Folder holding one icon per section                                                                 |
+| `-d, --dest <dest>`         | yes      |         | Equipment sprite dds file to write                                                                  |
 | `--gamedata <gamedata>`     |          |         | Path to gamedata folder for resources usage                                                         |
-| `--strict`                  |          |         | Turn on strict mode                                                                                 |
+| `--strict`                  |          |         | Fail on an icon that cannot be read or placed instead of skipping it                                |
 | `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
 | `-s, --silent`              |          |         | Turn off logging                                                                                    |
 | `-v, --verbose`             |          |         | Turn on verbose logging                                                                             |
@@ -48,7 +48,7 @@ xrf-cli sprite pack-equipment [OPTIONS] --system-ltx <system-ltx> --source <sour
 
 ## `xrf-cli sprite unpack-description`
 
-Command to unpack the sprites a texture description xml declares
+Unpack the sprites a texture description xml declares out of its sheets
 
 ```txt
 xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <base>
@@ -56,11 +56,11 @@ xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <
 
 | Option                        | Required | Default | Description                                                                                         |
 | ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
-| `--description <description>` | yes      |         | Path to XML file describing textures                                                                |
-| `--base <base>`               | yes      |         | Path to base where search for described files                                                       |
-| `--output <output>`           |          |         | Path to output folder for icons                                                                     |
+| `--description <description>` | yes      |         | Path to the XML file describing the sheets                                                          |
+| `--base <base>`               | yes      |         | Folder the described sheets are read from                                                           |
+| `-d, --dest <dest>`           |          |         | Folder the sprites are written to, defaults to the base folder                                      |
 | `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted             |
-| `--strict`                    |          |         | Turn on strict unpack mode                                                                          |
+| `--strict`                    |          |         | Fail on a sheet that cannot be read or a sprite outside its sheet instead of skipping it            |
 | `-j, --jobs <JOBS>`           |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                    |
 | `--refuse-links`              |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
 | `-s, --silent`                |          |         | Turn off logging                                                                                    |
@@ -70,17 +70,17 @@ xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <
 
 ## `xrf-cli sprite unpack-equipment`
 
-Command to unpack separate icon files out of an equipment sprite
+Unpack separate icon files out of an equipment sprite
 
 ```txt
-xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --source <source> --output <output>
+xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --path <path> --dest <dest>
 ```
 
 | Option                      | Required | Default | Description                                                                                         |
 | --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
 | `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
-| `--source <source>`         | yes      |         | Path to source dds file                                                                             |
-| `--output <output>`         | yes      |         | Path to output folder for sections icons                                                            |
+| `-p, --path <path>`         | yes      |         | Equipment sprite dds file to read                                                                   |
+| `-d, --dest <dest>`         | yes      |         | Folder the section icons are written to                                                             |
 | `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
 | `--refuse-links`            |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
 | `-s, --silent`              |          |         | Turn off logging                                                                                    |
@@ -90,7 +90,7 @@ xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --source <so
 
 ## `xrf-cli sprite verify-equipment`
 
-Command to check an equipment sprite's inventory icon grid rects for overlaps
+Check an equipment sprite's inventory icon grid rects for overlaps
 
 ```txt
 xrf-cli sprite verify-equipment [OPTIONS] --system-ltx <system-ltx>

@@ -6,7 +6,7 @@
 
 ## `xrf-cli level info`
 
-Command to print information about a compiled level
+Print what a compiled level holds
 
 ```txt
 xrf-cli level info [OPTIONS] <--path <path>|--root <root>>
@@ -25,7 +25,7 @@ xrf-cli level info [OPTIONS] <--path <path>|--root <root>>
 
 ## `xrf-cli level verify`
 
-Command to verify a compiled level's geometry can be drawn the way the renderer addresses it
+Verify that a compiled level's geometry can be drawn the way the renderer addresses it
 
 ```txt
 xrf-cli level verify [OPTIONS] <--path <path>|--root <root>>
