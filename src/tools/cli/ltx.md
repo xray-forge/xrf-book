@@ -36,7 +36,10 @@ rewritten in place. Review that list before treating a formatting run as coverag
 ## Verifying
 
 `ltx verify` checks an LTX project folder, including schemes and case-sensitive include paths. Supply a directory;
-include, inheritance, section-field, and scheme errors fail verification.
+include, inheritance, section-field, and scheme errors fail verification. So does an entry point that does not resolve,
+and, under `--dltx`, a statement the game loads and then silently ignores, such as an override of a section nothing
+declares. `--report` writes the verify commands' shared shape: the counts beside one `ltx` check, whose findings name
+the config to open and lead with the section and field.
 
 ```powershell
 xrf-cli ltx verify --path ./gamedata/configs
