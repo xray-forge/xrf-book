@@ -117,6 +117,9 @@ Findings carry a stable rule identifier. These groups expose the following rules
   `animations.post-process-read`, `animations.post-process-round-trip`, `animations.post-process-value`,
   `animations.post-process-noise-granularity`. Besides the HUD animations a weapon or device names, this check reads
   every object motion (`.anm`, `.anm1`) and post-process effect (`.ppe`) the game holds.
+  - `animations.player-hud`: a problem with the player hands, one finding each: their visual is missing, its motion refs
+    or a motion bank they link does not read, they play no animations, or they lack a motion a weapon's HUD section
+    plays. A motion ref that resolves to no bank is reported by the meshes check.
   - `*-read`: the file does not read, for example because it is truncated or declares a version the engine does not
     load.
   - `*-round-trip`: the file does not write back to the bytes it was read from. An object motion that carries a chunk
@@ -157,21 +160,24 @@ Findings carry a stable rule identifier. These groups expose the following rules
   - `materials.reference`: a `material` key in a config, or a climable object in a spawn file, names a material the
     library does not define. Names match regardless of ASCII case, as in the engine.
 - **Meshes:** `meshes.chunk-residue`, `meshes.game-material`, `meshes.motion-label`, `meshes.motion-read`,
-  `meshes.motion-validation`, `meshes.path`, `meshes.read`, `meshes.shader-library`, `meshes.validation`.
-  `meshes.game-material`: a skeleton bone made of a material the library does not define, or of a static one, which the
-  engine asserts against.
+  `meshes.motion-validation`, `meshes.read`, `meshes.shader-library`, `meshes.validation`. `meshes.game-material`: a
+  skeleton bone made of a material the library does not define, or of a static one, which the engine asserts against.
 - **Particles:** `particles.library`, `particles.texture`.
 - **Particle usage:** `particles-usage.reference`, `particles-usage.spawn`, `particles-usage.spawn-custom-data`. The
   collide particles of material pairs count as references, reported once per name against `gamemtl.xr`.
-- **Scripts:** `scripts.path`, `scripts.read`, `scripts.syntax`. Syntax checks use the LuaJIT dialect.
+- **Scripts:** `scripts.read`, `scripts.syntax`. `scripts.read`: the script does not read as Windows-1251 text.
+  `scripts.syntax`: LuaJIT's parser rejects the script, and the finding gives the parser's message.
 - **Shaders:** `shaders.include-cycle`, `shaders.include-missing`, `shaders.include-syntax`, `shaders.lua-syntax`,
   `shaders.renderer-root`, `shaders.source-invalid`, `shaders.source-read`.
 - **Sounds:** `sounds.files`, `sounds.references`. The breaking, step and collide sounds of material pairs count as
   references, reported once per name against `gamemtl.xr`.
-- **Spawns:** `spawns.path`, `spawns.read`.
+- **Spawns:** `spawns.read`.
 - **Textures:** `textures.bump`, `textures.bump-companion`, `textures.bump-declaration`, `textures.chunk-residue`,
-  `textures.path`, `textures.read`, `textures.dds`.
-- **Weapons:** `weapons.validation`.
+  `textures.read`, `textures.dds`.
+- **Weapons:** `weapons.validation`, one finding per problem with a weapon section, each naming the section: a visual,
+  HUD section, item visual or motion bank that is missing or does not read, a required sound that is not declared, a
+  sound that does not resolve, a layered sound section that breaks its numbering or takes a volume or delay, and a
+  launcher-capable weapon missing the launcher bores its `anm_bore` needs.
 
 Without a readable `gamemtl.xr`, only `materials` fails; the levels, meshes, particle usage and sounds checks leave out
 what they would resolve against the library.
