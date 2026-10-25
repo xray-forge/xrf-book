@@ -107,7 +107,7 @@ well as the winning paths: a successfully produced listing may still be incomple
 
 ## Checks and rules
 
-Select checks by their group names: `animations`, `environment`, `levels`, `ltx`, `meshes`, `particles`,
+Select checks by their group names: `animations`, `environment`, `levels`, `ltx`, `materials`, `meshes`, `particles`,
 `particles-usage`, `scripts`, `shaders`, `sounds`, `spawns`, `textures`, and `weapons`.
 
 Findings carry a stable rule identifier. These groups expose the following rules:
@@ -137,23 +137,44 @@ Findings carry a stable rule identifier. These groups expose the following rules
     reported under this rule too, because the engine never loads that definition.
   - `environment.asset`: a sky or clouds texture that the game does not contain.
 - **Levels:** `levels.ai-guid`, `levels.ai-node-count`, `levels.ai-version`, `levels.cform-version`,
-  `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.graph-duplicate`, `levels.graph-guid`,
-  `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`, `levels.missing-bundle`,
-  `levels.missing-file`, `levels.orphan-bundle`, `levels.roster-conflict`, `levels.shader-reference`,
-  `levels.shaders-chunk`, `levels.texture-reference`, `levels.undeclared-map`.
+  `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.game-material`, `levels.graph-duplicate`,
+  `levels.graph-guid`, `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`,
+  `levels.missing-bundle`, `levels.missing-file`, `levels.orphan-bundle`, `levels.roster-conflict`,
+  `levels.shader-reference`, `levels.shaders-chunk`, `levels.texture-reference`, `levels.undeclared-map`.
+  `levels.game-material`: collision faces made of a material `gamemtl.xr` does not define, or of a dynamic one; either
+  stops the level from loading.
 - **LTX:** `ltx.formatting`, `ltx.schema`, `ltx.verification`.
-- **Meshes:** `meshes.chunk-residue`, `meshes.motion-label`, `meshes.motion-read`, `meshes.motion-validation`,
-  `meshes.path`, `meshes.read`, `meshes.shader-library`, `meshes.validation`.
+- **Materials:** `materials.engine`, `materials.library`, `materials.list`, `materials.mark`, `materials.pair`,
+  `materials.reference`. This check reads the game material library, `gamemtl.xr`.
+  - `materials.library`: the library is missing or does not read. The engine then loads no materials, and the other
+    checks below cannot run.
+  - `materials.engine`: a material the engine looks up by a name of its own (`default`, `default_object`,
+    `objects\small_box`, `objects\bullet`, `objects\knife`) is missing, or `default_object` is not dynamic.
+  - `materials.pair`: a pair names a material number the library does not define.
+  - `materials.list`: a pair lists more than six sounds, or more than four particles or marks, in one list. The engine
+    stops with an assertion while loading the library.
+  - `materials.mark`: a wallmark texture a pair names is missing. The finding counts the pairs that name it.
+  - `materials.reference`: a `material` key in a config, or a climable object in a spawn file, names a material the
+    library does not define. Names match regardless of ASCII case, as in the engine.
+- **Meshes:** `meshes.chunk-residue`, `meshes.game-material`, `meshes.motion-label`, `meshes.motion-read`,
+  `meshes.motion-validation`, `meshes.path`, `meshes.read`, `meshes.shader-library`, `meshes.validation`.
+  `meshes.game-material`: a skeleton bone made of a material the library does not define, or of a static one, which the
+  engine asserts against.
 - **Particles:** `particles.library`, `particles.texture`.
-- **Particle usage:** `particles-usage.reference`, `particles-usage.spawn`, `particles-usage.spawn-custom-data`.
+- **Particle usage:** `particles-usage.reference`, `particles-usage.spawn`, `particles-usage.spawn-custom-data`. The
+  collide particles of material pairs count as references, reported once per name against `gamemtl.xr`.
 - **Scripts:** `scripts.path`, `scripts.read`, `scripts.syntax`. Syntax checks use the LuaJIT dialect.
 - **Shaders:** `shaders.include-cycle`, `shaders.include-missing`, `shaders.include-syntax`, `shaders.lua-syntax`,
   `shaders.renderer-root`, `shaders.source-invalid`, `shaders.source-read`.
-- **Sounds:** `sounds.files`, `sounds.references`.
+- **Sounds:** `sounds.files`, `sounds.references`. The breaking, step and collide sounds of material pairs count as
+  references, reported once per name against `gamemtl.xr`.
 - **Spawns:** `spawns.path`, `spawns.read`.
 - **Textures:** `textures.bump`, `textures.bump-companion`, `textures.bump-declaration`, `textures.chunk-residue`,
   `textures.path`, `textures.read`, `textures.dds`.
 - **Weapons:** `weapons.validation`.
+
+Without a readable `gamemtl.xr`, only `materials` fails; the levels, meshes, particle usage and sounds checks leave out
+what they would resolve against the library.
 
 Two checks always run and cannot be selected or suppressed with `--checks`: `collisions.unreachable` reports files no
 lookup can reach, and `coverage.skipped-mount` reports declared sources that could not be opened. `checks.execution`

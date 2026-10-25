@@ -49,6 +49,7 @@
     - [Dialog](tools/cli/dialog.md)
     - [Docs](tools/cli/docs.md)
     - [Gamedata](tools/cli/gamedata.md)
+    - [Game materials](tools/cli/gamemtl.md)
     - [LTX](tools/cli/ltx.md)
     - [OGF](tools/cli/ogf.md)
     - [OMF](tools/cli/omf.md)
