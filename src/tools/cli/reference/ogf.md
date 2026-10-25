@@ -47,16 +47,16 @@ Rewrite the motion refs of an OGF visual
 xrf-cli ogf patch-motion-refs [OPTIONS] --path <path> --refs <refs>...
 ```
 
-| Option                 | Required | Default | Description                                                                 |
-| ---------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>`    | yes      |         | Path to ogf file                                                            |
-| `-d, --dest <dest>`    |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
-| `-r, --refs <refs>...` | yes      |         | Motion refs to store in the ogf file                                        |
-| `--dry-run`            |          |         | Validate the rewrite and report the result without writing any file         |
-| `-s, --silent`         |          |         | Turn off logging                                                            |
-| `-v, --verbose`        |          |         | Turn on verbose logging                                                     |
-| `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
-| `--report <PATH>`      |          |         | Write the run's JSON report to a file                                       |
+| Option              | Required | Default | Description                                                                 |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to ogf file                                                            |
+| `-d, --dest <dest>` |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
+| `--refs <refs>...`  | yes      |         | Motion refs to store in the ogf file                                        |
+| `--dry-run`         |          |         | Validate the rewrite and report the result without writing any file         |
+| `-s, --silent`      |          |         | Turn off logging                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                       |
 
 ## `xrf-cli ogf patch-texture-refs`
 

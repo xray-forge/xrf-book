@@ -53,8 +53,8 @@ extension, as the engine finds it. `inspect` explains one effect (sprite, flags,
 (each effect's time window, flags and children), and reports it whole with `--json` or `--report`. A name nothing holds
 fails with exit code `1`, naming the names that contain it.
 
-In a report, `list` carries its `entries` and their `total`. Each `find` match lists its reasons as `{ kind, value }`,
-the kind being `texture`, `shader`, `action`, `effect`, `playChild`, `birthChild`, or `deathChild`.
+In a report, `list` carries its `entries`. Each `find` match lists its reasons as `{ kind, value }`, the kind being
+`texture`, `shader`, `action`, `effect`, `playChild`, `birthChild`, or `deathChild`.
 
 Example output — explain a group:
 

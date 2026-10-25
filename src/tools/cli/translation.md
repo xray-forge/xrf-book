@@ -123,10 +123,10 @@ Exit code: `3`. Both the absent key and the explicit null are reported as missin
 Both an absent language key and an explicit `null` count as missing. Without `--strict`, missing translations are
 reported while a completed check succeeds. With `--strict`, those gaps produce exit 3.
 
-The report's `result` holds `checkedTranslations`, `missingTranslations`, `languages`, `duration`, `status`, and
-`checks`. Its `translations` check carries one `translations.missing` finding per missing id, and `languages` holds a
-summary row per file and language. `status` is `failed` whenever a translation is missing; only `--strict` turns that
-into exit 3. Use the summary rows to review large imports, then inspect findings for the files being translated.
+The report's `result` holds `checkedTranslations`, `missingTranslations`, `languages`, `status`, and `checks`. Its
+`translations` check carries the run's duration and one `translations.missing` finding per missing id, and `languages`
+holds a summary row per file and language. `status` is `failed` whenever a translation is missing; only `--strict` turns
+that into exit 3. Use the summary rows to review large imports, then inspect findings for the files being translated.
 
 An unreadable source is an execution failure, exit 1. A malformed source fails verification with exit 3 regardless of
 `--strict`; the report then carries the parse error as a single `translations.source` finding, with nothing else
@@ -151,7 +151,7 @@ Each table becomes a JSON source under `--dest` with its subdirectory path prese
 merge languages. Ids and language keys use the same canonical order as [Format](#format), independently of import order.
 A record missing one of the languages represented in its file receives an explicit `null`.
 
-Existing text that differs from the import is preserved and counted as a conflict. Add `--overwrite` to replace it.
+Existing text that differs from the import is preserved and counted as a conflict. Add `-f/--force` to replace it.
 Reimporting unchanged tables into an unchanged output is idempotent.
 
 ### Finding the tables

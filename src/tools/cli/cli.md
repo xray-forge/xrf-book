@@ -42,21 +42,22 @@ Use `--json` when a consumer needs a stdout pipe. Neither report mode limits the
 
 The report is an envelope around a command-specific `result`:
 
-| Field       | Meaning                                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------- |
-| `build`     | Binary version, commit, build settings, dirty state, and CI run identity when available. |
-| `command`   | Group and operation names.                                                               |
-| `duration`  | Total duration in whole milliseconds.                                                    |
-| `execution` | Worker count and how it was selected.                                                    |
-| `exitCode`  | Command exit code.                                                                       |
-| `outcome`   | `success`, `checkFailed`, or `executionFailed`.                                          |
-| `error`     | Failure details, or `null` on success.                                                   |
-| `result`    | The command's structured answer; it is `null` when no structured answer was produced.    |
+| Field       | Meaning                                                                                 |
+| ----------- | --------------------------------------------------------------------------------------- |
+| `build`     | Binary version, kind, commit, dirty state, profile, and CI run identity when available. |
+| `command`   | Group and operation names.                                                              |
+| `duration`  | Total duration in whole milliseconds.                                                   |
+| `execution` | Worker count.                                                                           |
+| `exitCode`  | Command exit code, which is the verdict.                                                |
+| `error`     | Failure details, present only when the command could not do its job (exit 1).           |
+| `result`    | The command's structured answer, absent when the command produced none.                 |
 
-Verification commands — `gamedata verify`, `translation verify`, `ogf verify`, `level verify`, and `dialog info` — share
-one shape inside `result`: an overall `status` and a `checks` list. Each check is `{ id, status, duration, findings }`,
-and each finding is `{ ruleId, subject, message }`. A command adds its own fields beside them, such as a census of what
-it read.
+Verification commands share one shape inside `result`: an overall `status` and a `checks` list. Each check is
+`{ id, status, duration, findings }`, and each finding is `{ ruleId, subject, message }`. A check's `duration` is `null`
+when the check did not time itself. A command adds its own fields beside them, such as a census of what it read. The
+commands using this shape are `gamedata verify`, `translation verify`, `ogf verify`, `level verify`, `dialog info`,
+`archive verify`, `particle verify`, `spawn verify`, `sprite verify-equipment`, `externs export --check`, and
+`omf repack --verify`.
 
 A failed check still reports its findings. Argument parsing failures occur before command execution and do not produce
 an envelope. If writing the report fails, the process exits 1; an existing report at that path may belong to an earlier

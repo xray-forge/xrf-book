@@ -67,9 +67,8 @@ everyone. Character descriptions are read with their `#include` lines spliced in
 lists its own conditions under `elements` in the report; whether it is offered right now is for the running game to
 judge.
 
-Without `--profile`, the command lists every dialog in the tree. The report carries the `dialogs` and their `total`
-either way. An unknown profile, or one that resolves to no character, exits 1 and names any character files that could
-not be read.
+Without `--profile`, the command lists every dialog in the tree. The report carries the `dialogs` either way. An unknown
+profile, or one that resolves to no character, exits 1 and names any character files that could not be read.
 
 ## Explain one dialog
 
