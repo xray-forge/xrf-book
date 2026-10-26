@@ -109,7 +109,9 @@ npm run cli -- verify translations --language eng
 npm run cli -- verify translations --strict
 ```
 
-Without `--strict` the command only reports gaps; `--strict` turns them into a non-zero exit.
+Without `--strict` the command reports gaps and fails only on what the game would refuse or show wrong: a character the
+language's code page cannot hold, a line too long to load, or an id defined twice. `--strict` turns gaps into a non-zero
+exit too.
 
 Filling a new file with the full set of locale keys is an [`xrf-cli`](../tools/cli/translation.md) task:
 

@@ -89,6 +89,23 @@ Exit code: `0`.
 
 A missing translation compiles to its id. The report summarizes tables written and ids compiled per language.
 
+Each table lands at `<dest>/<language>/<source name>.xml`, whatever directory its source sits in. The game opens every
+table by its bare name in the language directory, so a table one level deeper would stop it with "Can't find specified
+xml file". Two sources with one name, in any directories, are refused before anything is written.
+
+Each language is written in the code page the game's fonts draw it with. The game never decodes a table; the font maps
+each byte to a glyph.
+
+| Code page    | Fonts      | Languages                  |
+| ------------ | ---------- | -------------------------- |
+| windows-1252 | `_west`    | `fra`, `ger`, `ita`, `spa` |
+| windows-1250 | `_cent`    | `pol`                      |
+| windows-1251 | unprefixed | `eng`, `rus`, `ukr`        |
+
+A character the language's code page cannot hold fails the build with the entry named, because the game would show
+another letter in its place. So does an entry whose line is longer than 4094 bytes. The game's XML reader takes lines of
+at most 4095 bytes in xray-16 and 4094 in Anomaly's engine, and a longer line stops it loading the table.
+
 Build and verify accept a single source file or roots read through the virtual file system. Layered roots resolve
 winning files by priority, including files from mounted archives. The `--dest` directory is a plain directory and must
 be outside every source root.
@@ -107,7 +124,7 @@ Example output — find missing Ukrainian text:
 ```text
 Verifying translations in ./translations (containing-installation), language - ukr
 Verifying 2 translation source(s)
-Verified translation files in 0 ms, 4 checked, 2 missing
+Verified translation files in 0 ms, 4 checked, 2 missing, 0 the game would refuse or mangle
 ```
 
 Stderr:
@@ -115,18 +132,29 @@ Stderr:
 ```text
 Translation key missing: st_medkit_name ukr in st_items.json
 Translation key missing: st_ui_quit ukr in st_ui.json
+Check 'translations' is failed with 2 finding(s)
 Check failed: 2 finding(s)
 ```
 
 Exit code: `3`. Both the absent key and the explicit null are reported as missing.
 
 Both an absent language key and an explicit `null` count as missing. Without `--strict`, missing translations are
-reported while a completed check succeeds. With `--strict`, those gaps produce exit 3.
+reported while a completed check succeeds, since the game shows each one as its id. With `--strict`, those gaps produce
+exit 3.
 
-The report's `result` holds `checkedTranslations`, `missingTranslations`, `languages`, `status`, and `checks`. Its
-`translations` check carries the run's duration and one `translations.missing` finding per missing id, and `languages`
-holds a summary row per file and language. `status` is `failed` whenever a translation is missing; only `--strict` turns
-that into exit 3. Use the summary rows to review large imports, then inspect findings for the files being translated.
+Verify also checks what the game would refuse or show wrong, and fails with exit 3 on it with or without `--strict`:
+
+- `translations.unencodable`: a character the language's code page cannot hold.
+- `translations.overlong`: a table line longer than the game's XML reader takes.
+- `translations.duplicate-across-files`: an id two sources define. The game shows whichever loads last, and xray-16
+  loads tables in parallel.
+- `translations.collision`: two sources that build to one table.
+
+The report's `result` holds `checkedTranslations`, `missingTranslations`, `engineProblems`, `languages`, `status`, and
+`checks`. The `translations` check carries one `translations.missing` finding per missing id. The `translations.engine`
+check carries the game problems. `languages` holds a summary row per file and language. `status` is `failed` whenever a
+translation is missing or a problem is found; only `--strict` makes a missing translation exit 3. Use the summary rows
+to review large imports, then inspect findings for the files being translated.
 
 An unreadable source is an execution failure, exit 1. A malformed source fails verification with exit 3 regardless of
 `--strict`; the report then carries the parse error as a single `translations.source` finding, with nothing else
