@@ -16,5 +16,5 @@ Keep a backup before writing over game data.
 ## Source
 
 - `xrf-tools/bin/xrf-app`: Tauri backend plugins and commands;
-- `xrf-tools/bin/xrf-ui`: React routes, pages, stores, and components;
+- `xrf-tools/bin/xrf-app/ui`: React routes, pages, stores, and components;
 - `xrf-tools/crates/*`: reusable parsers, verifiers, packers, and project readers.
