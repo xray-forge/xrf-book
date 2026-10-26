@@ -116,9 +116,11 @@ Exit code: `0`.
 The destination is a base path without an extension or `_bump` suffix. This example writes `textures/tile/wall_bump.dds`
 and `textures/tile/wall_bump#.dds`.
 
-Height is averaged across the input's color channels. Supply `--gloss` for a gloss-mask image instead of a constant
-between 0 and 1. An optional `--normal-map` supplies normals instead of deriving them from height; its dimensions must
-match the height image. `--virtual-height` controls relief depth, defaulting to `0.05`.
+Normals are derived from the average of the input's color channels, and the height stored in `_bump#.dds` is read from
+its red channel, as the SDK does. Gloss is a constant between 0 and 1 by default. Pass `--gloss-alpha` to read it from
+the height image's own alpha, the way the SDK's bump sources carry it, or `--gloss` for a separate gloss-mask image. An
+optional `--normal-map` supplies normals instead of deriving them from height; its dimensions must match the height
+image. `--virtual-height` controls relief depth, defaulting to `0.05`.
 
 Bump generation uses the `box` mip filter by default. A warning about very dark gloss indicates little specular
 response; the files are still written because a matte surface may be intentional.
