@@ -66,4 +66,29 @@ and never fail the run. A texture no root holds is reported as `missing`. The co
 because a level directory alone holds no textures to resolve. Detail textures laid over a base, and the textures of
 models placed by the spawn, are not in the shader table, so they are not measured.
 
+## Materials
+
+A game material, from `gamemtl.xr`, is what a surface is made of to the game: the sound a footstep makes on it, how a
+bullet passes through it, whether grass grows on it. The compiled level stores it only on the collision form, never on
+the geometry that is drawn. `level materials` finds it for every render surface by looking where each of its triangles
+lies: a short ray through the triangle's centre meets the collision face built from it, and the triangle's area is
+counted against that face's material.
+
+```powershell
+xrf-cli level materials --root ./stalker-anomaly --level zaton --report zaton-materials.json
+```
+
+```text
+Reading the materials beneath compiled level levels\zaton
+917 surfaces over 19358587 square metres, 52% of it on collision faces of 24 materials
+```
+
+Exit code: `0`.
+
+Each surface in the report, one per shader table entry, lists its shader and textures, its area, the share of it lying
+on no collision face, and the materials beneath the rest by their share. Foliage, grass and the landscape past the
+playable edge have no collision, so they read as uncovered; a surface the level's author never assigned a material reads
+as `default`. The materials are named from the installation's `gamemtl.xr`; a level read by `--path` alone reports their
+ids. The command needs the level's `level.cform` beside `level` and `level.geom`.
+
 {{#include reference/level.md:commands}}
