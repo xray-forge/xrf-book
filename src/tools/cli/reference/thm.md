@@ -4,6 +4,24 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli thm bump-alignment`
+
+Report whether each texture's bump belongs to its diffuse, by how closely the bump's slopes follow the diffuse's edges
+
+```txt
+xrf-cli thm bump-alignment [OPTIONS] --path <path>...
+```
+
+| Option                 | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
+| ---------------------- | -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>...` | yes      |                           | Root holding the textures and their descriptors. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                            |
+| `--source <source>`    |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
+| `--prefix <prefix>`    |          |                           | Limit to the descriptors of one logical subtree, such as textures\wpn                                                                                                                                                                                                                                                                                     |
+| `-s, --silent`         |          |                           | Turn off logging                                                                                                                                                                                                                                                                                                                                          |
+| `-v, --verbose`        |          |                           | Turn on verbose logging                                                                                                                                                                                                                                                                                                                                   |
+| `--json`               |          |                           | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                                                                      |
+| `--report <PATH>`      |          |                           | Write the run's JSON report to a file                                                                                                                                                                                                                                                                                                                     |
+
 ## `xrf-cli thm patch-bump`
 
 Repoint the bump texture reference of a THM file
