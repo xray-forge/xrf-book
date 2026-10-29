@@ -50,6 +50,7 @@
     - [Docs](tools/cli/docs.md)
     - [Gamedata](tools/cli/gamedata.md)
     - [Game materials](tools/cli/gamemtl.md)
+    - [Level](tools/cli/level.md)
     - [LTX](tools/cli/ltx.md)
     - [OGF](tools/cli/ogf.md)
     - [OMF](tools/cli/omf.md)

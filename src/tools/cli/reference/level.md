@@ -4,6 +4,25 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli level albedo`
+
+Report how the base textures of a level's lit surfaces sit as albedo, against the range real materials span
+
+```txt
+xrf-cli level albedo [OPTIONS] <--path <path>|--root <root>>
+```
+
+| Option                 | Required | Default | Description                                                                                                                                                                                                                                                                                                                                               |
+| ---------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`    |          |         | Path to a compiled level directory, the one holding `level` and `level.geom`                                                                                                                                                                                                                                                                              |
+| `-r, --root <root>...` |          |         | Root holding an installation's levels. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                                      |
+| `-l, --level <level>`  |          |         | Name of the level to read from the mounted roots, as `levels` knows it                                                                                                                                                                                                                                                                                    |
+| `--source <source>`    |          | `auto`  | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
+| `-s, --silent`         |          |         | Turn off logging                                                                                                                                                                                                                                                                                                                                          |
+| `-v, --verbose`        |          |         | Turn on verbose logging                                                                                                                                                                                                                                                                                                                                   |
+| `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                                                                      |
+| `--report <PATH>`      |          |         | Write the run's JSON report to a file                                                                                                                                                                                                                                                                                                                     |
+
 ## `xrf-cli level info`
 
 Print what a compiled level holds
