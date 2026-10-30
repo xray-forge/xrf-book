@@ -21,9 +21,15 @@ Built by xrLC version 14, quality 1
 97 sectors, 420 portals, 55 static lights, one of them the sun
 Shader table entries: 922
 Visuals: 25935, drawable: 17854, with fast path: 7257
+Trees: 3970 of 119 types, from 9871 parts
 level.geom: 41 vertex buffers, 16 index buffers, 131 slide windows
 level.geomx: 19 vertex buffers, 11 index buffers, 0 slide windows
 ```
+
+The level compiler writes each part of a tree, such as its trunk or a layer of leaves, as a visual of its own standing
+at the tree's transform. `level info` counts the parts that stand together as one tree, and the trees made of the same
+parts as one type. Its report lists every type with how many trees the level stands of it, the visuals of its parts, and
+the triangles one tree of it draws.
 
 Verify that every drawable visual can be drawn the way the renderer addresses it:
 
