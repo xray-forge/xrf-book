@@ -29,7 +29,10 @@ Speed: 103 MB/s
 Exit code: `0`.
 
 The command compresses file types the engine normally compresses and stores the rest. It writes one volume as
-`gamedata.db`; when the archive needs more than one volume, it writes `gamedata.db0`, `gamedata.db1`, and so on.
+`gamedata.db`; when the archive needs more than one volume, it writes `gamedata.db0`, `gamedata.db1`, and so on. Write
+volumes beside the source, as `target\db` sits beside `target\gamedata` here: a destination inside the source is
+refused, because the next run would pack those volumes as source files. Volume files already in a source, such as
+`old.db0` or `patch.xdb`, are skipped unless `--no-skip-list` is given.
 
 By default, a volume can be up to 1900 MB and receives a header that mounts its contents at `$fs_root$\gamedata\`. That
 is the usual setting for a `gamedata` archive. To add or change one entry, name it:
