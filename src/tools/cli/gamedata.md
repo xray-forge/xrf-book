@@ -117,9 +117,12 @@ Findings carry a stable rule identifier. These groups expose the following rules
   `animations.post-process-read`, `animations.post-process-round-trip`, `animations.post-process-value`,
   `animations.post-process-noise-granularity`. Besides the HUD animations a weapon or device names, this check reads
   every object motion (`.anm`, `.anm1`) and post-process effect (`.ppe`) the game holds.
-  - `animations.player-hud`: a problem with the player hands, one finding each: their visual is missing, its motion refs
-    or a motion bank they link does not read, they play no animations, or they lack a motion a weapon's HUD section
-    plays. A motion ref that resolves to no bank is reported by the meshes check.
+  - `animations.player-hud`: a problem with the player hands. Each hands section gets one finding when its visual is
+    missing, its motion refs or a linked motion bank does not read, or it plays no animations. A motion a weapon's HUD
+    section plays is found as the engine finds it, under its own name or as one of the numbered variants `name1` to
+    `name8`. One that some hands lack is one finding, naming the HUD sections and fields that ask for it, the hands that
+    lack it, and what the engine then does: the vanilla engine asserts, and the extended engine plays `hand_idle_doun`
+    in its place where the hands have it. A motion ref that resolves to no bank is reported by the meshes check.
   - `*-read`: the file does not read, for example because it is truncated or declares a version the engine does not
     load.
   - `*-round-trip`: the file does not write back to the bytes it was read from. An object motion that carries a chunk
