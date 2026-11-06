@@ -63,6 +63,9 @@ The OGF keeps most of what the editor exported, and the decompiler restores it:
   when their stored normals agree at both its ends, and hard otherwise, so the editor shades the model as the OGF did.
 - **Bones**, with their bind pose, shapes, joint types and limits, mass and friction, and the motion references, class
   script, LODs and description the OGF carries.
+- **Motions** a model keeps itself, a fan's spin or a door opening, with their speed, blending, marks and bone parts.
+  Each bone is keyed at every frame, so the motion plays as it did; compiled again, every key lands within a
+  quantisation step of the original.
 
 ## What is inferred
 
@@ -71,7 +74,8 @@ Some of a source file never reaches the OGF, and the decompiler writes the edito
 - surface names, taken from the texture's file name;
 - each surface's compiler shader and game material, `default`;
 - the mesh name, `skin`;
-- bone lengths, `0.5`.
+- bone lengths, `0.5`;
+- a motion's curves between its frames, which come back as straight lines from frame to frame.
 
 The sidecar lists each of these under `inferred`. Check the game materials in particular before rebuilding a model whose
 physics sound or particles matter.
@@ -97,7 +101,8 @@ source did where two parts nearly touched.
     "meshName",
     "boneLengths",
     "smoothing",
-    "twoSidedSurfaces"
+    "twoSidedSurfaces",
+    "motionCurves"
   ]
 }
 ```
