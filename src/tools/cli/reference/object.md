@@ -6,7 +6,7 @@
 
 ## `xrf-cli object decompile`
 
-Decompile a rigid skeleton OGF into an SDK .object, with a .object.xrf.json provenance sidecar beside it
+Decompile a skeleton OGF into an SDK .object, with a .object.xrf.json provenance sidecar beside it
 
 ```txt
 xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>

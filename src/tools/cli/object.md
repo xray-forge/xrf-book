@@ -18,16 +18,17 @@ Decompiled ./meshes/ventilator_01.ogf into ./rawdata/ventilator_01.object: 1 sur
 
 Exit code: `0`. The command refuses to replace an existing `.object` or sidecar; pass `--force` to overwrite both.
 
-Only rigid skeleton models decompile for now: props and physics objects whose every vertex follows one bone. A model
-with vertices blended across several bones, such as a character, or a static level-style model, is refused with exit
-`1`.
+Skeleton models decompile: props and physics objects, weapon hands and characters, whose vertices follow one bone or
+blend across up to four. A static level-style model is refused with exit `1`.
 
 ## What comes back
 
 The OGF keeps most of what the editor exported, and the decompiler restores it:
 
 - **Points and faces.** The export split a point wherever two faces met at a UV seam or a hard edge; the decompiler
-  welds corners with the same position and bone back into one point, so the mesh edits as one piece.
+  welds corners with the same position and bones back into one point, so the mesh edits as one piece.
+- **Bone weights.** Each point gets an entry in the weight map of every bone it follows. The weights come back as the
+  export stored them: the four strongest, scaled to sum to one, which is what the editor exports from in any case.
 - **Texture coordinates**, with a seam's second UV stored per face as the editor keeps it.
 - **Two-sided surfaces.** The export wrote each face of a two-sided surface twice, the copy facing the other way; each
   pair becomes one face on a surface with the two-sided flag.
