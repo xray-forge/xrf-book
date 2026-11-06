@@ -52,6 +52,7 @@
     - [Game materials](tools/cli/gamemtl.md)
     - [Level](tools/cli/level.md)
     - [LTX](tools/cli/ltx.md)
+    - [Object](tools/cli/object.md)
     - [OGF](tools/cli/ogf.md)
     - [OMF](tools/cli/omf.md)
     - [Particle](tools/cli/particle.md)
