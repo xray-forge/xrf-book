@@ -26,8 +26,9 @@ parts, which the editor's export cannot split either.
 
 The OGF draws as the editor's would. Against 134 vanilla models compiled from their SDK sources, every face, nearly
 every vertex, normal and weight, and over 99% of tangents matched the editor's. Bones, physics, class script, LODs and
-motion references matched exactly. It is not the same bytes. The children can come in another order, the triangles are
-in the build's own order, and each bone's box is fitted along the bone's axes, never smaller than the editor's.
+motion references matched exactly, and compiled props load, draw and collide in game. It is not the same bytes. The
+children can come in another order, the triangles are in the build's own order, and each bone's box is fitted along the
+bone's axes, never smaller than the editor's.
 
 ## Decompile a model
 
