@@ -20,9 +20,10 @@ Compiled ./rawdata/objects/dynamics/workshop_room/hammer.object into ./meshes/dy
 
 Exit code: `0`. The command refuses to replace an existing OGF; pass `--force` to overwrite it.
 
-Skeleton objects compile: props and physics objects, weapon hands and characters. A static object, or one that embeds
-its own motions rather than referencing motion libraries, is refused with exit `1`. So is a face spanning two breakable
-parts, which the editor's export cannot split either.
+Skeleton objects compile: props and physics objects, weapon hands and characters, with the motions they keep themselves
+(a fan's spin, a door opening) or the motion files they reference. A static object is refused with exit `1`, and so is a
+motion that moves the whole object through its root bone. So is a face spanning two breakable parts, which the editor's
+export cannot split either.
 
 The OGF draws as the editor's would. Against 134 vanilla models compiled from their SDK sources, every face, nearly
 every vertex, normal and weight, and over 99% of tangents matched the editor's. Bones, physics, class script, LODs and
