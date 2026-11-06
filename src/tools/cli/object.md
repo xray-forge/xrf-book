@@ -4,6 +4,31 @@
 open it again. Use it when a model ships without its source and needs editing. The `.object` gets a provenance sidecar
 beside it, so a decompiled file is never taken for an authored one.
 
+`object compile` goes the other way, writing the OGF the Actor Editor's **Export OGF** would write, without the editor.
+
+## Compile a model
+
+```powershell
+xrf-cli object compile --path ./rawdata/objects/dynamics/workshop_room/hammer.object --dest ./meshes/dynamics/workshop_room/hammer.ogf
+```
+
+Example output — the vanilla hammer:
+
+```text
+Compiled ./rawdata/objects/dynamics/workshop_room/hammer.object into ./meshes/dynamics/workshop_room/hammer.ogf: 1 children, 56 vertices, 32 faces (0 dropped), 2 bones
+```
+
+Exit code: `0`. The command refuses to replace an existing OGF; pass `--force` to overwrite it.
+
+Skeleton objects compile: props and physics objects, weapon hands and characters. A static object, or one that embeds
+its own motions rather than referencing motion libraries, is refused with exit `1`. So is a face spanning two breakable
+parts, which the editor's export cannot split either.
+
+The OGF draws as the editor's would. Against 134 vanilla models compiled from their SDK sources, every face, nearly
+every vertex, normal and weight, and over 99% of tangents matched the editor's. Bones, physics, class script, LODs and
+motion references matched exactly. It is not the same bytes. The children can come in another order, the triangles are
+in the build's own order, and each bone's box is fitted along the bone's axes, never smaller than the editor's.
+
 ## Decompile a model
 
 ```powershell

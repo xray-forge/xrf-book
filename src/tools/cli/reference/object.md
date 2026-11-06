@@ -4,6 +4,24 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli object compile`
+
+Compile a skeleton SDK .object into the OGF the engine loads
+
+```txt
+xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
+```
+
+| Option              | Required | Default | Description                                                          |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to the .object to compile                                       |
+| `-d, --dest <dest>` | yes      |         | Path of the OGF to write                                             |
+| `-f, --force`       |          |         | Overwrite an existing OGF                                            |
+| `-s, --silent`      |          |         | Turn off logging                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+
 ## `xrf-cli object decompile`
 
 Decompile a skeleton OGF into an SDK .object, with a .object.xrf.json provenance sidecar beside it
