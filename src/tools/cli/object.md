@@ -5,6 +5,8 @@ open it again. Use it when a model ships without its source and needs editing. T
 beside it, so a decompiled file is never taken for an authored one.
 
 `object compile` goes the other way, writing the OGF the Actor Editor's **Export OGF** would write, without the editor.
+`object verify` compiles an object in memory and compares the result with an OGF it should stand in for, such as the one
+shipped in `gamedata`, before the OGF is replaced.
 
 ## Compile a model
 
@@ -29,8 +31,49 @@ The OGF draws as the editor's would. Against 134 vanilla models compiled from th
 every vertex, normal and weight, and over 99% of tangents matched the editor's. Bones, physics, class script, LODs and
 motion references matched exactly, and compiled props load, draw and collide in game. It is not the same bytes. The
 children can come in another order, the triangles are ordered for the GPU's vertex cache by a modern optimiser rather
-than the editor's (as few cache misses, often fewer), and each bone's box is fitted along the bone's axes, never smaller
-than the editor's.
+than the editor's (as few cache misses, often fewer), and each bone's box is fitted tightly around every vertex the bone
+moves, smaller than the editor's in sum and holding the model better as it animates.
+
+## Verify a model
+
+```powershell
+xrf-cli object verify --path ./rawdata/objects/dynamics/balon/bidon.object --ogf ./meshes/dynamics/balon/bidon.ogf
+```
+
+Example output — the vanilla canister against its shipped OGF:
+
+```text
+Verifying ./rawdata/objects/dynamics/balon/bidon.object against ./meshes/dynamics/balon/bidon.ogf
+Children 1 against 1; vertices matched 1922 of 1922 (0 more but for their normal); reference faces drawn 1032 of 1032 (0 with two corners at one position)
+Verification of the object: passed
+```
+
+Exit code: `0` when nothing differs, `3` when something does. Nothing is written. The comparison covers what the engine
+reads, in four checks:
+
+- **`object.model`**: the model type, the user data (the class script), the LODs and the motion references.
+- **`object.skeleton`**: every bone's name, parent and order, and its physics: game material, shape, joint, mass, centre
+  of mass and bind pose.
+- **`object.motions`**: the model's own motions by name and length, and the parameters and bone parts they play by.
+- **`object.geometry`**: the bounds, each child paired with the OGF's of the same texture and shader, and its vertices
+  (position, normal, texture coordinate and weights) and triangles.
+
+The order of children, vertices and triangles, the tangents, the bones' boxes and the description's authoring stamps are
+left out, as the compile builds them its own way. A face with two corners at one position draws nothing, so the OGF's
+faces of that kind are counted apart and never missed.
+
+Pass `--verbose` to list each difference. A vertex that differs in its normal alone is counted as such: the model draws
+and moves alike but shades differently. Expect it for a decompiled object, whose smoothing is inferred, and for an SDK
+source exported by an older editor that read smoothing another way:
+
+```text
+Children 1 against 1; vertices matched 246 of 1083 (837 more but for their normal); reference faces drawn 594 of 594 (0 with two corners at one position)
+Check 'object.geometry' is failed with 1 finding(s)
+  [object.geometry] -: child prop\prop_ballon1 / models\model: 837 of 1083 vertices have no reference vertex like them, 837 of them differing in their normal alone
+Check failed: 1 finding(s)
+```
+
+An object the compile refuses is refused here too, with exit `1`.
 
 ## Decompile a model
 

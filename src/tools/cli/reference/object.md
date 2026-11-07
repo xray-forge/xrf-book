@@ -40,4 +40,21 @@ xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
 | `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
 | `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
 
+## `xrf-cli object verify`
+
+Compile a skeleton SDK .object in memory and compare it with the OGF it should stand in for
+
+```txt
+xrf-cli object verify [OPTIONS] --path <path> --ogf <ogf>
+```
+
+| Option              | Required | Default | Description                                                                                 |
+| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to the .object to compile                                                              |
+| `--ogf <ogf>`       | yes      |         | Path to the OGF the compile should stand in for, such as the one the object was exported to |
+| `-s, --silent`      |          |         | Turn off logging                                                                            |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                     |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                        |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                       |
+
 <!-- ANCHOR_END: commands -->
