@@ -97,7 +97,8 @@ blend across up to four. A static level-style model is refused with exit `1`.
 The OGF keeps most of what the editor exported, and the decompiler restores it:
 
 - **Points and faces.** The export split a point wherever two faces met at a UV seam or a hard edge; the decompiler
-  welds corners with the same position and bones back into one point, so the mesh edits as one piece.
+  welds corners with the same position, bones and weights back into one point, so the mesh edits as one piece. Two
+  points the export moved onto one position stay two, each with its own weights.
 - **Bone weights.** Each point gets an entry in the weight map of every bone it follows. The weights come back as the
   export stored them: the four strongest, scaled to sum to one, which is what the editor exports from in any case.
 - **Texture coordinates**, with a seam's second UV stored per face as the editor keeps it.
