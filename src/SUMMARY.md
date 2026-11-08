@@ -56,7 +56,6 @@
     - [OGF](tools/cli/ogf.md)
     - [OMF](tools/cli/omf.md)
     - [Particle](tools/cli/particle.md)
-    - [Profile](tools/cli/profile.md)
     - [Spawn](tools/cli/spawn.md)
     - [Sprite](tools/cli/sprite.md)
     - [THM](tools/cli/thm.md)
