@@ -64,8 +64,8 @@ stamps are left out, as the compile builds them its own way. A face with two cor
 the OGF's faces of that kind are counted apart and never missed.
 
 Pass `--verbose` to list each difference. A vertex that differs in its normal alone is counted as such: the model draws
-and moves alike but shades differently. Expect it for a decompiled object, whose smoothing is inferred, and for an SDK
-source exported by an older editor that read smoothing another way:
+and moves alike but shades differently. Expect it for an SDK source exported by an older editor that read smoothing
+another way; a decompiled object keeps the normals it was decompiled from:
 
 ```text
 Children 1 against 1; vertices matched 246 of 1083 (837 more but for their normal); reference faces drawn 594 of 594 (0 with two corners at one position)
@@ -105,8 +105,11 @@ The OGF keeps most of what the editor exported, and the decompiler restores it:
 - **Texture coordinates**, with a seam's second UV stored per face as the editor keeps it.
 - **Two-sided surfaces.** The export wrote each face of a two-sided surface twice, the copy facing the other way; each
   pair becomes one face on a surface with the two-sided flag.
-- **Smoothing.** Normals are recomputed in the editor from per-edge smoothing flags. An edge between two faces is soft
-  when their stored normals agree at both its ends, and hard otherwise, so the editor shades the model as the OGF did.
+- **Normals and smoothing.** Each face corner keeps the normal the OGF stored, in the mesh chunk blender-xray also
+  writes and reads, so a compile with xrf-cli and an import into Blender shade the model exactly as before. The SDK's
+  editors ignore that chunk and recompute normals from per-edge smoothing flags, which the decompiler also writes: an
+  edge between two faces is soft when their stored normals agree at both its ends, and hard otherwise. Models made in
+  Blender weight their normals differently, so the SDK shades them slightly otherwise than the OGF did.
 - **Bones**, with their bind pose, shapes, joint types and limits, mass and friction, and the motion references, class
   script, LODs and description the OGF carries.
 - **Motions** a model keeps itself, a fan's spin or a door opening, with their speed, blending, marks and bone parts.
