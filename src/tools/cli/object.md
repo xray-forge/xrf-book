@@ -8,6 +8,9 @@ beside it, so a decompiled file is never taken for an authored one.
 `object verify` compiles an object in memory and compares the result with an OGF it should stand in for, such as the one
 shipped in `gamedata`, before the OGF is replaced.
 
+`object decompile` and `object compile` also handle `.dm` detail models, the small meshes such as lightning bolts the
+game draws as details: see [Detail models](#detail-models). `object verify` compares OGFs only.
+
 ## Compile a model
 
 ```powershell
@@ -152,6 +155,25 @@ physics sound or particles matter.
 
 The export also merged points closer than a millimetre, so a decompiled model can hold a few fewer points than its
 source did where two parts nearly touched.
+
+## Detail models
+
+A `.dm` path decompiles a detail model into an object of one mesh and one surface, and a `.dm` destination compiles an
+object into one, as the Level Editor's detail export writes it:
+
+```powershell
+xrf-cli object decompile --path ./meshes/dm/dm_lightning-01.dm --dest ./rawdata/dm_lightning-01.object
+xrf-cli object compile --path ./rawdata/dm_lightning-01.object --dest ./meshes/dm/dm_lightning-01.dm
+```
+
+The vanilla lightning models come back exactly: decompiled and compiled again, each is the same file, byte for byte. A
+detail model stores no normals, so the object's edges all come back smooth and no surface two-sided; the compile needs
+neither. A model's flags (whether the wind sways it) and the range its planted copies are scaled in are not part of an
+object: the decompile records them in the sidecar, and the compile writes them back from there, or uses the editor's
+defaults (no flags, 0.5 to 2) for an object without one.
+
+To compile, the object needs exactly one surface; the compile uses its first mesh, as the editor does. Faces that repeat
+another, a back face among them, are dropped, and corners within a millimetre of each other become one vertex.
 
 ## The provenance sidecar
 

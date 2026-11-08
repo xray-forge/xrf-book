@@ -6,7 +6,8 @@
 
 ## `xrf-cli object compile`
 
-Compile an SDK .object into the OGF the engine loads: a skeleton with bones, else a static visual
+Compile an SDK .object into the OGF the engine loads (a skeleton with bones, else a static visual), or into a .dm detail
+model where the destination is one
 
 ```txt
 xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
@@ -15,7 +16,7 @@ xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
 | Option                  | Required | Default | Description                                                                                                                                                                                                                                                                                                     |
 | ----------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-p, --path <path>`     | yes      |         | Path to the .object to compile                                                                                                                                                                                                                                                                                  |
-| `-d, --dest <dest>`     | yes      |         | Path of the OGF to write                                                                                                                                                                                                                                                                                        |
+| `-d, --dest <dest>`     | yes      |         | Path of the OGF to write, or of a .dm, whose flags and scale range come from the sidecar of an object decompiled from one and are the editor's defaults otherwise                                                                                                                                               |
 | `-f, --force`           |          |         | Overwrite an existing OGF                                                                                                                                                                                                                                                                                       |
 | `--tangents <tangents>` |          | `auto`  | Tangent method of a skeleton: auto follows the provenance sidecar beside a decompiled object (MikkTSpace for a model exported from Blender) and the Actor Editor's otherwise; actor-editor or mikktspace forces one. A static visual stores no tangents. Possible values: `auto`, `actor-editor`, `mikktspace`. |
 | `-s, --silent`          |          |         | Turn off logging                                                                                                                                                                                                                                                                                                |
@@ -25,7 +26,8 @@ xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
 
 ## `xrf-cli object decompile`
 
-Decompile a skeleton or static OGF into an SDK .object, with a .object.xrf.json provenance sidecar beside it
+Decompile a skeleton or static OGF, or a .dm detail model, into an SDK .object, with a .object.xrf.json provenance
+sidecar beside it
 
 ```txt
 xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
@@ -33,7 +35,7 @@ xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
 
 | Option              | Required | Default | Description                                                          |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the OGF to decompile                                         |
+| `-p, --path <path>` | yes      |         | Path to the OGF or .dm to decompile                                  |
 | `-d, --dest <dest>` | yes      |         | Path of the .object to write; its sidecar is written beside it       |
 | `-f, --force`       |          |         | Overwrite an existing .object and sidecar                            |
 | `-s, --silent`      |          |         | Turn off logging                                                     |
