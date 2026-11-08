@@ -22,6 +22,18 @@ Compiled ./rawdata/objects/dynamics/workshop_room/hammer.object into ./meshes/dy
 
 Exit code: `0`. The command refuses to replace an existing OGF; pass `--force` to overwrite it.
 
+`--tangents` picks how vertices get the tangents normal maps are read against:
+
+- **`auto`** (the default): a decompiled object compiles with the method its source model was made with, which the
+  decompiler records in the sidecar beside it: MikkTSpace for a model the blender-xray add-on exported, the editor's
+  otherwise. An object with no sidecar gets the editor's.
+- **`actor-editor`**: the editor's own tangents, which vanilla and SDK-made models carry.
+- **`mikktspace`**: MikkTSpace, as Blender, Substance and similar tools bake normal maps against. Use it for a model
+  made in Blender that has no sidecar.
+
+Each gives back the tangents of the models made its way on most vertices (MikkTSpace over 95% on blender-xray models,
+where the editor's matches under half) and does worse on the others, so neither replaces the other.
+
 Skeleton objects compile: props and physics objects, weapon hands and characters, with the motions they keep themselves
 (a fan's spin, a door opening) or the motion files they reference. A static object is refused with exit `1`, and so is a
 motion that moves the whole object through its root bone. So is a face spanning two breakable parts, which the editor's
