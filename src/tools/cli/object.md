@@ -25,8 +25,8 @@ Exit code: `0`. The command refuses to replace an existing OGF; pass `--force` t
 `--tangents` picks how vertices get the tangents normal maps are read against:
 
 - **`auto`** (the default): a decompiled object compiles with the method its source model was made with, which the
-  decompiler records in the sidecar beside it: MikkTSpace for a model the blender-xray add-on exported, the editor's
-  otherwise. An object with no sidecar gets the editor's.
+  decompiler records in the sidecar beside it: MikkTSpace for a model exported from Blender, the editor's otherwise. An
+  object with no sidecar gets the editor's.
 - **`actor-editor`**: the editor's own tangents, which vanilla and SDK-made models carry.
 - **`mikktspace`**: MikkTSpace, as Blender, Substance and similar tools bake normal maps against. Use it for a model
   made in Blender that has no sidecar.
