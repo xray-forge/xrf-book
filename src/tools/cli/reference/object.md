@@ -12,15 +12,16 @@ Compile a skeleton SDK .object into the OGF the engine loads
 xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the .object to compile                                       |
-| `-d, --dest <dest>` | yes      |         | Path of the OGF to write                                             |
-| `-f, --force`       |          |         | Overwrite an existing OGF                                            |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option                  | Required | Default | Description                                                                                                                                                                                                                                                   |
+| ----------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`     | yes      |         | Path to the .object to compile                                                                                                                                                                                                                                |
+| `-d, --dest <dest>`     | yes      |         | Path of the OGF to write                                                                                                                                                                                                                                      |
+| `-f, --force`           |          |         | Overwrite an existing OGF                                                                                                                                                                                                                                     |
+| `--tangents <tangents>` |          | `auto`  | Tangent method: auto follows the provenance sidecar beside a decompiled object (MikkTSpace for a model exported from Blender) and the Actor Editor's otherwise; actor-editor or mikktspace forces one. Possible values: `auto`, `actor-editor`, `mikktspace`. |
+| `-s, --silent`          |          |         | Turn off logging                                                                                                                                                                                                                                              |
+| `-v, --verbose`         |          |         | Turn on verbose logging                                                                                                                                                                                                                                       |
+| `--json`                |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                          |
+| `--report <PATH>`       |          |         | Write the run's JSON report to a file                                                                                                                                                                                                                         |
 
 ## `xrf-cli object decompile`
 
