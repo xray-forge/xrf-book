@@ -148,13 +148,14 @@ directory-sweep parallelism.
 
 ### What changes
 
-The fixer removes recognized unread motion-reference tails, adjusts the chunk's declared size, and removes accounted
-trailing bytes after the last well-formed chunk. Other bytes are preserved. An already well-formed source is left
-untouched; with `--dest`, a destination is still written.
+The fixer removes recognized unread motion-reference tails, adjusts the declared size of a motion references or LODs
+chunk to what it holds, and removes trailing bytes after the last well-formed chunk that the engine never reads, such as
+text appended to the file. Other bytes are preserved. An already well-formed source is left untouched; with `--dest`, a
+destination is still written.
 
-Before writing, the normalized bytes must parse without residue and produce the same motion references. Unexplained
-trailing data and chunks extending beyond the file are refused. The result is staged beside the destination and moved
-into place.
+Before writing, the normalized bytes must parse without residue and produce the same motion references. Trailing data
+the engine would read, and any other chunk extending beyond the file, are refused. The result is staged beside the
+destination and moved into place.
 
 A directory sweep continues after a refusal. Successfully fixed files remain changed; any refused files produce exit 1
 and entries in `findings`. Check those entries, then use `ogf info` to confirm that repaired models no longer report
