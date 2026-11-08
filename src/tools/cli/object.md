@@ -55,12 +55,13 @@ reads, in four checks:
 - **`object.skeleton`**: every bone's name, parent and order, and its physics: game material, shape, joint, mass, centre
   of mass and bind pose.
 - **`object.motions`**: the model's own motions by name and length, and the parameters and bone parts they play by.
-- **`object.geometry`**: the bounds, each child paired with the OGF's of the same texture and shader, and its vertices
-  (position, normal, texture coordinate and weights) and triangles.
+- **`object.geometry`**: the bounds, and what each texture and shader draws, over every child drawing with them, against
+  the OGF's: its vertices (position, normal, texture coordinate and weights) and triangles.
 
-The order of children, vertices and triangles, the tangents, the bones' boxes and the description's authoring stamps are
-left out, as the compile builds them its own way. A face with two corners at one position draws nothing, so the OGF's
-faces of that kind are counted apart and never missed.
+The order of children, vertices and triangles, how a surface's faces fall among children (the SDK splits one by
+breakable part where older exporters kept it whole), the tangents, the bones' boxes and the description's authoring
+stamps are left out, as the compile builds them its own way. A face with two corners at one position draws nothing, so
+the OGF's faces of that kind are counted apart and never missed.
 
 Pass `--verbose` to list each difference. A vertex that differs in its normal alone is counted as such: the model draws
 and moves alike but shades differently. Expect it for a decompiled object, whose smoothing is inferred, and for an SDK
@@ -69,7 +70,7 @@ source exported by an older editor that read smoothing another way:
 ```text
 Children 1 against 1; vertices matched 246 of 1083 (837 more but for their normal); reference faces drawn 594 of 594 (0 with two corners at one position)
 Check 'object.geometry' is failed with 1 finding(s)
-  [object.geometry] -: child prop\prop_ballon1 / models\model: 837 of 1083 vertices have no reference vertex like them, 837 of them differing in their normal alone
+  [object.geometry] -: prop\prop_ballon1 / models\model: 837 of 1083 vertices have no reference vertex like them, 837 of them differing in their normal alone
 Check failed: 1 finding(s)
 ```
 
