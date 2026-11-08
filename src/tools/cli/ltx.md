@@ -1,7 +1,7 @@
 # LTX CLI
 
-LTX commands inspect, format, and verify `.ltx` and `.ini` config files. Use them for standalone config projects or when
-you need the lower-level tool behind the engine repository's `format ltx` and `verify ltx` commands.
+LTX commands list, search, inspect, format, and verify `.ltx` and `.ini` config files. Use them for standalone config
+projects or when you need the lower-level tool behind the engine repository's `format ltx` and `verify ltx` commands.
 
 ## Formatting
 
@@ -79,6 +79,41 @@ Exit code: `0`. The later patch supplies cost = 9000; the output names the file 
 Use the resolved values and their source locations to distinguish a wrong declaration from a later override. If several
 entry points declare the section, select one with `--entry system.ltx`. Both commands accept `--dltx` for patched
 installations.
+
+## Finding where a section or field is written
+
+Use `ltx find` to list every place a section or field is written, including configs inside archives and DLTX patch
+files. Give it `--section`, `--field`, `--value`, or any combination:
+
+```powershell
+xrf-cli ltx find --path ./gamedata/configs --section wpn_ak74
+xrf-cli ltx find --path ./gamedata/configs --field ammo_class --value ammo_c
+```
+
+Example output — find a section that patch files override:
+
+```text
+Find path: ./gamedata-dltx/configs
+items\w_ak74.ltx:1 [wpn_ak74]:wpn_base - declaration
+mod_system_aaa.ltx:3 ![wpn_ak74] - patch
+mod_system_xxx.ltx:3 ![wpn_ak74] - patch
+Found 3 statement(s) in 3 config(s): 1 declaration(s), 2 patch(es)
+Resolved values: ltx inspect --path ./gamedata-dltx/configs --dltx wpn_ak74
+```
+
+Exit code: `0`, also when nothing matches.
+
+Each line names the config and line to open, the statement as written with its operation prefix, and whether it declares
+or patches. A field written under a `![section]` header counts as a patch. `[archived]` marks a config read from an
+archive, which you cannot edit in place.
+
+Section and field names must match exactly, including case, as the game compares them. `--value` matches any value that
+contains the text, also case-sensitively. Pass names alone: `--section [wpn_ak74]` or `--field !rpm` is refused, and
+`--field rpm` already finds `!rpm`, `>rpm` and `<rpm`. A section query alone lists headers; adding `--field` or
+`--value` lists field lines instead.
+
+`ltx find` shows what each file writes, not the value the game ends up with. Several files can write the same field;
+`ltx inspect` names the one that wins.
 
 ## The DLTX patch dialect
 
