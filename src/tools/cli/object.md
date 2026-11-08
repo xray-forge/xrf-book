@@ -35,16 +35,22 @@ Each gives back the tangents of the models made its way on most vertices (MikkTS
 where the editor's matches under half) and does worse on the others, so neither replaces the other.
 
 Skeleton objects compile: props and physics objects, weapon hands and characters, with the motions they keep themselves
-(a fan's spin, a door opening) or the motion files they reference. A static object is refused with exit `1`, and so is a
-motion that moves the whole object through its root bone. So is a face spanning two breakable parts, which the editor's
-export cannot split either.
+(a fan's spin, a door opening) or the motion files they reference. A motion that moves the whole object through its root
+bone is refused with exit `1`, and so is a face spanning two breakable parts, which the editor's export cannot split
+either.
+
+Static objects compile too. As in the editor, any object without bones exports static, even one flagged dynamic: one
+surface becomes the model itself, several become a model with a part per surface. Static models store no tangents, so
+`--tangents` does not apply, and the report's `tangents` is `null`. A progressive object compiles at full detail,
+without the levels of detail the editor builds for it.
 
 The OGF draws as the editor's would. Against 134 vanilla models compiled from their SDK sources, every face, nearly
 every vertex, normal and weight, and over 99% of tangents matched the editor's. Bones, physics, class script, LODs and
 motion references matched exactly, and compiled props load, draw and collide in game. It is not the same bytes. The
 children can come in another order, the triangles are ordered for the GPU's vertex cache by a modern optimiser rather
 than the editor's (as few cache misses, often fewer), and each bone's box is fitted tightly around every vertex the bone
-moves, smaller than the editor's in sum and holding the model better as it animates.
+moves, smaller than the editor's in sum and holding the model better as it animates. A two-sided surface of a static
+object is written once, where the editor writes all of its faces twice over by mistake; the model draws the same.
 
 ## Verify a model
 
@@ -103,7 +109,9 @@ Decompiled ./meshes/ventilator_01.ogf into ./rawdata/ventilator_01.object: 1 sur
 Exit code: `0`. The command refuses to replace an existing `.object` or sidecar; pass `--force` to overwrite both.
 
 Skeleton models decompile: props and physics objects, weapon hands and characters, whose vertices follow one bone or
-blend across up to four. A static level-style model is refused with exit `1`.
+blend across up to four. So do static models, a single one or one made of parts, into a static object without bones; a
+progressive one comes back at its full detail, marked progressive. Other model types, such as trees, particles and level
+geometry, are refused with exit `1`.
 
 ## What comes back
 
@@ -116,7 +124,8 @@ The OGF keeps most of what the editor exported, and the decompiler restores it:
   export stored them: the four strongest, scaled to sum to one, which is what the editor exports from in any case.
 - **Texture coordinates**, with a seam's second UV stored per face as the editor keeps it.
 - **Two-sided surfaces.** The export wrote each face of a two-sided surface twice, the copy facing the other way; each
-  pair becomes one face on a surface with the two-sided flag.
+  pair becomes one face on a surface with the two-sided flag. The editor's static export writes both again by mistake;
+  those repeats are dropped.
 - **Normals and smoothing.** Each face corner keeps the normal the OGF stored, in the mesh chunk blender-xray also
   writes and reads, so a compile with xrf-cli and an import into Blender shade the model exactly as before. The SDK's
   editors ignore that chunk and recompute normals from per-edge smoothing flags, which the decompiler also writes: an
@@ -134,8 +143,8 @@ Some of a source file never reaches the OGF, and the decompiler writes the edito
 
 - surface names, taken from the texture's file name;
 - each surface's compiler shader and game material, `default`;
-- the mesh name, `skin`;
-- bone lengths, `0.5`;
+- the mesh name, `skin` for a skeleton, `mesh` for a static object, which the editor names after the object;
+- a skeleton's bone lengths, `0.5`;
 - a motion's curves between its frames, which come back as straight lines from frame to frame.
 
 The sidecar lists each of these under `inferred`. Check the game materials in particular before rebuilding a model whose

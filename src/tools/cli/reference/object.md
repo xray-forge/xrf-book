@@ -6,26 +6,26 @@
 
 ## `xrf-cli object compile`
 
-Compile a skeleton SDK .object into the OGF the engine loads
+Compile an SDK .object into the OGF the engine loads: a skeleton with bones, else a static visual
 
 ```txt
 xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option                  | Required | Default | Description                                                                                                                                                                                                                                                   |
-| ----------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`     | yes      |         | Path to the .object to compile                                                                                                                                                                                                                                |
-| `-d, --dest <dest>`     | yes      |         | Path of the OGF to write                                                                                                                                                                                                                                      |
-| `-f, --force`           |          |         | Overwrite an existing OGF                                                                                                                                                                                                                                     |
-| `--tangents <tangents>` |          | `auto`  | Tangent method: auto follows the provenance sidecar beside a decompiled object (MikkTSpace for a model exported from Blender) and the Actor Editor's otherwise; actor-editor or mikktspace forces one. Possible values: `auto`, `actor-editor`, `mikktspace`. |
-| `-s, --silent`          |          |         | Turn off logging                                                                                                                                                                                                                                              |
-| `-v, --verbose`         |          |         | Turn on verbose logging                                                                                                                                                                                                                                       |
-| `--json`                |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                          |
-| `--report <PATH>`       |          |         | Write the run's JSON report to a file                                                                                                                                                                                                                         |
+| Option                  | Required | Default | Description                                                                                                                                                                                                                                                                                                     |
+| ----------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`     | yes      |         | Path to the .object to compile                                                                                                                                                                                                                                                                                  |
+| `-d, --dest <dest>`     | yes      |         | Path of the OGF to write                                                                                                                                                                                                                                                                                        |
+| `-f, --force`           |          |         | Overwrite an existing OGF                                                                                                                                                                                                                                                                                       |
+| `--tangents <tangents>` |          | `auto`  | Tangent method of a skeleton: auto follows the provenance sidecar beside a decompiled object (MikkTSpace for a model exported from Blender) and the Actor Editor's otherwise; actor-editor or mikktspace forces one. A static visual stores no tangents. Possible values: `auto`, `actor-editor`, `mikktspace`. |
+| `-s, --silent`          |          |         | Turn off logging                                                                                                                                                                                                                                                                                                |
+| `-v, --verbose`         |          |         | Turn on verbose logging                                                                                                                                                                                                                                                                                         |
+| `--json`                |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                            |
+| `--report <PATH>`       |          |         | Write the run's JSON report to a file                                                                                                                                                                                                                                                                           |
 
 ## `xrf-cli object decompile`
 
-Decompile a skeleton OGF into an SDK .object, with a .object.xrf.json provenance sidecar beside it
+Decompile a skeleton or static OGF into an SDK .object, with a .object.xrf.json provenance sidecar beside it
 
 ```txt
 xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
@@ -43,7 +43,7 @@ xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
 
 ## `xrf-cli object verify`
 
-Compile a skeleton SDK .object in memory and compare it with the OGF it should stand in for
+Compile an SDK .object in memory and compare it with the OGF it should stand in for
 
 ```txt
 xrf-cli object verify [OPTIONS] --path <path> --ogf <ogf>
