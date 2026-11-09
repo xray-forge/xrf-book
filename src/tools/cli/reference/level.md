@@ -23,6 +23,26 @@ xrf-cli level albedo [OPTIONS] <--path <path>|--root <root>>
 | `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                                                                      |
 | `--report <PATH>`      |          |         | Write the run's JSON report to a file                                                                                                                                                                                                                                                                                                                     |
 
+## `xrf-cli level decompile`
+
+Decompile a compiled level's directory into an SDK Level Editor scene (.level and its parts), with a .level.xrf.json
+provenance sidecar beside it. The scene holds the parts the build passes through (particles, sounds, sound environments,
+fog volumes, wall marks, patrol paths, respawn points and environment modifiers); no geometry yet
+
+```txt
+xrf-cli level decompile [OPTIONS] --path <path> --dest <dest>
+```
+
+| Option              | Required | Default | Description                                                                                                                             |
+| ------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to the level's directory, holding level.game, level.ps_static and the rest                                                         |
+| `-d, --dest <dest>` | yes      |         | Path of the .level to write; its parts go in the directory beside it named after it, its sidecar beside it, and its name is the level's |
+| `-f, --force`       |          |         | Overwrite an existing .level, its parts and its sidecar                                                                                 |
+| `-s, --silent`      |          |         | Turn off logging                                                                                                                        |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                                                 |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                    |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                                                   |
+
 ## `xrf-cli level info`
 
 Print what a compiled level holds

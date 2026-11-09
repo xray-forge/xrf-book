@@ -1,11 +1,11 @@
 # Level CLI
 
 Level commands read one compiled level: the `level` bundle with its shader table, sectors, portals, lights and visuals,
-and the `level.geom` and `level.geomx` buffers the visuals draw from. Every command names the level the same two ways:
-`--path` is a level directory on disk, and `--root` with `--level` is one of an installation's levels, read through the
-game's file system by its engine name `levels\<name>`. A stock Anomaly installation ships its levels inside `.db`
-volumes, with no directory to point at, so the second way is the one that reads a real game. `--root` without `--level`
-fails and names the levels the roots hold.
+and the `level.geom` and `level.geomx` buffers the visuals draw from. Every command but `level decompile` names the
+level the same two ways: `--path` is a level directory on disk, and `--root` with `--level` is one of an installation's
+levels, read through the game's file system by its engine name `levels\<name>`. A stock Anomaly installation ships its
+levels inside `.db` volumes, with no directory to point at, so the second way is the one that reads a real game.
+`--root` without `--level` fails and names the levels the roots hold.
 
 ## Examples
 
@@ -47,6 +47,32 @@ Against linear 0.03 to 0.9: 95 dark, 230 within, 0 bright; median albedo 0.057, 
 ```
 
 Exit code: `0`.
+
+Decompile a level directory into a Level Editor scene:
+
+```powershell
+xrf-cli level decompile --path ./gamedata/levels/zaton --dest ./rawdata/levels/zaton.level
+```
+
+```text
+Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 6 files: fog_volume 0, ps 129, sound_src 12, spawn 0, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
+```
+
+## Decompile
+
+`level decompile` turns the files the SDK's Level Editor writes straight from a scene, with no compiler in between, back
+into that scene's parts. That covers static particles, sounds and sound environments, fog volumes, wall marks, patrol
+paths, respawn points and environment modifiers. It does not cover geometry or entity spawns yet. It reads a level
+directory on disk only, not a level inside `.db` volumes.
+
+- It writes `<name>.level`, a directory `<name>` beside it holding one `.part` file per tool, and a
+  `<name>.level.xrf.json` sidecar. The name comes from `--dest`.
+- The sidecar lists each source file with its SHA-256, each written file and its sources, and what the decompile chose
+  rather than read (object names, level options, the camera, build parameters). The scene's GUID is derived from the
+  sources, so decompiling the same level twice gives the same scene.
+- An existing `.level`, part directory or sidecar is refused unless `--force` is given. Even with `--force`, a part
+  directory holding a part the decompile would not write is refused, since the editor would read that part as belonging
+  to the scene. A refusal writes nothing.
 
 ## Albedo
 
