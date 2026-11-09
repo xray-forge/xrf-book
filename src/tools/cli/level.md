@@ -55,6 +55,7 @@ xrf-cli level decompile --path ./gamedata/levels/zaton --dest ./rawdata/levels/z
 ```
 
 ```text
+Entities from ./gamedata/spawns/all.spawn (1866 objects): 0 disagreements with level.spawn and 262 update packets recorded in the sidecar
 Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 9 files: fog_volume 0, glow 36, light 571, ps 129, sound_src 12, spawn 2183, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
 ```
 
@@ -70,6 +71,16 @@ Entities come from `level.spawn` and `level_rs.spawn`, each as a spawn point at 
 and a zone's or restrictor's volume as a shape attached to it. An entity whose class the decompile cannot read, such as
 a multiplayer item or a Clear Sky or Shadow of Chernobyl packet, is left out: the command warns, and the sidecar names
 each one with its reason.
+
+A game starts from its root spawn, `spawns/all.spawn`, and mods often edit it after it was built, so its objects on the
+level replace `level.spawn`'s where the game tree has one:
+
+- `--spawn <name>` reads `spawns/<name>.spawn` instead, such as a test spawn built for one level. It must exist.
+- Without `--spawn`, `all.spawn` is read where it exists, else the entities come from `level.spawn` alone.
+- The ids the AI compiler assigns while building the root spawn (game and level vertices, a level changer's destination)
+  are taken from `level.spawn`, as the editor wrote them, so a scene built again gives the same `level.spawn`.
+- The sidecar's `rootSpawn` lists every object the two files disagree on, and keeps the update packets a rebuilt root
+  spawn would not reproduce. The command reports the counts.
 
 - It writes `<name>.level`, a directory `<name>` beside it holding one `.part` file per tool, and a
   `<name>.level.xrf.json` sidecar. The name comes from `--dest`.

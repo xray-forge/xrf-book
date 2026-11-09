@@ -54,15 +54,16 @@ and lights; no geometry yet
 xrf-cli level decompile [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                                                                                             |
-| ------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the level's directory, holding level, build.lights, level.game, level.ps_static and the rest                                    |
-| `-d, --dest <dest>` | yes      |         | Path of the .level to write; its parts go in the directory beside it named after it, its sidecar beside it, and its name is the level's |
-| `-f, --force`       |          |         | Overwrite an existing .level, its parts and its sidecar                                                                                 |
-| `-s, --silent`      |          |         | Turn off logging                                                                                                                        |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                                                 |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                    |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                                                   |
+| Option              | Required | Default | Description                                                                                                                                                                          |
+| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `-p, --path <path>` | yes      |         | Path to the level's directory, holding level, build.lights, level.game, level.ps_static and the rest                                                                                 |
+| `-d, --dest <dest>` | yes      |         | Path of the .level to write; its parts go in the directory beside it named after it, its sidecar beside it, and its name is the level's                                              |
+| `--spawn <spawn>`   |          |         | Root spawn whose objects on the level replace level.spawn's entities, read from spawns/&lt;spawn&gt;.spawn beside the level's levels directory; all.spawn by default where it exists |
+| `-f, --force`       |          |         | Overwrite an existing .level, its parts and its sidecar                                                                                                                              |
+| `-s, --silent`      |          |         | Turn off logging                                                                                                                                                                     |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                                                                                              |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                 |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                                                                                                |
 
 ## `xrf-cli level info`
 
