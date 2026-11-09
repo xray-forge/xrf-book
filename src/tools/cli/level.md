@@ -62,8 +62,8 @@ Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 6 file
 
 `level decompile` turns the files the SDK's Level Editor writes straight from a scene, with no compiler in between, back
 into that scene's parts. That covers static particles, sounds and sound environments, fog volumes, wall marks, patrol
-paths, respawn points and environment modifiers. It does not cover geometry or entity spawns yet. It reads a level
-directory on disk only, not a level inside `.db` volumes.
+paths, respawn points and environment modifiers, and also the glows the `level` file keeps. It does not cover geometry
+or entity spawns yet. It reads a level directory on disk only, not a level inside `.db` volumes.
 
 - It writes `<name>.level`, a directory `<name>` beside it holding one `.part` file per tool, and a
   `<name>.level.xrf.json` sidecar. The name comes from `--dest`.
