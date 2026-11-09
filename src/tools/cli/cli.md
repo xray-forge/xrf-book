@@ -70,11 +70,11 @@ and timings.
 
 Commands that support parallel work accept `-j, --jobs`:
 
-| Value            | Meaning                                                                             |
-| ---------------- | ----------------------------------------------------------------------------------- |
-| `auto`           | Use the machine's available parallelism; the default.                               |
-| A positive count | Use that many workers. `1` runs sequentially.                                       |
-| A percentage     | Use that share of available parallelism, rounded down with a minimum of one worker. |
+| Value            | Meaning                                                                                |
+| ---------------- | -------------------------------------------------------------------------------------- |
+| `auto`           | A worker per processor the process may run on (its CPU affinity, if set); the default. |
+| A positive count | Use that many workers. `1` runs sequentially.                                          |
+| A percentage     | Use that share of the `auto` count, rounded down with a minimum of one worker.         |
 
 ```powershell
 xrf-cli gamedata verify --path ./target/gamedata -j 50%
