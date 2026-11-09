@@ -26,8 +26,8 @@ xrf-cli level albedo [OPTIONS] <--path <path>|--root <root>>
 ## `xrf-cli level build`
 
 Build an SDK Level Editor scene's game files into a level directory, as the editor's Build writes them from the scene's
-parts: level.game, level.env_mod, level.fog_vol, and level.ps_static, level.snd_static, level.snd_env and
-level.wallmarks where the scene holds them. No geometry, spawns or build.prj yet
+parts: level.game, level.env_mod, level.fog_vol, and level.spawn, level_rs.spawn, level.ps_static, level.snd_static,
+level.snd_env and level.wallmarks where the scene holds them. No geometry or build.prj yet
 
 ```txt
 xrf-cli level build [OPTIONS] --path <path> --dest <dest>
@@ -47,8 +47,8 @@ xrf-cli level build [OPTIONS] --path <path> --dest <dest>
 
 Decompile a compiled level's directory into an SDK Level Editor scene (.level and its parts), with a .level.xrf.json
 provenance sidecar beside it. The scene holds the parts the build passes through (particles, sounds, sound environments,
-fog volumes, wall marks, patrol paths, respawn points and environment modifiers) and the level's glows and lights; no
-geometry yet
+fog volumes, wall marks, patrol paths, respawn points, environment modifiers and entity spawns) and the level's glows
+and lights; no geometry yet
 
 ```txt
 xrf-cli level decompile [OPTIONS] --path <path> --dest <dest>

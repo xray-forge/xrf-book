@@ -55,16 +55,21 @@ xrf-cli level decompile --path ./gamedata/levels/zaton --dest ./rawdata/levels/z
 ```
 
 ```text
-Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 6 files: fog_volume 0, ps 129, sound_src 12, spawn 0, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
+Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 9 files: fog_volume 0, glow 36, light 571, ps 129, sound_src 12, spawn 2183, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
 ```
 
 ## Decompile
 
 `level decompile` turns the files the SDK's Level Editor writes straight from a scene, with no compiler in between, back
 into that scene's parts. That covers static particles, sounds and sound environments, fog volumes, wall marks, patrol
-paths, respawn points and environment modifiers, and also the glows and lights the `level` file and `build.lights` keep.
-It does not cover geometry or entity spawns yet. It reads a level directory on disk only, not a level inside `.db`
+paths, respawn points, environment modifiers and entity spawns, and also the glows and lights the `level` file and
+`build.lights` keep. It does not cover geometry yet. It reads a level directory on disk only, not a level inside `.db`
 volumes.
+
+Entities come from `level.spawn` and `level_rs.spawn`, each as a spawn point at its place with its packet as spawn data,
+and a zone's or restrictor's volume as a shape attached to it. An entity whose class the decompile cannot read, such as
+a multiplayer item or a Clear Sky or Shadow of Chernobyl packet, is left out: the command warns, and the sidecar names
+each one with its reason.
 
 - It writes `<name>.level`, a directory `<name>` beside it holding one `.part` file per tool, and a
   `<name>.level.xrf.json` sidecar. The name comes from `--dest`.
@@ -81,9 +86,11 @@ volumes.
 directory what the Level Editor's Build writes from those parts:
 
 - `level.game`, `level.env_mod` and `level.fog_vol` every time;
+- `level.spawn`, and `level_rs.spawn` for entities marked to respawn in multiplayer, where the scene places entities;
 - `level.ps_static`, `level.snd_static`, `level.snd_env` and `level.wallmarks` where the scene holds their objects.
 
-It does not write geometry, entity spawns or `build.prj` yet.
+Each entity takes its name, position and angles from its spawn point, and its volume from the attached shape, as the
+editor's Build does. It does not write geometry or `build.prj` yet.
 
 ```powershell
 xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --force
@@ -91,7 +98,9 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 
 - A file it would write that is already there is refused unless `--force` is given. The report says of each file whether
   it is new, the same bytes as before, or changed. A level decompiled and built back into its own directory reports
-  every file the same.
+  every file the same but, on most levels, `level.spawn`: the scene saves floats as text with six decimals, as the
+  editor does, which rounds the few that held more (mostly climbable and breakable shapes), and an entity the decompile
+  left out is missing.
 - The editor's Build moves every file it may write aside as a `.~` backup first, so a file the scene no longer produces
   goes away. `level build` moves and deletes nothing. It refuses, naming the file, when the directory holds one the
   scene does not build, such as a `level.ps_static` from a scene that now places no particles.
