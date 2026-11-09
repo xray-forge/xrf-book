@@ -47,7 +47,8 @@ xrf-cli level build [OPTIONS] --path <path> --dest <dest>
 
 Decompile a compiled level's directory into an SDK Level Editor scene (.level and its parts), with a .level.xrf.json
 provenance sidecar beside it. The scene holds the parts the build passes through (particles, sounds, sound environments,
-fog volumes, wall marks, patrol paths, respawn points and environment modifiers) and the level's glows; no geometry yet
+fog volumes, wall marks, patrol paths, respawn points and environment modifiers) and the level's glows and lights; no
+geometry yet
 
 ```txt
 xrf-cli level decompile [OPTIONS] --path <path> --dest <dest>
@@ -55,7 +56,7 @@ xrf-cli level decompile [OPTIONS] --path <path> --dest <dest>
 
 | Option              | Required | Default | Description                                                                                                                             |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the level's directory, holding level, level.game, level.ps_static and the rest                                                  |
+| `-p, --path <path>` | yes      |         | Path to the level's directory, holding level, build.lights, level.game, level.ps_static and the rest                                    |
 | `-d, --dest <dest>` | yes      |         | Path of the .level to write; its parts go in the directory beside it named after it, its sidecar beside it, and its name is the level's |
 | `-f, --force`       |          |         | Overwrite an existing .level, its parts and its sidecar                                                                                 |
 | `-s, --silent`      |          |         | Turn off logging                                                                                                                        |
