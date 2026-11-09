@@ -23,6 +23,26 @@ xrf-cli level albedo [OPTIONS] <--path <path>|--root <root>>
 | `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                                                                                                                                                      |
 | `--report <PATH>`      |          |         | Write the run's JSON report to a file                                                                                                                                                                                                                                                                                                                     |
 
+## `xrf-cli level build`
+
+Build an SDK Level Editor scene's game files into a level directory, as the editor's Build writes them from the scene's
+parts: level.game, level.env_mod, level.fog_vol, and level.ps_static, level.snd_static, level.snd_env and
+level.wallmarks where the scene holds them. No geometry, spawns or build.prj yet
+
+```txt
+xrf-cli level build [OPTIONS] --path <path> --dest <dest>
+```
+
+| Option              | Required | Default | Description                                                                                |
+| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------ |
+| `-p, --path <path>` | yes      |         | Path to the scene's .level; its parts are read from the directory beside it named after it |
+| `-d, --dest <dest>` | yes      |         | Path of the level directory to write the files into                                        |
+| `-f, --force`       |          |         | Overwrite the files the build writes where the directory already holds them                |
+| `-s, --silent`      |          |         | Turn off logging                                                                           |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                                    |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                       |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                      |
+
 ## `xrf-cli level decompile`
 
 Decompile a compiled level's directory into an SDK Level Editor scene (.level and its parts), with a .level.xrf.json

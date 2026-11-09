@@ -74,6 +74,27 @@ directory on disk only, not a level inside `.db` volumes.
   directory holding a part the decompile would not write is refused, since the editor would read that part as belonging
   to the scene. A refusal writes nothing.
 
+## Build
+
+`level build` goes the other way for the same files. It reads a scene's `.level` and parts and writes into a level
+directory what the Level Editor's Build writes from those parts:
+
+- `level.game`, `level.env_mod` and `level.fog_vol` every time;
+- `level.ps_static`, `level.snd_static`, `level.snd_env` and `level.wallmarks` where the scene holds their objects.
+
+It does not write geometry, entity spawns or `build.prj` yet.
+
+```powershell
+xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --force
+```
+
+- A file it would write that is already there is refused unless `--force` is given. The report says of each file whether
+  it is new, the same bytes as before, or changed. A level decompiled and built back into its own directory reports
+  every file the same.
+- The editor's Build moves every file it may write aside as a `.~` backup first, so a file the scene no longer produces
+  goes away. `level build` moves and deletes nothing. It refuses, naming the file, when the directory holds one the
+  scene does not build, such as a `level.ps_static` from a scene that now places no particles.
+
 ## Albedo
 
 `level albedo` takes the base texture of every surface in the shader table that has a colour of its own: opaque and
