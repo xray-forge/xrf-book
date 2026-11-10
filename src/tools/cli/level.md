@@ -74,6 +74,10 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   as one object, welded, with mirrored triangles folded into two-sided faces. Trees are not written yet.
 - Each object keeps the level's own coordinates and stands at the origin, so every point lands exactly where the level
   had it and neighbouring sectors still meet.
+- Collision faces in `level.cform` that no render triangle draws, such as invisible walls, come back as one more object,
+  `<name>_collision`, with one mesh per sector. It is dressed as GSC dressed such props: the `prop\prop_fake_kollision`
+  texture and the `def_shaders\def_kolizion_vertex` compiler shader, which collides and never renders. Each face keeps
+  its game material. Collision under trees is left for the trees.
 - A sector that draws only trees would have no object to name. On such a level the sectors and portals are left out, so
   a rebuild does not number its sectors differently, and the sidecar names each empty sector.
 - The objects go under `--objects` at `levels\<name>\`, each with its own `.object.xrf.json` sidecar. By default that is
