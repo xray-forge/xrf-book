@@ -78,6 +78,8 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   `<name>_collision`, with one mesh per sector. It is dressed as GSC dressed such props: the `prop\prop_fake_kollision`
   texture and the `def_shaders\def_kolizion_vertex` compiler shader, which collides and never renders. Each face keeps
   its game material. Collision under trees is left for the trees.
+- The Build also bakes every wall mark into the static geometry. Those copies are left out of the shells, since
+  `wallmark.part` holds the wall marks and a rebuild would otherwise draw them twice.
 - `level.hom`, the occlusion mesh, comes back as `<name>_hom`, as GSC keeps its own: an ordinary object whose surfaces
   have the `materials\occ` game material, which the Build exports to `level.hom` and leaves out of the geometry.
   `level.som`, the sound occluders, comes back as `<name>_som`, flagged as a sound occluder. Each surface takes the game
