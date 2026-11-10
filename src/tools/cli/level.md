@@ -84,6 +84,11 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   have the `materials\occ` game material, which the Build exports to `level.hom` and leaves out of the geometry.
   `level.som`, the sound occluders, comes back as `<name>_som`, flagged as a sound occluder. Each surface takes the game
   material whose sound occlusion factor is its polygons', which needs the game material library.
+- The Build cuts ladders and breakable glass or boards out of the geometry and exports them as entities, so they come
+  back as objects and leave the spawn points. A ladder becomes `<name>_ladder_<N>`: the box the Build made of it, less
+  its back face, standing at its foot, of the entity's game material or `materials\fake_ladders`. A breakable part
+  becomes `<name>_breakable_<N>` from its `meshes\brkbl#<n>.ogf`, its fragments joined again, where its entity placed
+  it. A rebuild exports both again.
 - A sector that draws only trees would have no object to name. On such a level the sectors and portals are left out, so
   a rebuild does not number its sectors differently, and the sidecar names each empty sector.
 - The objects go under `--objects` at `levels\<name>\`, each with its own `.object.xrf.json` sidecar. By default that is
@@ -143,8 +148,8 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 - A file it would write that is already there is refused unless `--force` is given. The report says of each file whether
   it is new, the same bytes as before, or changed. A level decompiled and built back into its own directory reports
   every file the same but, on most levels, `level.spawn`: the scene saves floats as text with six decimals, as the
-  editor does, which rounds the few that held more (mostly climbable and breakable shapes), and an entity the decompile
-  left out is missing.
+  editor does, which rounds the few that held more, an entity the decompile left out is missing, and so are ladders and
+  breakables, which the scene holds as geometry that `level build` does not export yet.
 - The editor's Build moves every file it may write aside as a `.~` backup first, so a file the scene no longer produces
   goes away. `level build` moves and deletes nothing. It refuses, naming the file, when the directory holds one the
   scene does not build, such as a `level.ps_static` from a scene that now places no particles.
