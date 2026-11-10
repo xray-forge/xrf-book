@@ -47,23 +47,24 @@ xrf-cli level build [OPTIONS] --path <path> --dest <dest>
 
 Decompile a compiled level's directory into an SDK Level Editor scene (.level and its parts), with a .level.xrf.json
 provenance sidecar beside it. The scene holds the parts the build passes through (particles, sounds, sound environments,
-fog volumes, wall marks, patrol paths, respawn points, environment modifiers and entity spawns) and the level's glows
-and lights; no geometry yet
+fog volumes, wall marks, patrol paths, respawn points, environment modifiers and entity spawns), the level's glows and
+lights, and its static geometry as one .object per sector with the sectors and portals
 
 ```txt
 xrf-cli level decompile [OPTIONS] --path <path> --dest <dest>
 ```
 
-| Option              | Required | Default | Description                                                                                                                                                                          |
-| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `-p, --path <path>` | yes      |         | Path to the level's directory, holding level, build.lights, level.game, level.ps_static and the rest                                                                                 |
-| `-d, --dest <dest>` | yes      |         | Path of the .level to write; its parts go in the directory beside it named after it, its sidecar beside it, and its name is the level's                                              |
-| `--spawn <spawn>`   |          |         | Root spawn whose objects on the level replace level.spawn's entities, read from spawns/&lt;spawn&gt;.spawn beside the level's levels directory; all.spawn by default where it exists |
-| `-f, --force`       |          |         | Overwrite an existing .level, its parts and its sidecar                                                                                                                              |
-| `-s, --silent`      |          |         | Turn off logging                                                                                                                                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                                                                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                 |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                                                                                                |
+| Option                | Required | Default | Description                                                                                                                                                                                                                 |
+| --------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`   | yes      |         | Path to the level's directory, holding level, build.lights, level.game, level.ps_static and the rest                                                                                                                        |
+| `-d, --dest <dest>`   | yes      |         | Path of the .level to write; its parts go in the directory beside it named after it, its sidecar beside it, and its name is the level's                                                                                     |
+| `--objects <objects>` |          |         | Objects root ($objects$) the scene's .object files are written under, at levels/&lt;level&gt;/; by default the objects directory beside the destination's directory, as the SDK lays out rawdata/levels and rawdata/objects |
+| `--spawn <spawn>`     |          |         | Root spawn whose objects on the level replace level.spawn's entities, read from spawns/&lt;spawn&gt;.spawn beside the level's levels directory; all.spawn by default where it exists                                        |
+| `-f, --force`         |          |         | Overwrite an existing .level, its parts, its sidecar and its objects                                                                                                                                                        |
+| `-s, --silent`        |          |         | Turn off logging                                                                                                                                                                                                            |
+| `-v, --verbose`       |          |         | Turn on verbose logging                                                                                                                                                                                                     |
+| `--json`              |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                        |
+| `--report <PATH>`     |          |         | Write the run's JSON report to a file                                                                                                                                                                                       |
 
 ## `xrf-cli level info`
 

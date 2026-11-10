@@ -55,8 +55,9 @@ xrf-cli level decompile --path ./gamedata/levels/zaton --dest ./rawdata/levels/z
 ```
 
 ```text
+Static geometry: 118 objects under ./rawdata/objects, 1648157 faces from 1673272 triangles (25115 two-sided folds, 0 repeats dropped); 1567425 tree triangles left for their own objects
 Entities from ./gamedata/spawns/all.spawn (1866 objects): 0 disagreements with level.spawn and 262 update packets recorded in the sidecar
-Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 9 files: fog_volume 0, glow 36, light 571, ps 129, sound_src 12, spawn 2183, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
+Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 10 files: fog_volume 0, glow 36, light 571, portal 495, ps 129, scene_object 118, sector 118, sound_src 12, spawn 2183, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
 ```
 
 ## Decompile
@@ -64,8 +65,22 @@ Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 9 file
 `level decompile` turns the files the SDK's Level Editor writes straight from a scene, with no compiler in between, back
 into that scene's parts. That covers static particles, sounds and sound environments, fog volumes, wall marks, patrol
 paths, respawn points, environment modifiers and entity spawns, and also the glows and lights the `level` file and
-`build.lights` keep. It does not cover geometry yet. It reads a level directory on disk only, not a level inside `.db`
-volumes.
+`build.lights` keep. It reads a level directory on disk only, not a level inside `.db` volumes.
+
+Where the directory holds `level.geom`, the static geometry comes back as one `.object` per compiled sector,
+`<name>_sector_<N>`, with the sectors and portals that cull it:
+
+- The compiled level merged every authored object of a sector into one mesh, so each sector's static triangles come back
+  as one object, welded, with mirrored triangles folded into two-sided faces. Trees are not written yet.
+- Each object keeps the level's own coordinates and stands at the origin, so every point lands exactly where the level
+  had it and neighbouring sectors still meet.
+- A sector that draws only trees would have no object to name. On such a level the sectors and portals are left out, so
+  a rebuild does not number its sectors differently, and the sidecar names each empty sector.
+- The objects go under `--objects` at `levels\<name>\`, each with its own `.object.xrf.json` sidecar. By default that is
+  the `objects` directory beside the destination's directory: `rawdata/objects` for a scene in `rawdata/levels`, as the
+  SDK lays them out.
+- Surfaces keep their texture and engine shader. The compiler shader and game material are the editor's `default` for
+  now.
 
 Entities come from `level.spawn` and `level_rs.spawn`, each as a spawn point at its place with its packet as spawn data,
 and a zone's or restrictor's volume as a shape attached to it. An entity whose class the decompile cannot read, such as
@@ -87,9 +102,9 @@ level replace `level.spawn`'s where the game tree has one:
 - The sidecar lists each source file with its SHA-256, each written file and its sources, and what the decompile chose
   rather than read (object names, level options, the camera, build parameters). The scene's GUID is derived from the
   sources, so decompiling the same level twice gives the same scene.
-- An existing `.level`, part directory or sidecar is refused unless `--force` is given. Even with `--force`, a part
-  directory holding a part the decompile would not write is refused, since the editor would read that part as belonging
-  to the scene. A refusal writes nothing.
+- An existing `.level`, part directory, sidecar or object is refused unless `--force` is given. Even with `--force`, a
+  part directory holding a part the decompile would not write is refused, since the editor would read that part as
+  belonging to the scene. A refusal writes nothing.
 
 ## Build
 
