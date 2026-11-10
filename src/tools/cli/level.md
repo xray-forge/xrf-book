@@ -177,8 +177,9 @@ models placed by the spawn, are not in the shader table, so they are not measure
 A game material, from `gamemtl.xr`, is what a surface is made of to the game: the sound a footstep makes on it, how a
 bullet passes through it, whether grass grows on it. The compiled level stores it only on the collision form, never on
 the geometry that is drawn. `level materials` finds it for every render surface by looking where each of its triangles
-lies: a short ray through the triangle's centre meets the collision face built from it, and the triangle's area is
-counted against that face's material.
+lies: of the collision faces a short line through the triangle's centre crosses, the nearest is the one built from it,
+and the triangle's area is counted against that face's material. Taking the nearest, rather than the first a ray from
+above meets, keeps a floor's material where a plate or grating lies a few centimetres over it.
 
 ```powershell
 xrf-cli level materials --root ./stalker-anomaly --level zaton --report zaton-materials.json
