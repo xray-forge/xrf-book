@@ -78,6 +78,10 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   `<name>_collision`, with one mesh per sector. It is dressed as GSC dressed such props: the `prop\prop_fake_kollision`
   texture and the `def_shaders\def_kolizion_vertex` compiler shader, which collides and never renders. Each face keeps
   its game material. Collision under trees is left for the trees.
+- `level.hom`, the occlusion mesh, comes back as `<name>_hom`, as GSC keeps its own: an ordinary object whose surfaces
+  have the `materials\occ` game material, which the Build exports to `level.hom` and leaves out of the geometry.
+  `level.som`, the sound occluders, comes back as `<name>_som`, flagged as a sound occluder. Each surface takes the game
+  material whose sound occlusion factor is its polygons', which needs the game material library.
 - A sector that draws only trees would have no object to name. On such a level the sectors and portals are left out, so
   a rebuild does not number its sectors differently, and the sidecar names each empty sector.
 - The objects go under `--objects` at `levels\<name>\`, each with its own `.object.xrf.json` sidecar. By default that is
