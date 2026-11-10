@@ -79,8 +79,16 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
 - The objects go under `--objects` at `levels\<name>\`, each with its own `.object.xrf.json` sidecar. By default that is
   the `objects` directory beside the destination's directory: `rawdata/objects` for a scene in `rawdata/levels`, as the
   SDK lays them out.
-- Surfaces keep their texture and engine shader. The compiler shader and game material are the editor's `default` for
-  now.
+- Surfaces keep their texture and engine shader, and by default (`--surfaces infer`) take a game material and a compiler
+  shader inferred from the level. Each triangle takes the game material of the collision face in `level.cform` it lies
+  on; a surface whose triangles lie on different materials, or on none, is split. The compiler shader is one in
+  `shaders_xrlc.xr` that fits what the level shows: whether the surface collides, and whether it is lit per vertex or by
+  lightmap. Among those that fit, `--library <objects root>` (repeatable, such as an SDK's `rawdata/objects`) prefers
+  the one its objects pair most with the surface's engine shader.
+- The two libraries are `gamemtl.xr` and `shaders_xrlc.xr` in the level's `gamedata`, or `--game-materials` and
+  `--compiler-shaders`. `--surfaces defaults` gives every surface the editor's `default` instead. The sidecar's
+  `geometry.surfaces` records the libraries, how many triangles lay on a collision face, were traced to one or lay on
+  none, and each compiler shader chosen with why.
 
 Entities come from `level.spawn` and `level_rs.spawn`, each as a spawn point at its place with its packet as spawn data,
 and a zone's or restrictor's volume as a shape attached to it. An entity whose class the decompile cannot read, such as
