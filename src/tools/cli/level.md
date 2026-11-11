@@ -94,6 +94,10 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
 - The objects go under `--objects` at `levels\<name>\`, each with its own `.object.xrf.json` sidecar. By default that is
   the `objects` directory beside the destination's directory: `rawdata/objects` for a scene in `rawdata/levels`, as the
   SDK lays them out.
+- A tree model whose impostor the level's `level_lods.dds` holds gets its strip back as `lod\lod_<model>.dds` and
+  `_nm.dds` under `--textures`, the textures the editor's Build loads for it. By default that is `gamedata/textures`
+  beside the destination's `rawdata` directory: `editors/gamedata/textures` for a scene in `editors/rawdata/levels`.
+  `level build` merges them back into `level_lods.dds` from the root its own `--textures` names.
 - Surfaces keep their texture and engine shader, and by default (`--surfaces infer`) take a game material and a compiler
   shader inferred from the level. Each triangle takes the game material of the collision face in `level.cform` it lies
   on; a surface whose triangles lie on different materials, or on none, is split. The compiler shader is one in
