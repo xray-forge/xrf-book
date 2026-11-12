@@ -54,26 +54,28 @@ xrf-cli level build [OPTIONS] --path <path> --dest <dest>
 ## `xrf-cli level compile`
 
 Compile a level directory level build wrote into what the game loads, step by step: geometry (the level, its geometry,
-collision and lightmaps; the SDK's xrLC), details (level.details lit; xrDO_Light) and ai (level.ai; xrAI -f). Every
-step's inputs and every texture build.prj names are checked before any step runs. The compilers run in a working
-directory under an fsgame.ltx written for them, never in a game installation
+collision and lightmaps; the SDK's xrLC), details (level.details lit from build.details, build.cform and build.lights,
+as xrDO_Light lights it, on every core) and ai (level.ai; the SDK's xrAI -f). Every step's inputs and every texture
+build.prj names are checked before any step runs. The SDK's compilers run in a working directory under an fsgame.ltx
+written for them, never in a game installation
 
 ```txt
-xrf-cli level compile [OPTIONS] --path <path> --sdk <sdk>
+xrf-cli level compile [OPTIONS] --path <path>
 ```
 
-| Option                  | Required | Default | Description                                                                                                                                                           |
-| ----------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`     | yes      |         | Path to the level's directory, &lt;levels&gt;/&lt;level&gt;, holding build.prj and the rest level build wrote                                                         |
-| `--steps <steps>`       |          |         | Steps to run, in their order whatever the order given; every step by default. Possible values: `geometry`, `details`, `ai`. Accepts multiple values separated by `,`. |
-| `--sdk <sdk>`           | yes      |         | The SDK's editors directory, whose bin holds xrLC, xrDO_Light and xrAI                                                                                                |
-| `--gamedata <gamedata>` |          |         | Game data the compilers read gamemtl.xr and shaders_xrlc.xr from; the gamedata holding the level's levels directory by default                                        |
-| `--textures <textures>` |          |         | Textures root with a .thm for every texture build.prj names; the game data's textures by default                                                                      |
-| `--work <work>`         |          |         | Directory the compilers run in, with their fsgame.ltx and logs; one in the system's temporary directory                                                               |
-| `-s, --silent`          |          |         | Turn off logging                                                                                                                                                      |
-| `-v, --verbose`         |          |         | Turn on verbose logging                                                                                                                                               |
-| `--json`                |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                  |
-| `--report <PATH>`       |          |         | Write the run's JSON report to a file                                                                                                                                 |
+| Option                     | Required | Default | Description                                                                                                                                                                                                                 |
+| -------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`        | yes      |         | Path to the level's directory, &lt;levels&gt;/&lt;level&gt;, holding build.prj and the rest level build wrote                                                                                                               |
+| `--steps <steps>`          |          |         | Steps to run, in their order whatever the order given; every step by default. Possible values: `geometry`, `details`, `ai`. Accepts multiple values separated by `,`.                                                       |
+| `--sdk <sdk>`              |          |         | The SDK's editors directory, whose bin holds xrLC and xrAI; needed by the geometry and ai steps                                                                                                                             |
+| `--gamedata <gamedata>`    |          |         | Game data the compilers read gamemtl.xr and shaders_xrlc.xr from; the gamedata holding the level's levels directory by default                                                                                              |
+| `--textures <textures>...` |          |         | Textures root with a .thm for every texture build.prj names, and the images of those with alpha; repeatable, each file from the first root holding it, though the SDK's steps take one; the game data's textures by default |
+| `--work <work>`            |          |         | Directory the SDK's compilers run in, with their fsgame.ltx and logs; one in the system's temporary directory                                                                                                               |
+| `-f, --force`              |          |         | Overwrite level.details where the level's directory already holds it                                                                                                                                                        |
+| `-s, --silent`             |          |         | Turn off logging                                                                                                                                                                                                            |
+| `-v, --verbose`            |          |         | Turn on verbose logging                                                                                                                                                                                                     |
+| `--json`                   |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                                        |
+| `--report <PATH>`          |          |         | Write the run's JSON report to a file                                                                                                                                                                                       |
 
 ## `xrf-cli level decompile`
 

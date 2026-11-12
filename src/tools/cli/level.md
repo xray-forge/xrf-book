@@ -182,34 +182,54 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 
 `level compile` takes the level directory `level build` wrote and compiles it into what the game loads, step by step:
 
-| Step       | Writes                                                         | Runs                 |
-| ---------- | -------------------------------------------------------------- | -------------------- |
-| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, lightmaps | the SDK's xrLC       |
-| `details`  | `level.details`, lit                                           | the SDK's xrDO_Light |
-| `ai`       | `level.ai`                                                     | the SDK's xrAI       |
+| Step       | Writes                                                         | Runs           |
+| ---------- | -------------------------------------------------------------- | -------------- |
+| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, lightmaps | the SDK's xrLC |
+| `details`  | `level.details`, lit                                           | XRF's lighter  |
+| `ai`       | `level.ai`                                                     | the SDK's xrAI |
 
-Every step runs by default, in that order; `--steps` names some of them. The SDK 0.7 compilers run until XRF's own
-replace them, one step at a time, with the same command.
+Every step runs by default, in that order; `--steps` names some of them. The SDK 0.7 compilers run the steps XRF has no
+compiler of its own for yet; the details are XRF's already.
 
 ```powershell
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,details --sdk ./sdk/editors --gamedata ./gamedata --textures ./gamedata/textures
+xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps details
+xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,details --sdk ./sdk/editors
 ```
 
-It prints each step's compiler, time and log, then the level and the working directory it compiled in. A compiler that
-fails stops the command with the last line of its log.
+It prints each step's time, with the compiler and its log for the SDK's steps and the slots lit for the details, then
+the level, and the working directory where an SDK compiler ran. A compiler that fails stops the command with the last
+line of its log.
 
-- `--sdk` names the SDK's `editors` directory. `--gamedata` names where the compilers read `gamemtl.xr` and
-  `shaders_xrlc.xr`: by default the gamedata holding the level. `--textures` names the textures root, which needs a
-  `.thm` for every texture `build.prj` names: by default the gamedata's `textures`.
+- `--gamedata` names where the compilers read `gamemtl.xr` and `shaders_xrlc.xr`: by default the gamedata holding the
+  level. `--textures` names a textures root, which needs a `.thm` for every texture `build.prj` names: by default the
+  gamedata's `textures`. It repeats, each file read from the first root holding it, but the SDK's steps take one root.
+- `--sdk` names the SDK's `editors` directory, needed only by the `geometry` and `ai` steps.
 - Before any step runs, it checks every step's inputs (`build.prj`; `build.details`, `build.cform` and `build.lights`
   for the details; `build.aimap` and `build.cform` for the AI map) and every texture's `.thm`, so a missing file stops
   it at once rather than minutes into xrLC. What the geometry step writes counts as there for the steps after it.
-- The compilers run in a working directory of their own (`--work`, a temporary one by default), under an `fsgame.ltx`
-  written there, with their logs beside it. Point `--path` at a copy of a level, never at a game installation.
-- Nothing needs answering: xrLC and xrDO_Light run with `-silent`, and xrAI, which has no such switch, is stopped once
-  its closing "Congratulation!" box shows, its files already written. xrAI also runs with `-keep_temp_files`, so it
-  leaves `build.aimap` in place and the step can run again. The compilers lower themselves to idle priority, so other
-  work on the machine slows them.
+- The details step refuses a level directory that already holds `level.details` unless given `-f/--force`.
+
+### Details
+
+The details step lights every planted slot of `build.details` as xrDO_Light does: the sun, the sky and the level's
+lights traced to 225 points across each 2 m slot over xrLC's collision form (`build.cform`), a ray dimmed by the alpha
+of a texture it crosses and passed by a surface that casts no shadow. It writes the five light values a slot stores, the
+grass's sun and sky shade among them. It runs on every core: about 16 s for `mp_darkvalley` and a minute for `jupiter`
+at proof quality, where SDK 0.7's xrDO_Light takes 12 and 23 minutes.
+
+Against SDK 0.7's own runs on the same files it lights all but a handful of slots exactly, each of those one step of
+sixteen off. xrDO_Light remembers the last surface that shadowed each light and tests it first, a shortcut that changes
+its result with the order and the threads it lights in; XRF traces every ray in full, so a run gives the same file on
+any machine.
+
+### The SDK's compilers
+
+- They run in a working directory of their own (`--work`, a temporary one by default), under an `fsgame.ltx` written
+  there, with their logs beside it. Point `--path` at a copy of a level, never at a game installation.
+- Nothing needs answering: xrLC runs with `-silent`, and xrAI, which has no such switch, is stopped once its closing
+  "Congratulation!" box shows, its files already written. xrAI also runs with `-keep_temp_files`, so it leaves
+  `build.aimap` in place and the step can run again. The compilers lower themselves to idle priority, so other work on
+  the machine slows them.
 - The spawn is not a step: xrAI `-s` builds `all.spawn` from every level of a game at once.
 
 ## Albedo
