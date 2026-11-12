@@ -71,7 +71,15 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
 `<name>_sector_<N>`, with the sectors and portals that cull it:
 
 - The compiled level merged every authored object of a sector into one mesh, so each sector's static triangles come back
-  as one object, welded, with mirrored triangles folded into two-sided faces. Trees are not written yet.
+  as one object, welded, with mirrored triangles folded into two-sided faces.
+- Given `--library <objects root>` (repeatable, such as an SDK's `rawdata/objects`), the library's objects the level
+  holds are found in that geometry and come back as scene objects placing them by reference, at their place, turn and
+  scale, their triangles taken out of the sector objects; a tree model the library holds is placed by its library name
+  too. Each object found is copied, with its thumbnail, from the library to `--objects`, so the scene opens without the
+  library. The library's objects in `levels\<name>\`, what an earlier decompile of this level wrote, are not looked for.
+  The sidecar's `geometry.instances` lists each copy with its hash and each placement with how well it fits. Geometry no
+  library object matches stays in the sector objects.
+- Trees come back as multi-use objects, `<name>_tree_<N>`, one per model, with a scene object per placement.
 - Each object keeps the level's own coordinates and stands at the origin, so every point lands exactly where the level
   had it and neighbouring sectors still meet.
 - Collision faces in `level.cform` that no render triangle draws, such as invisible walls, come back as one more object,
@@ -102,8 +110,8 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   shader inferred from the level. Each triangle takes the game material of the collision face in `level.cform` it lies
   on; a surface whose triangles lie on different materials, or on none, is split. The compiler shader is one in
   `shaders_xrlc.xr` that fits what the level shows: whether the surface collides, and whether it is lit per vertex or by
-  lightmap. Among those that fit, `--library <objects root>` (repeatable, such as an SDK's `rawdata/objects`) prefers
-  the one its objects pair most with the surface's engine shader.
+  lightmap. Among those that fit, the `--library` roots prefer the one their objects pair most with the surface's engine
+  shader.
 - The two libraries are `gamemtl.xr` and `shaders_xrlc.xr` in the level's `gamedata`, or `--game-materials` and
   `--compiler-shaders`. `--surfaces defaults` gives every surface the editor's `default` instead. The sidecar's
   `geometry.surfaces` records the libraries, how many triangles lay on a collision face, were traced to one or lay on
