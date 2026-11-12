@@ -62,6 +62,11 @@ xrf-cli spawn verify --path ./all.rebuilt.spawn
 Verification reads the packed file and checks that its structure can be parsed. Use [gamedata verification](gamedata.md)
 for checks involving the surrounding assets; test the affected spawning behavior in game.
 
+`verify` and `repack` also take a level's `level.spawn`. Verification of a level's list checks that every object opens
+as a spawn packet with its section, name and position; the rest of each packet is carried as it is, and repacking writes
+it back byte for byte. A level's list has no unpacked form yet: `unpack` refuses one with exit code `1`, and `pack`,
+`re-unpack` and `verify --unpacked` read only a root spawn's folder.
+
 ## Re-serialize a spawn file
 
 ```powershell
