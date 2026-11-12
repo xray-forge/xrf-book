@@ -14,7 +14,7 @@ xrf-cli spawn info [OPTIONS] --path <path>
 
 | Option              | Required | Default | Description                                                          |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to spawn file                                                   |
+| `-p, --path <path>` | yes      |         | Path to a root spawn such as all.spawn, or to a level's level.spawn  |
 | `-s, --silent`      |          |         | Turn off logging                                                     |
 | `-v, --verbose`     |          |         | Turn on verbose logging                                              |
 | `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |

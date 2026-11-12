@@ -30,8 +30,29 @@ Level graph edges: 2568
 
 Exit code: `0`.
 
-`info` reports the header and counts of objects, artifact spawns, patrols, and graph entries. After editing the exported
-representation:
+`info` reports the header and counts of objects, artifact spawns, patrols, and graph entries. It also reads a level's
+`level.spawn`, the list of objects a level spawns, telling the two kinds apart by the file's contents rather than its
+name:
+
+```powershell
+xrf-cli spawn info --path ./levels/jupiter/level.spawn
+```
+
+Example output excerpt — inspect a level's spawn list:
+
+```text
+Level spawn list information:
+Objects count: 2830
+Sections count: 175
+Section 'af_oasis_heart' objects: 1
+Section 'ammo_11.43x23_fmj' objects: 12
+```
+
+A level's list has no header, so `info` counts its objects by the config section each is built from. The `--report`
+result says which kind was read in its `kind` field, `root` or `level`. A file that is neither is refused with exit code
+`1`.
+
+After editing the exported representation of `all.spawn`:
 
 ```powershell
 xrf-cli spawn pack --path ./all_spawn --dest ./all.rebuilt.spawn
