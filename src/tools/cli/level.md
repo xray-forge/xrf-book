@@ -143,17 +143,29 @@ directory what the Level Editor's Build writes from those parts:
 - `level.ps_static`, `level.snd_static`, `level.snd_env` and `level.wallmarks` where the scene holds their objects.
 
 Each entity takes its name, position and angles from its spawn point, and its volume from the attached shape, as the
-editor's Build does. It does not write geometry or `build.prj` yet.
+editor's Build does.
+
+Given the objects roots the scene's objects are read from (`--objects`, repeatable) and the game material library
+(`--game-materials`), it also writes what the SDK's level compilers take: `build.prj` for xrLC, `level.ltx`, the
+occluders (`level.hom`, `level.som`), `build.details` and its atlas, `build.aimap`, the tree impostors' atlas
+(`level_lods.dds`, `level_lods_nm.dds`) and each breakable part (`meshes/brkbl#<n>.ogf`). Details and impostors need the
+textures root their textures are read from (`--textures`). The ladders and breakables it cuts out of the geometry open
+the spawn list, as the editor's Build places them.
 
 ```powershell
-xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --force
+xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --textures ./gamedata/textures --force
 ```
+
+- `--proof-lighting` writes 3 lightmap pixels a metre, one jitter sample and quality 1 sky and sun into `build.prj`,
+  whatever the scene sets. xrLC then lights a large level in under an hour rather than many: use it to check a level,
+  not to ship one.
+- The impostor atlas grows to 4096 a side, as Anomaly's largest levels ship it. `--sdk-impostor-atlas` keeps SDK 0.7's
+  limit of 2048, which refuses a level of more than 128 tree impostors as that Level Editor does.
 
 - A file it would write that is already there is refused unless `--force` is given. The report says of each file whether
   it is new, the same bytes as before, or changed. A level decompiled and built back into its own directory reports
   every file the same but, on most levels, `level.spawn`: the scene saves floats as text with six decimals, as the
-  editor does, which rounds the few that held more, an entity the decompile left out is missing, and so are ladders and
-  breakables, which the scene holds as geometry that `level build` does not export yet.
+  editor does, which rounds the few that held more, and an entity the decompile left out is missing.
 - The editor's Build moves every file it may write aside as a `.~` backup first, so a file the scene no longer produces
   goes away. `level build` moves and deletes nothing. It refuses, naming the file, when the directory holds one the
   scene does not build, such as a `level.ps_static` from a scene that now places no particles.
