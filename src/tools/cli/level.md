@@ -187,32 +187,34 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 
 `level compile` takes the level directory `level build` wrote and compiles it into what the game loads, step by step:
 
-| Step       | Writes                                                         | Runs           |
-| ---------- | -------------------------------------------------------------- | -------------- |
-| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, lightmaps | the SDK's xrLC |
-| `details`  | `level.details`, lit                                           | XRF's lighter  |
-| `ai`       | `level.ai`                                                     | the SDK's xrAI |
+| Step       | Writes                                                         | Runs                  |
+| ---------- | -------------------------------------------------------------- | --------------------- |
+| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, lightmaps | the SDK's xrLC        |
+| `details`  | `level.details`, lit                                           | XRF's lighter         |
+| `ai`       | `level.ai`                                                     | XRF's AI map compiler |
 
-Every step runs by default, in that order; `--steps` names some of them. The SDK 0.7 compilers run the steps XRF has no
-compiler of its own for yet; the details are XRF's already.
+Every step runs by default, in that order; `--steps` names some of them. The SDK 0.7's xrLC runs the geometry, which XRF
+has no compiler of its own for yet; the details and the AI map are XRF's.
 
 ```powershell
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps details
+xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps details,ai
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,details --sdk ./sdk/editors
 ```
 
-It prints each step's time, with the compiler and its log for the SDK's steps and the slots lit for the details, then
-the level, and the working directory where an SDK compiler ran. A compiler that fails stops the command with the last
-line of its log.
+It prints each step's time, with xrLC and its log for the geometry, the slots lit for the details, and the nodes and
+graph for the AI map, then the level, and the working directory where xrLC ran. A compiler that fails stops the command
+with the last line of its log.
 
 - `--gamedata` names where the compilers read `gamemtl.xr` and `shaders_xrlc.xr`: by default the gamedata holding the
   level. `--textures` names a textures root, which needs a `.thm` for every texture `build.prj` names: by default the
-  gamedata's `textures`. It repeats, each file read from the first root holding it, but the SDK's steps take one root.
-- `--sdk` names the SDK's `editors` directory, needed only by the `geometry` and `ai` steps.
+  gamedata's `textures`. It repeats, each file read from the first root holding it, but xrLC takes one root.
+- `--sdk` names the SDK's `editors` directory, needed only by the `geometry` step.
 - Before any step runs, it checks every step's inputs (`build.prj`; `build.details`, `build.cform` and `build.lights`
-  for the details; `build.aimap` and `build.cform` for the AI map) and every texture's `.thm`, so a missing file stops
-  it at once rather than minutes into xrLC. What the geometry step writes counts as there for the steps after it.
-- The details step refuses a level directory that already holds `level.details` unless given `-f/--force`.
+  for the details; `build.aimap`, with `build.cform` for full covers, for the AI map) and every texture's `.thm` where a
+  step reads them, so a missing file stops it at once rather than minutes into xrLC. What the geometry step writes
+  counts as there for the steps after it.
+- The details and AI steps refuse a level directory that already holds `level.details` or `level.ai` unless given
+  `-f/--force`.
 
 ### Details
 
@@ -244,14 +246,36 @@ ray tracing. Its light is the CPU's but for a few slots in a hundred thousand, e
 | `jupiter`, proof         | 71 s  | 20 s  | about 23 min         |
 | `jupiter`, as shipped    | 406 s | 51 s  | not run              |
 
-### The SDK's compilers
+### AI map
 
-- They run in a working directory of their own (`--work`, a temporary one by default), under an `fsgame.ltx` written
-  there, with their logs beside it. Point `--path` at a copy of a level, never at a game installation.
-- Nothing needs answering: xrLC runs with `-silent`, and xrAI, which has no such switch, is stopped once its closing
-  "Congratulation!" box shows, its files already written. xrAI also runs with `-keep_temp_files`, so it leaves
-  `build.aimap` in place and the step can run again. The compilers lower themselves to idle priority, so other work on
-  the machine slows them.
+The AI step compiles the nodes the Level Editor exported (`build.aimap`) into `level.ai` as SDK 0.7's `xrAI -f` does:
+each node's cell, height and plane packed over the map's box, the nodes sorted by cell with their links renumbered. Its
+covers, how open each node is in four directions from a standing and a crouching height, are traced against xrLC's
+collision form as xrAI traces them: from each node at a corner of the map toward every node it reaches within 30 m, a
+ray dimmed by the alpha of a texture it crosses; every other node then takes a mix of the corners it walks straight to.
+`--backend` traces those rays as it traces the details', with the same choices.
+
+- `--ai-covers none` leaves every cover 0, as xrAI's `-draft` does, and needs no `build.cform`, so it runs on what
+  `level build` wrote before the geometry is compiled. `full`, the default, needs `build.cform`, `build.prj` and
+  `shaders_xrlc.xr`.
+- A `level.ai` replaced with `--force` keeps its identity while the new map's nodes have the same cells and links, so
+  the game's spawn, built against the old map, still loads the level. A map that changed takes an identity hashed from
+  its nodes, the same for the same input; it needs a new spawn, which SDK 0.7's `xrAI -s` builds from every level of a
+  game at once.
+- Before it writes, the map is checked as `level verify` checks one: a node linked to itself stops the step with the
+  file left as it was, and links with no link back and parts no link joins are warnings with their counts.
+
+Against SDK 0.7's own runs on the same files, everything but the covers is xrAI's byte for byte, and every cover is
+within one step of sixteen, all but a few in ten thousand exact. Like the details, XRF traces every ray in full rather
+than test the surface that blocked a ray before, so a run gives the same file on any machine. On a 16-core machine with
+an RTX 5080, `jupiter`'s 1.5 million nodes take 35 s on the CPU and 10 s on the GPU, against about 7 min for xrAI.
+
+### The SDK's compiler
+
+- xrLC runs in a working directory of its own (`--work`, a temporary one by default), under an `fsgame.ltx` written
+  there, with its log beside it. Point `--path` at a copy of a level, never at a game installation.
+- Nothing needs answering: xrLC runs with `-silent`. It lowers itself to idle priority, so other work on the machine
+  slows it.
 - The spawn is not a step: xrAI `-s` builds `all.spawn` from every level of a game at once.
 
 ## Albedo
