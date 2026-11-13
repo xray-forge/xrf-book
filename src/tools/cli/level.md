@@ -34,6 +34,11 @@ xrf-cli level verify --root ./stalker-anomaly --level zaton
 `level verify` fails with exit code `3` on a range past a buffer, an index past the visual that draws it, a vertex
 declaration the level compiler does not write, a sector or portal naming nothing, or a portal that is no polygon.
 
+It also checks the AI map, `level.ai`, as the SDK's `xrAI -verify` does. A node linked to itself fails the level. A link
+with no link back, and a part of the map no link reaches, are warnings that leave it passing: GSC shipped every
+single-player level with one-way links. The warnings give their counts and the first nodes' positions; the JSON report
+counts the map in `aiCensus`. A level without `level.ai`, as a multiplayer one may be, skips these checks.
+
 Measure the level's textures as albedo, the colour a surface reflects:
 
 ```powershell
