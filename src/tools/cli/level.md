@@ -214,13 +214,30 @@ line of its log.
 The details step lights every planted slot of `build.details` as xrDO_Light does: the sun, the sky and the level's
 lights traced to 225 points across each 2 m slot over xrLC's collision form (`build.cform`), a ray dimmed by the alpha
 of a texture it crosses and passed by a surface that casts no shadow. It writes the five light values a slot stores, the
-grass's sun and sky shade among them. It runs on every core: about 16 s for `mp_darkvalley` and a minute for `jupiter`
-at proof quality, where SDK 0.7's xrDO_Light takes 12 and 23 minutes.
+grass's sun and sky shade among them.
 
 Against SDK 0.7's own runs on the same files it lights all but a handful of slots exactly, each of those one step of
 sixteen off. xrDO_Light remembers the last surface that shadowed each light and tests it first, a shortcut that changes
 its result with the order and the threads it lights in; XRF traces every ray in full, so a run gives the same file on
 any machine.
+
+`--backend` picks what traces the rays:
+
+| Backend | Traces                                                              |
+| ------- | ------------------------------------------------------------------- |
+| `auto`  | on the GPU where one traces rays, on the CPU otherwise; the default |
+| `gpu`   | with the GPU's ray tracing alone; refused where no GPU traces rays  |
+| `cpu`   | on every core; the reference the SDK's runs are matched against     |
+
+The GPU traces on Vulkan, or on D3D12 where DXC's `dxc/dxcompiler.dll` stands beside the CLI; either needs a GPU with
+ray tracing. Its light is the CPU's but for a few slots in a hundred thousand, each one step off. A CLI built with
+`--no-default-features` has no GPU backend and lights on the CPU. On a 16-core machine with an RTX 5080:
+
+| Level, quality           | CPU   | GPU   | SDK 0.7's xrDO_Light |
+| ------------------------ | ----- | ----- | -------------------- |
+| `mp_darkvalley`, default | 14 s  | 3.5 s | about 12 min         |
+| `jupiter`, proof         | 71 s  | 20 s  | about 23 min         |
+| `jupiter`, as shipped    | 406 s | 51 s  | not run              |
 
 ### The SDK's compilers
 
