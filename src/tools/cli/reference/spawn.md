@@ -4,6 +4,29 @@
 
 <!-- ANCHOR: commands -->
 
+## `xrf-cli spawn build`
+
+Build a root spawn from a gamedata root's levels, as SDK 0.7's xrAI -s does: each level's level.ai, level.spawn and
+level.game into one spawn with the game graph, its cross tables, the entities, artefact points and patrols, written as
+`spawns/<out>.spawn`. The same levels give the same file
+
+```txt
+xrf-cli spawn build [OPTIONS] --path <path> --out <out>
+```
+
+| Option                 | Required | Default | Description                                                                                                                                                                                                  |
+| ---------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `-p, --path <path>`    | yes      |         | Gamedata root holding configs/game_levels.ltx and the levels' directories under levels/                                                                                                                      |
+| `--levels <levels>...` |          |         | Levels to build, by directory name, comma-separated or repeated; by default every level the game lists whose directory holds level.ai, level.spawn and level.game. Accepts multiple values separated by `,`. |
+| `--out <out>`          | yes      |         | Name of the spawn to write, `spawns/&lt;out&gt;.spawn`; `all` is the game's own                                                                                                                              |
+| `--start <start>`      |          |         | Level the actor starts on, where it is not the actor's own: it moves to that level's first game vertex                                                                                                       |
+| `--strict-separators`  |          |         | Refuse the build where a restrictor flagged for the separator check cuts an AI map apart, rather than report it                                                                                              |
+| `-f, --force`          |          |         | Write over spawns/all.spawn, the game's own spawn, where it is there                                                                                                                                         |
+| `-s, --silent`         |          |         | Turn off logging                                                                                                                                                                                             |
+| `-v, --verbose`        |          |         | Turn on verbose logging                                                                                                                                                                                      |
+| `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                                                         |
+| `--report <PATH>`      |          |         | Write the run's JSON report to a file                                                                                                                                                                        |
+
 ## `xrf-cli spawn info`
 
 Print what a spawn file holds

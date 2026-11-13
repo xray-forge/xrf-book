@@ -1,7 +1,53 @@
 # Spawn CLI
 
-Spawn commands inspect and convert ALife `.spawn` files. Unpack a file for editing, then rebuild and verify a separate
-output before replacing the game's spawn file.
+Spawn commands build, inspect and convert ALife `.spawn` files. Build a root spawn from the levels, or unpack one for
+editing, then rebuild and verify a separate output before replacing the game's spawn file.
+
+## Build a root spawn
+
+`build` does what SDK 0.7's `xrAI -s` does: it reads each level's `level.ai`, `level.spawn` and `level.game` from a
+gamedata root and writes one spawn holding the game graph, its cross tables, every entity, the anomalies' artefact
+points and the patrols. Run it after a change to a level's AI map, entities, graph points, level changers or patrols;
+geometry, lighting and details do not need it.
+
+```powershell
+xrf-cli spawn build --path ./gamedata --out test_jupiter
+```
+
+The root holds `configs/game_levels.ltx` and the levels' directories under `levels/`. Without `--levels`, every level
+`[levels]` lists whose directory holds the three files is built; `--levels zaton,jupiter` builds those alone. The spawn
+is written as `spawns/<out>.spawn`. `all` is the game's own spawn, and writing over it needs `--force`.
+
+Example output excerpt — vanilla's five levels:
+
+```text
+zaton: Restrictor zat_surge_hide_b40 cuts 69 AI map nodes off, the first node 1495511 at (313.6, 41.7, -389.9)
+Built ./gamedata/spawns/test_jupiter.spawn from zaton, jupiter, pripyat, labx8, jupiter_underground: 6464 objects,
+39584 artefact points, 4634 patrols, 153 warnings
+```
+
+Exit code: `0`.
+
+Built from vanilla's own levels, the spawn matches the shipped `all.spawn`: the game graph, every entity, every artefact
+point and every patrol point with an AI node under it. What differs is what xrAI leaves to chance: the GUIDs, the
+patrols' order, the game vertex of a patrol point with no node under it, and fields xrAI never sets. The same levels
+always give the same file, with the same GUID, so a rebuild that changes nothing keeps saved games loading; any real
+change gives a new GUID, and old saves of that spawn no longer load.
+
+`--start <level>` puts the actor on another level, at the first game vertex of that level a search from its own reaches,
+as xrAI's `-start` does. Naming the actor's own level leaves it where it stands.
+
+The build warns, and goes on, where xrAI lets something through:
+
+- a graph point left out of the game graph, too close to another, off the AI map, or on another's node;
+- a graph point connecting to a level outside the build, whose connection is left out;
+- a restrictor flagged for the separator check whose border cuts AI nodes off the rest of the map, with the count and
+  where the first one is. `--strict-separators` refuses the build instead, as xrAI does without `-no_separator_check`.
+  Vanilla's levels give 153 such warnings, which is why GSC built them without the check.
+
+It refuses, with exit code `1`, what xrAI asserts on: no actor or more than one, a level with no entity or no graph
+point, two entities sharing a story id, a level changer leading to a level not built or to a graph point its level
+lacks, two patrols of one name, two neighbouring graph points no path on the AI map joins, and an unknown start level.
 
 ## Examples
 
