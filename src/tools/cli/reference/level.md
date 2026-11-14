@@ -54,11 +54,11 @@ xrf-cli level build [OPTIONS] --path <path> --dest <dest>
 ## `xrf-cli level compile`
 
 Compile a level directory level build wrote into what the game loads, step by step: geometry (the level, its geometry,
-collision and lightmaps; ours, its vertices and lightmaps lit but for terrain's implicit light, or the SDK's xrLC with
---sdk), details (level.details lit from build.details, build.cform and build.lights, as xrDO_Light lights it) and ai
-(level.ai compiled from build.aimap as xrAI -f compiles it, its covers traced against build.cform, then checked as a
-graph). Every step's inputs and every texture build.prj names are checked before any step runs. The SDK's xrLC runs in a
-working directory under an fsgame.ltx written for it, never in a game installation
+collision and lightmaps; ours, its vertices, lightmaps and terrain lit, or the SDK's xrLC with --sdk), details
+(level.details lit from build.details, build.cform and build.lights, as xrDO_Light lights it) and ai (level.ai compiled
+from build.aimap as xrAI -f compiles it, its covers traced against build.cform, then checked as a graph). Every step's
+inputs and every texture build.prj names are checked before any step runs. The SDK's xrLC runs in a working directory
+under an fsgame.ltx written for it, never in a game installation
 
 ```txt
 xrf-cli level compile [OPTIONS] --path <path>
@@ -68,7 +68,7 @@ xrf-cli level compile [OPTIONS] --path <path>
 | -------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `-p, --path <path>`        | yes      |         | Path to the level's directory, &lt;levels&gt;/&lt;level&gt;, holding build.prj and the rest level build wrote                                                                                                                                                                                                                                        |
 | `--steps <steps>`          |          |         | Steps to run, in their order whatever the order given; every step by default. Possible values: `geometry`, `details`, `ai`. Accepts multiple values separated by `,`.                                                                                                                                                                                |
-| `--sdk <sdk>`              |          |         | The SDK's editors directory, whose bin holds xrLC; given, the geometry step runs it and the level is lit, else our compiler runs it, its vertices and lightmaps lit but for terrain's implicit light                                                                                                                                                 |
+| `--sdk <sdk>`              |          |         | The SDK's editors directory, whose bin holds xrLC; given, the geometry step runs it and the level is lit, else our compiler runs it, its vertices, lightmaps and terrain lit                                                                                                                                                                         |
 | `--gamedata <gamedata>`    |          |         | Game data the compilers read gamemtl.xr and shaders_xrlc.xr from; the gamedata holding the level's levels directory by default                                                                                                                                                                                                                       |
 | `--textures <textures>...` |          |         | Textures root with a .thm for every texture build.prj names, and the images of those with alpha; repeatable, each file from the first root holding it, though the SDK's xrLC takes one; the game data's textures by default                                                                                                                          |
 | `--work <work>`            |          |         | Directory the SDK's xrLC runs in, with its fsgame.ltx and logs; one in the system's temporary directory                                                                                                                                                                                                                                              |

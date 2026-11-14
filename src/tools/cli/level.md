@@ -234,10 +234,10 @@ vertex-lit surface's colour and sun, and the trees' light, within a step of xrLC
 surfaces are cut into charts as xrLC cuts them, over 99.5% of them the same faces; each chart is lit texel by texel,
 compressed where its light allows as xrLC compresses it, and packed onto lightmap pages, as many as xrLC's. Compared
 with xrLC's at points across every lightmapped surface, the light differs as little as two of xrLC's own bakes of a
-level do. Two things are left:
+level do. A texture xrLC lights implicitly, such as terrain's, takes its light over its own coordinates as xrLC's does,
+written beside the level as `<texture>.dds` and `<texture>_lm.dds`; at draft quality, as xrLC, the step lights none.
 
-- A texture xrLC lights implicitly, such as terrain's, is not lit yet.
-- The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
+The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
 
 Visuals split a little differently from xrLC's, as they split by lightmap page and our charts sit on their pages in
 other places.
@@ -253,8 +253,8 @@ other places.
 lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The `build.lights`
 written holds the lights the step lit by, so the details step lights by them too.
 
-On a 16-core machine, `jupiter` takes about 80 s, lit, against about 15 min for xrLC at its quickest settings, 11 of
-them placing its charts; `mp_darkvalley` 4 s against xrLC's 28 s.
+On a 16-core machine, `jupiter` takes about 2 min at proof quality, lit with its terrain, against about 15 min for xrLC,
+11 of them placing its charts; `mp_darkvalley` 4 s at draft quality against xrLC's 28 s.
 
 ### Details
 
