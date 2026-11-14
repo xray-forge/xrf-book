@@ -193,8 +193,9 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 | `details`  | `level.details`, lit                                                                          | XRF's lighter                                  |
 | `ai`       | `level.ai`                                                                                    | XRF's AI map compiler                          |
 
-Every step runs by default, in that order; `--steps` names some of them. XRF's geometry compiler writes the level under
-draft light, as it has no light baker yet; given `--sdk`, the SDK 0.7's xrLC compiles and lights the geometry instead.
+Every step runs by default, in that order; `--steps` names some of them. XRF's geometry compiler lights the vertices and
+writes draft lightmaps, as its light baker does not bake them yet; given `--sdk`, the SDK 0.7's xrLC compiles and lights
+the geometry instead.
 
 ```powershell
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley
@@ -228,15 +229,16 @@ Against SDK 0.7's own runs on the same `build.prj`, every visual triangle, secto
 and coordinates within their stored precision; the collision forms hold the same faces but for the few where xrLC's weld
 met corners in another order, as two of its own runs differ. Two things are left on purpose:
 
-- The light is a draft: every lightmapped surface draws from one small lightmap pair, with the sun full and the sky at
-  half, and trees and vertex colours take the same terms. R2 to R4 light the level's lamps in real time over it. Bake
-  the light with `--sdk` until XRF has a light baker.
+- The lightmaps are a draft: every lightmapped surface draws from one small lightmap pair, with the sun full and the sky
+  at half. Vertices are lit as xrLC lights them, from `build.prj`'s lamps, sun and sky: each one's sky term, a
+  vertex-lit surface's colour and sun, and the trees' light, within a step of xrLC's on nearly every vertex. R2 to R4
+  light the level's lamps in real time over it. Bake the lightmaps with `--sdk` until XRF's light baker writes them.
 - The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
 
 Visuals split a little differently from xrLC's, as its splits also follow the lightmap charts draft light has none of.
 
-On a 16-core machine, `jupiter` takes about 32 s, against about 3 min for xrLC's geometry phases alone (15 min with its
-light at its quickest settings).
+On a 16-core machine, `jupiter` takes about 52 s with its vertices lit, against about 3 min for xrLC's geometry phases
+alone (15 min with its light at its quickest settings).
 
 ### Details
 
