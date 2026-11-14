@@ -227,18 +227,20 @@ or more is made progressive, its detail stepping down by sliding windows, as xrL
 
 Against SDK 0.7's own runs on the same `build.prj`, every visual triangle, sector and portal is the same, with normals
 and coordinates within their stored precision; the collision forms hold the same faces but for the few where xrLC's weld
-met corners in another order, as two of its own runs differ. Two things are left on purpose:
+met corners in another order, as two of its own runs differ.
 
-- The lightmaps' light is a draft. Lightmapped surfaces are cut into charts and packed onto lightmap pages as xrLC cuts
-  them, but every page holds one colour, with the sun full and the sky at half. Vertices are lit as xrLC lights them,
-  from `build.prj`'s lamps, sun and sky: each one's sky term, a vertex-lit surface's colour and sun, and the trees'
-  light, within a step of xrLC's on nearly every vertex. R2 to R4 light the level's lamps in real time over it. Bake the
-  lightmaps with `--sdk` until XRF's light baker writes them.
+The step lights the level as xrLC does, from `build.prj`'s lamps, sun and sky. Vertices take each one's sky term, a
+vertex-lit surface's colour and sun, and the trees' light, within a step of xrLC's on nearly every vertex. Lightmapped
+surfaces are cut into charts as xrLC cuts them, over 99.5% of them the same faces; each chart is lit texel by texel,
+compressed where its light allows as xrLC compresses it, and packed onto lightmap pages, as many as xrLC's. Compared
+with xrLC's at points across every lightmapped surface, the light differs as little as two of xrLC's own bakes of a
+level do. Two things are left:
+
+- A texture xrLC lights implicitly, such as terrain's, is not lit yet.
 - The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
 
-The charts hold the same faces as xrLC's for over 99.5% of them, and each has the size xrLC gives it before its lightmap
-is compressed. Until the light baker compresses them, the pages outnumber xrLC's (11 to 5 on `jupiter`), and visuals,
-which split by page, split a little differently from xrLC's.
+Visuals split a little differently from xrLC's, as they split by lightmap page and our charts sit on their pages in
+other places.
 
 `--quality` sets how finely the step lights:
 
@@ -251,8 +253,8 @@ which split by page, split a little differently from xrLC's.
 lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The `build.lights`
 written holds the lights the step lit by, so the details step lights by them too.
 
-On a 16-core machine, `jupiter` takes about 65 s with its vertices lit and its lightmaps charted, against about 3 min
-for xrLC's geometry phases alone (15 min with its light at its quickest settings, 11 of them placing its charts).
+On a 16-core machine, `jupiter` takes about 80 s, lit, against about 15 min for xrLC at its quickest settings, 11 of
+them placing its charts; `mp_darkvalley` 4 s against xrLC's 28 s.
 
 ### Details
 
