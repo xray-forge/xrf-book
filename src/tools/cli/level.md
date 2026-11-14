@@ -229,27 +229,30 @@ Against SDK 0.7's own runs on the same `build.prj`, every visual triangle, secto
 and coordinates within their stored precision; the collision forms hold the same faces but for the few where xrLC's weld
 met corners in another order, as two of its own runs differ. Two things are left on purpose:
 
-- The lightmaps are a draft: every lightmapped surface draws from one small lightmap pair, with the sun full and the sky
-  at half. Vertices are lit as xrLC lights them, from `build.prj`'s lamps, sun and sky: each one's sky term, a
-  vertex-lit surface's colour and sun, and the trees' light, within a step of xrLC's on nearly every vertex. R2 to R4
-  light the level's lamps in real time over it. Bake the lightmaps with `--sdk` until XRF's light baker writes them.
+- The lightmaps' light is a draft. Lightmapped surfaces are cut into charts and packed onto lightmap pages as xrLC cuts
+  them, but every page holds one colour, with the sun full and the sky at half. Vertices are lit as xrLC lights them,
+  from `build.prj`'s lamps, sun and sky: each one's sky term, a vertex-lit surface's colour and sun, and the trees'
+  light, within a step of xrLC's on nearly every vertex. R2 to R4 light the level's lamps in real time over it. Bake the
+  lightmaps with `--sdk` until XRF's light baker writes them.
 - The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
 
-Visuals split a little differently from xrLC's, as its splits also follow the lightmap charts draft light has none of.
+The charts hold the same faces as xrLC's for over 99.5% of them, and each has the size xrLC gives it before its lightmap
+is compressed. Until the light baker compresses them, the pages outnumber xrLC's (11 to 5 on `jupiter`), and visuals,
+which split by page, split a little differently from xrLC's.
 
 `--quality` sets how finely the step lights:
 
-| Quality | Lights by                                                                                                 |
-| ------- | --------------------------------------------------------------------------------------------------------- |
-| `scene` | `build.prj`'s own sky and sun, at the quality the Level Editor built them; the default                    |
-| `draft` | the sky and sun the Level Editor builds at quality 1 (26 and 9 lights), and each tree lit from one sample |
+| Quality | Lights by                                                                                                                                                    |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `scene` | `build.prj`'s own sky and sun, at the quality the Level Editor built them; the default                                                                       |
+| `draft` | the sky and sun the Level Editor builds at quality 1 (26 and 9 lights), lightmaps of 3 texels a metre and one sample each, and each tree lit from one sample |
 
 `draft` regenerates the sky and sun from the level's sun direction exactly as the Level Editor would, and keeps the
 lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The `build.lights`
 written holds the lights the step lit by, so the details step lights by them too.
 
-On a 16-core machine, `jupiter` takes about 52 s with its vertices lit, against about 3 min for xrLC's geometry phases
-alone (15 min with its light at its quickest settings).
+On a 16-core machine, `jupiter` takes about 65 s with its vertices lit and its lightmaps charted, against about 3 min
+for xrLC's geometry phases alone (15 min with its light at its quickest settings, 11 of them placing its charts).
 
 ### Details
 
