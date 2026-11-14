@@ -263,10 +263,10 @@ GPU pays most where lamps are many, as indoors. On a 16-core machine with an RTX
 
 | Level           | CPU  | GPU  |
 | --------------- | ---- | ---- |
-| `l01_test`      | 43 s | 4 s  |
-| `labx8`         | 35 s | 15 s |
+| `l01_test`      | 43 s | 3 s  |
+| `labx8`         | 35 s | 12 s |
 | `mp_darkvalley` | 4 s  | 4 s  |
-| `jupiter`       | 73 s | 70 s |
+| `jupiter`       | 73 s | 69 s |
 
 ### Details
 
