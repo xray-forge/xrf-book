@@ -187,34 +187,56 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 
 `level compile` takes the level directory `level build` wrote and compiles it into what the game loads, step by step:
 
-| Step       | Writes                                                         | Runs                  |
-| ---------- | -------------------------------------------------------------- | --------------------- |
-| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, lightmaps | the SDK's xrLC        |
-| `details`  | `level.details`, lit                                           | XRF's lighter         |
-| `ai`       | `level.ai`                                                     | XRF's AI map compiler |
+| Step       | Writes                                                                                        | Runs                                           |
+| ---------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, `build.cform`, `build.lights`, lightmaps | XRF's compiler, or the SDK's xrLC with `--sdk` |
+| `details`  | `level.details`, lit                                                                          | XRF's lighter                                  |
+| `ai`       | `level.ai`                                                                                    | XRF's AI map compiler                          |
 
-Every step runs by default, in that order; `--steps` names some of them. The SDK 0.7's xrLC runs the geometry, which XRF
-has no compiler of its own for yet; the details and the AI map are XRF's.
+Every step runs by default, in that order; `--steps` names some of them. XRF's geometry compiler writes the level under
+draft light, as it has no light baker yet; given `--sdk`, the SDK 0.7's xrLC compiles and lights the geometry instead.
 
 ```powershell
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps details,ai
+xrf-cli level compile --path ./gamedata/levels/mp_darkvalley
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,details --sdk ./sdk/editors
 ```
 
-It prints each step's time, with xrLC and its log for the geometry, the slots lit for the details, and the nodes and
-graph for the AI map, then the level, and the working directory where xrLC ran. A compiler that fails stops the command
-with the last line of its log.
+It prints each step's time, with what the geometry compiler made (or xrLC and its log), the slots lit for the details,
+and the nodes and graph for the AI map, then the level, and the working directory where xrLC ran. A compiler that fails
+stops the command with the last line of its log.
 
 - `--gamedata` names where the compilers read `gamemtl.xr` and `shaders_xrlc.xr`: by default the gamedata holding the
   level. `--textures` names a textures root, which needs a `.thm` for every texture `build.prj` names: by default the
   gamedata's `textures`. It repeats, each file read from the first root holding it, but xrLC takes one root.
-- `--sdk` names the SDK's `editors` directory, needed only by the `geometry` step.
+- `--sdk` names the SDK's `editors` directory, which makes the `geometry` step run its xrLC.
 - Before any step runs, it checks every step's inputs (`build.prj`; `build.details`, `build.cform` and `build.lights`
   for the details; `build.aimap`, with `build.cform` for full covers, for the AI map) and every texture's `.thm` where a
   step reads them, so a missing file stops it at once rather than minutes into xrLC. What the geometry step writes
   counts as there for the steps after it.
 - The details and AI steps refuse a level directory that already holds `level.details` or `level.ai` unless given
   `-f/--force`.
+
+### Geometry
+
+The geometry step compiles `build.prj` as xrLC does, phase by phase: the weld and the faces it refuses, the cut of edges
+12.8 m or longer, normals, the collision form (`level.cform`) and the compilers' ray model (`build.cform`), the tangent
+basis, the split into visuals by material and size, multi-use models placed as trees with their LODs, each sector's
+hierarchy and its portals, and `build.lights` from the project's light layers. Above draft quality a visual of 128 faces
+or more is made progressive, its detail stepping down by sliding windows, as xrLC's are.
+
+Against SDK 0.7's own runs on the same `build.prj`, every visual triangle, sector and portal is the same, with normals
+and coordinates within their stored precision; the collision forms hold the same faces but for the few where xrLC's weld
+met corners in another order, as two of its own runs differ. Two things are left on purpose:
+
+- The light is a draft: every lightmapped surface draws from one small lightmap pair, with the sun full and the sky at
+  half, and trees and vertex colours take the same terms. R2 to R4 light the level's lamps in real time over it. Bake
+  the light with `--sdk` until XRF has a light baker.
+- The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
+
+Visuals split a little differently from xrLC's, as its splits also follow the lightmap charts draft light has none of.
+
+On a 16-core machine, `jupiter` takes about 32 s, against about 3 min for xrLC's geometry phases alone (15 min with its
+light at its quickest settings).
 
 ### Details
 
@@ -277,6 +299,7 @@ an RTX 5080, `jupiter`'s 1.5 million nodes take 35 s on the CPU and 10 s on the 
 - Nothing needs answering: xrLC runs with `-silent`. It lowers itself to idle priority, so other work on the machine
   slows it.
 - The spawn is not a step: xrAI `-s` builds `all.spawn` from every level of a game at once.
+- xrLC runs only with `--sdk`; without it, the geometry step is XRF's own and needs no SDK.
 
 ## Albedo
 
