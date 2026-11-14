@@ -237,6 +237,17 @@ met corners in another order, as two of its own runs differ. Two things are left
 
 Visuals split a little differently from xrLC's, as its splits also follow the lightmap charts draft light has none of.
 
+`--quality` sets how finely the step lights:
+
+| Quality | Lights by                                                                                                 |
+| ------- | --------------------------------------------------------------------------------------------------------- |
+| `scene` | `build.prj`'s own sky and sun, at the quality the Level Editor built them; the default                    |
+| `draft` | the sky and sun the Level Editor builds at quality 1 (26 and 9 lights), and each tree lit from one sample |
+
+`draft` regenerates the sky and sun from the level's sun direction exactly as the Level Editor would, and keeps the
+lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The `build.lights`
+written holds the lights the step lit by, so the details step lights by them too.
+
 On a 16-core machine, `jupiter` takes about 52 s with its vertices lit, against about 3 min for xrLC's geometry phases
 alone (15 min with its light at its quickest settings).
 
