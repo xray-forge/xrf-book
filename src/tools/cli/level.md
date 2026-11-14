@@ -256,6 +256,18 @@ written holds the lights the step lit by, so the details step lights by them too
 On a 16-core machine, `jupiter` takes about 2 min at proof quality, lit with its terrain, against about 15 min for xrLC,
 11 of them placing its charts; `mp_darkvalley` 4 s at draft quality against xrLC's 28 s.
 
+`--backend` traces the step's light as it traces the details' (below), with the same choices. The GPU's light is the
+CPU's on all but a few points in a thousand, a few steps apart; a chart compressed by its light can carry that across
+it, so pages differ from the CPU's by up to a few steps here and there, and from xrLC's as little as the CPU's do. The
+GPU pays most where lamps are many, as indoors. On a 16-core machine with an RTX 5080, the whole step at draft quality:
+
+| Level           | CPU  | GPU  |
+| --------------- | ---- | ---- |
+| `l01_test`      | 43 s | 4 s  |
+| `labx8`         | 35 s | 15 s |
+| `mp_darkvalley` | 4 s  | 4 s  |
+| `jupiter`       | 73 s | 70 s |
+
 ### Details
 
 The details step lights every planted slot of `build.details` as xrDO_Light does: the sun, the sky and the level's
