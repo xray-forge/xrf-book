@@ -190,21 +190,24 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 | Step       | Writes                                                                                        | Runs                                           |
 | ---------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, `build.cform`, `build.lights`, lightmaps | XRF's compiler, or the SDK's xrLC with `--sdk` |
+| `light`    | the vertices', trees', lightmaps' and terrain's light, with the geometry                      | XRF's light baker                              |
 | `details`  | `level.details`, lit                                                                          | XRF's lighter                                  |
 | `ai`       | `level.ai`                                                                                    | XRF's AI map compiler                          |
 
-Every step runs by default, in that order; `--steps` names some of them. XRF's geometry compiler lights the vertices and
-writes draft lightmaps, as its light baker does not bake them yet; given `--sdk`, the SDK 0.7's xrLC compiles and lights
-the geometry instead.
+Every step runs by default, in that order; `--steps` names some of them. The light runs in the geometry's pass, since
+the lightmap pages decide how the surfaces join into visuals, so `light` runs only with `geometry`; `geometry` alone
+writes the level with neutral light, the quick way to look at a change to its shapes. Given `--sdk`, the SDK 0.7's xrLC
+compiles and lights the geometry instead, whatever the steps.
 
 ```powershell
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley
+xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,details --sdk ./sdk/editors
 ```
 
-It prints each step's time, with what the geometry compiler made (or xrLC and its log), the slots lit for the details,
-and the nodes and graph for the AI map, then the level, and the working directory where xrLC ran. A compiler that fails
-stops the command with the last line of its log.
+It prints each step's time, with what the geometry compiler made (or xrLC and its log), what the light baker lit and
+where it traced, the slots lit for the details, and the nodes and graph for the AI map, then the level, and the working
+directory where xrLC ran. A compiler that fails stops the command with the last line of its log.
 
 - `--gamedata` names where the compilers read `gamemtl.xr` and `shaders_xrlc.xr`: by default the gamedata holding the
   level. `--textures` names a textures root, which needs a `.thm` for every texture `build.prj` names: by default the
@@ -229,18 +232,22 @@ Against SDK 0.7's own runs on the same `build.prj`, every visual triangle, secto
 and coordinates within their stored precision; the collision forms hold the same faces but for the few where xrLC's weld
 met corners in another order, as two of its own runs differ.
 
-The step lights the level as xrLC does, from `build.prj`'s lamps, sun and sky. Vertices take each one's sky term, a
-vertex-lit surface's colour and sun, and the trees' light, within a step of xrLC's on nearly every vertex. Lightmapped
+The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
+
+Visuals split a little differently from xrLC's, as they split by lightmap page and our charts sit on their pages in
+other places. Without the light step every lightmapped surface samples one small pair of neutral light (an open sky for
+the sun and half the hemisphere, no static light), the renderers lighting the rest in real time, and more surfaces join
+into each visual.
+
+### Light
+
+The light step lights the level as xrLC does, from `build.prj`'s lamps, sun and sky. Vertices take each one's sky term,
+a vertex-lit surface's colour and sun, and the trees' light, within a step of xrLC's on nearly every vertex. Lightmapped
 surfaces are cut into charts as xrLC cuts them, over 99.5% of them the same faces; each chart is lit texel by texel,
 compressed where its light allows as xrLC compresses it, and packed onto lightmap pages, as many as xrLC's. Compared
 with xrLC's at points across every lightmapped surface, the light differs as little as two of xrLC's own bakes of a
 level do. A texture xrLC lights implicitly, such as terrain's, takes its light over its own coordinates as xrLC's does,
 written beside the level as `<texture>.dds` and `<texture>_lm.dds`; at draft quality, as xrLC, the step lights none.
-
-The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
-
-Visuals split a little differently from xrLC's, as they split by lightmap page and our charts sit on their pages in
-other places.
 
 `--quality` sets how finely the step lights:
 
@@ -250,16 +257,14 @@ other places.
 | `draft` | the sky and sun the Level Editor builds at quality 1 (26 and 9 lights), lightmaps of 3 texels a metre and one sample each, and each tree lit from one sample |
 
 `draft` regenerates the sky and sun from the level's sun direction exactly as the Level Editor would, and keeps the
-lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The `build.lights`
-written holds the lights the step lit by, so the details step lights by them too.
+lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The geometry step
+writes `build.lights` with the lights the step lights by, so the details step lights by them too.
 
-On a 16-core machine, `jupiter` takes about 2 min at proof quality, lit with its terrain, against about 15 min for xrLC,
-11 of them placing its charts; `mp_darkvalley` 4 s at draft quality against xrLC's 28 s.
-
-`--backend` traces the step's light as it traces the details' (below), with the same choices. The GPU's light is the
+`--backend` traces the step's rays as it traces the details' (below), with the same choices. The GPU's light is the
 CPU's on all but a few points in a thousand, a few steps apart; a chart compressed by its light can carry that across
 it, so pages differ from the CPU's by up to a few steps here and there, and from xrLC's as little as the CPU's do. The
-GPU pays most where lamps are many, as indoors. On a 16-core machine with an RTX 5080, the whole step at draft quality:
+GPU pays most where lamps are many, as indoors. On a 16-core machine with an RTX 5080, the geometry and light steps
+together at draft quality:
 
 | Level           | CPU  | GPU  |
 | --------------- | ---- | ---- |
@@ -267,6 +272,9 @@ GPU pays most where lamps are many, as indoors. On a 16-core machine with an RTX
 | `labx8`         | 35 s | 12 s |
 | `mp_darkvalley` | 4 s  | 4 s  |
 | `jupiter`       | 73 s | 69 s |
+
+`mp_darkvalley` takes xrLC 28 s at draft quality and `jupiter` about 15 min at proof quality, 11 of them placing its
+charts.
 
 ### Details
 
