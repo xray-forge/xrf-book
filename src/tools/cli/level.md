@@ -1,11 +1,20 @@
 # Level CLI
 
-Level commands read one compiled level: the `level` bundle with its shader table, sectors, portals, lights and visuals,
-and the `level.geom` and `level.geomx` buffers the visuals draw from. Every command but `level decompile` names the
-level the same two ways: `--path` is a level directory on disk, and `--root` with `--level` is one of an installation's
-levels, read through the game's file system by its engine name `levels\<name>`. A stock Anomaly installation ships its
-levels inside `.db` volumes, with no directory to point at, so the second way is the one that reads a real game.
-`--root` without `--level` fails and names the levels the roots hold.
+Level commands work on a compiled level, the files the game loads from `levels\<name>`: the `level` bundle with its
+shader table, sectors, portals, lights and visuals, the `level.geom` and `level.geomx` buffers the visuals draw from,
+and companions such as `level.cform` (collision), `level.ai` (the AI map) and `level.spawn`. They do two kinds of work:
+
+- `level info`, `level verify`, `level albedo` and `level materials` read a level and report on it.
+- `level decompile`, `level build` and `level compile` take a level apart into a Level Editor scene and make it again.
+  [Decompile](#decompile) turns a level directory into a scene; [build](#build) writes the scene's game files, and the
+  inputs the compilers need, into a level directory; [compile](#compile) turns those inputs into the level's geometry,
+  light, details and AI map.
+
+The reading commands name the level two ways: `--path` is a level directory on disk, and `--root` with `--level` is one
+of an installation's levels, read through the game's file system by its engine name `levels\<name>`. A stock Anomaly
+installation ships its levels inside `.db` volumes, with no directory to point at, so the second way is the one that
+reads a real game. `--root` without `--level` fails and names the levels the roots hold. The decompile, build and
+compile commands work on directories on disk: each takes `--path`, and the first two a destination, `--dest`.
 
 ## Examples
 
@@ -159,19 +168,18 @@ Each entity takes its name, position and angles from its spawn point, and its vo
 editor's Build does.
 
 Given the objects roots the scene's objects are read from (`--objects`, repeatable) and the game material library
-(`--game-materials`), it also writes what the SDK's level compilers take: `build.prj` for xrLC, `level.ltx`, the
-occluders (`level.hom`, `level.som`), `build.details` and its atlas, `build.aimap`, the tree impostors' atlas
-(`level_lods.dds`, `level_lods_nm.dds`) and each breakable part (`meshes/brkbl#<n>.ogf`). Details and impostors need the
-textures root their textures are read from (`--textures`). The ladders and breakables it cuts out of the geometry open
-the spawn list, as the editor's Build places them.
+(`--game-materials`), it also writes what `level compile` takes, as the SDK's compilers took it: `build.prj` with the
+build options the scene sets, `level.ltx`, the occluders (`level.hom`, `level.som`), `build.details` and its atlas,
+`build.aimap`, the tree impostors' atlas (`level_lods.dds`, `level_lods_nm.dds`) and each breakable part
+(`meshes/brkbl#<n>.ogf`). Details and impostors need the textures root their textures are read from (`--textures`). The
+ladders and breakables it cuts out of the geometry open the spawn list, as the editor's Build places them.
 
 ```powershell
 xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --textures ./gamedata/textures --force
 ```
 
-- `--proof-lighting` writes 3 lightmap pixels a metre, one jitter sample and quality 1 sky and sun into `build.prj`,
-  whatever the scene sets. xrLC then lights a large level in under an hour rather than many: use it to check a level,
-  not to ship one.
+- The build options in `build.prj` are the scene's, as the Level Editor writes them. A quick look at a level comes from
+  `level compile --quality draft` instead ([Light quality](#light-quality)).
 - The impostor atlas grows to 4096 a side, as Anomaly's largest levels ship it. `--sdk-impostor-atlas` keeps SDK 0.7's
   limit of 2048, which refuses a level of more than 128 tree impostors as that Level Editor does.
 
@@ -185,54 +193,95 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 
 ## Compile
 
-`level compile` takes the level directory `level build` wrote and compiles it into what the game loads, step by step:
+`level compile` takes the level directory `level build` wrote and compiles it into the level the game loads. XRF's own
+compilers do the work, in the command's own process, so it needs no SDK. It works in four steps:
 
-| Step       | Writes                                                                                        | Runs                                           |
-| ---------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `geometry` | `level`, `level.geom`, `level.geomx`, `level.cform`, `build.cform`, `build.lights`, lightmaps | XRF's compiler, or the SDK's xrLC with `--sdk` |
-| `light`    | the vertices', trees', lightmaps' and terrain's light, with the geometry                      | XRF's light baker                              |
-| `details`  | `level.details`, lit                                                                          | XRF's lighter                                  |
-| `ai`       | `level.ai`                                                                                    | XRF's AI map compiler                          |
+| Step       | Reads                                            | Writes                                                                                          |
+| ---------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| `geometry` | `build.prj`                                      | `level`, `level.geom`, `level.geomx`, `level.cform`, `build.cform`, `build.lights`, lightmaps   |
+| `light`    | `build.prj`, in the geometry's pass              | the light of the vertices, trees and lightmaps, and of textures lit implicitly, such as terrain |
+| `details`  | `build.details`, `build.cform`, `build.lights`   | `level.details`, lit                                                                            |
+| `ai`       | `build.aimap`, and `build.cform` for full covers | `level.ai`                                                                                      |
 
-Every step runs by default, in that order; `--steps` names some of them. The light runs in the geometry's pass, since
-the lightmap pages decide how the surfaces join into visuals, so `light` runs only with `geometry`; `geometry` alone
-writes the level with neutral light, the quick way to look at a change to its shapes. Given `--sdk`, the SDK 0.7's xrLC
-compiles and lights the geometry instead, whatever the steps.
+Every step runs by default, in that order whatever the order given; `--steps` names some of them. The light is baked in
+the geometry's pass, since the lightmap pages decide how the surfaces join into visuals, so `light` runs only with
+`geometry`. `geometry` alone writes the level with neutral light, the quick way to look at a change to its shapes.
 
 ```powershell
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley
 xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,details --sdk ./sdk/editors
+xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,light,details --quality draft
 ```
 
-It prints each step's time, with what the geometry compiler made (or xrLC and its log), what the light baker lit and
-where it traced, the slots lit for the details, and the nodes and graph for the AI map, then the level, and the working
-directory where xrLC ran. A compiler that fails stops the command with the last line of its log.
+It prints each step's time, with what the geometry compiler made, what the light baker lit and where it traced, the
+slots lit for the details, and the nodes and graph for the AI map, then the level.
 
-- `--gamedata` names where the compilers read `gamemtl.xr` and `shaders_xrlc.xr`: by default the gamedata holding the
-  level. `--textures` names a textures root, which needs a `.thm` for every texture `build.prj` names: by default the
-  gamedata's `textures`. It repeats, each file read from the first root holding it, but xrLC takes one root.
-- `--sdk` names the SDK's `editors` directory, which makes the `geometry` step run its xrLC.
-- Before any step runs, it checks every step's inputs (`build.prj`; `build.details`, `build.cform` and `build.lights`
-  for the details; `build.aimap`, with `build.cform` for full covers, for the AI map) and every texture's `.thm` where a
-  step reads them, so a missing file stops it at once rather than minutes into xrLC. What the geometry step writes
-  counts as there for the steps after it.
-- The details and AI steps refuse a level directory that already holds `level.details` or `level.ai` unless given
-  `-f/--force`.
+- `--gamedata` names where the compilers read the game materials (`gamemtl.xr`) and the compiler shaders
+  (`shaders_xrlc.xr`): by default the gamedata holding the level. `--textures` names a textures root, which needs a
+  `.thm` for every texture `build.prj` names: by default the gamedata's `textures`. It repeats, each file read from the
+  first root holding it.
+- `--quality` sets how finely the light step lights, `scene` by default or `draft` for a cheap estimate
+  ([Light quality](#light-quality)).
+- `--backend` picks what traces the light, details and AI map rays: the GPU where it can, else the CPU
+  ([Ray tracing](#ray-tracing)).
+- Before any step runs, it checks the inputs in the table above, the compiler shader library and every texture's `.thm`
+  where a step reads them, so a missing file stops it at once rather than minutes into a step. What the geometry step
+  writes counts as there for the steps after it.
+- The geometry step writes over the files it makes. The details and AI steps refuse a level directory that already holds
+  `level.details` or `level.ai` unless given `-f/--force`.
+
+The times below were measured on a 16-core machine with an RTX 5080. Where a time for SDK 0.7's compilers (xrLC,
+xrDO_Light, xrAI) is given, it is a historical comparison from runs made before XRF's compilers replaced them;
+`level compile` does not run them.
+
+### Light quality
+
+`--quality` sets the settings the light step lights by:
+
+| Quality | Lights by                                                                                                                                                    |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `scene` | `build.prj`'s own sky and sun, lightmap density and samples, as the Level Editor built them; the default                                                     |
+| `draft` | the sky and sun the Level Editor builds at quality 1 (26 and 9 lights), lightmaps of 3 texels a metre and one sample each, and each tree lit from one sample |
+
+`draft` regenerates the sky and sun from the level's sun direction exactly as the Level Editor would, and keeps the
+lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The geometry step
+writes `build.lights` with the lights the light step lights by, so the details step lights by them too.
+
+For a full-quality bake, set the build options in the scene in the Level Editor, as for the SDK's own Build;
+`level build` writes them into `build.prj` as they are.
+
+`--quality` is not the scene's build quality, the draft or high setting `build.prj` also carries. That one decides, as
+it does for xrLC, whether visuals are made progressive and whether textures are lit implicitly; `--quality` changes
+neither.
+
+### Ray tracing
+
+`--backend` picks what traces the rays of the light, details and AI map steps:
+
+| Backend | Traces                                                              |
+| ------- | ------------------------------------------------------------------- |
+| `auto`  | on the GPU where one traces rays, on the CPU otherwise; the default |
+| `gpu`   | with the GPU's ray tracing alone; refused where no GPU traces rays  |
+| `cpu`   | on every core; the reference the SDK's runs are matched against     |
+
+The GPU traces on Vulkan, or on D3D12 where DXC's `dxc/dxcompiler.dll` stands beside the CLI; either needs a GPU with
+ray tracing. A CLI built with `--no-default-features` has no GPU backend and traces on the CPU. How closely the GPU's
+results follow the CPU's is given with the light and details steps.
 
 ### Geometry
 
 The geometry step compiles `build.prj` as xrLC does, phase by phase: the weld and the faces it refuses, the cut of edges
 12.8 m or longer, normals, the collision form (`level.cform`) and the compilers' ray model (`build.cform`), the tangent
 basis, the split into visuals by material and size, multi-use models placed as trees with their LODs, each sector's
-hierarchy and its portals, and `build.lights` from the project's light layers. Above draft quality a visual of 128 faces
-or more is made progressive, its detail stepping down by sliding windows, as xrLC's are.
+hierarchy and its portals, and `build.lights` from the project's light layers. Above draft build quality a visual of 128
+faces or more is made progressive, its detail stepping down by sliding windows, as xrLC's are.
 
 Against SDK 0.7's own runs on the same `build.prj`, every visual triangle, sector and portal is the same, with normals
 and coordinates within their stored precision; the collision forms hold the same faces but for the few where xrLC's weld
 met corners in another order, as two of its own runs differ.
 
-The collision form is not simplified, as xrLC simplifies it at proof quality. The game collides with every face.
+The collision form is not simplified, as xrLC simplifies it above draft build quality. The game collides with every
+face.
 
 Visuals split a little differently from xrLC's, as they split by lightmap page and our charts sit on their pages in
 other places. Without the light step every lightmapped surface samples one small pair of neutral light (an open sky for
@@ -247,24 +296,13 @@ surfaces are cut into charts as xrLC cuts them, over 99.5% of them the same face
 compressed where its light allows as xrLC compresses it, and packed onto lightmap pages, as many as xrLC's. Compared
 with xrLC's at points across every lightmapped surface, the light differs as little as two of xrLC's own bakes of a
 level do. A texture xrLC lights implicitly, such as terrain's, takes its light over its own coordinates as xrLC's does,
-written beside the level as `<texture>.dds` and `<texture>_lm.dds`; at draft quality, as xrLC, the step lights none.
+written beside the level as `<texture>.dds` and `<texture>_lm.dds`; at draft build quality, as xrLC, the step lights
+none.
 
-`--quality` sets how finely the step lights:
-
-| Quality | Lights by                                                                                                                                                    |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `scene` | `build.prj`'s own sky and sun, at the quality the Level Editor built them; the default                                                                       |
-| `draft` | the sky and sun the Level Editor builds at quality 1 (26 and 9 lights), lightmaps of 3 texels a metre and one sample each, and each tree lit from one sample |
-
-`draft` regenerates the sky and sun from the level's sun direction exactly as the Level Editor would, and keeps the
-lamps placed under the sky's layer. A level already built at quality 1 compiles the same either way. The geometry step
-writes `build.lights` with the lights the step lights by, so the details step lights by them too.
-
-`--backend` traces the step's rays as it traces the details' (below), with the same choices. The GPU's light is the
-CPU's on all but a few points in a thousand, a few steps apart; a chart compressed by its light can carry that across
-it, so pages differ from the CPU's by up to a few steps here and there, and from xrLC's as little as the CPU's do. The
-GPU pays most where lamps are many, as indoors. On a 16-core machine with an RTX 5080, the geometry and light steps
-together at draft quality:
+On the GPU ([Ray tracing](#ray-tracing)) the light is the CPU's on all but a few points in a thousand, a few steps
+apart; a chart compressed by its light can carry that across it, so pages differ from the CPU's by up to a few steps
+here and there, and from xrLC's as little as the CPU's do. The GPU pays most where lamps are many, as indoors. The
+geometry and light steps together with `--quality draft`:
 
 | Level           | CPU  | GPU  |
 | --------------- | ---- | ---- |
@@ -273,71 +311,57 @@ together at draft quality:
 | `mp_darkvalley` | 4 s  | 4 s  |
 | `jupiter`       | 73 s | 69 s |
 
-`mp_darkvalley` takes xrLC 28 s at draft quality and `jupiter` about 15 min at proof quality, 11 of them placing its
-charts.
+For historical comparison, SDK 0.7's xrLC took 28 s on `mp_darkvalley` at draft build quality, and about 15 min on
+`jupiter` at the light settings `draft` uses, 11 of them placing its charts.
 
 ### Details
 
 The details step lights every planted slot of `build.details` as xrDO_Light does: the sun, the sky and the level's
-lights traced to 225 points across each 2 m slot over xrLC's collision form (`build.cform`), a ray dimmed by the alpha
-of a texture it crosses and passed by a surface that casts no shadow. It writes the five light values a slot stores, the
-grass's sun and sky shade among them.
+lights traced to 225 points across each 2 m slot over the compilers' ray model (`build.cform`), a ray dimmed by the
+alpha of a texture it crosses and passed by a surface that casts no shadow. It writes the five light values a slot
+stores, the grass's sun and sky shade among them.
 
 Against SDK 0.7's own runs on the same files it lights all but a handful of slots exactly, each of those one step of
 sixteen off. xrDO_Light remembers the last surface that shadowed each light and tests it first, a shortcut that changes
 its result with the order and the threads it lights in; XRF traces every ray in full, so a run gives the same file on
 any machine.
 
-`--backend` picks what traces the rays:
+On the GPU ([Ray tracing](#ray-tracing)) the light is the CPU's but for a few slots in a hundred thousand, each one step
+off. The details step alone, with the last column a historical comparison:
 
-| Backend | Traces                                                              |
-| ------- | ------------------------------------------------------------------- |
-| `auto`  | on the GPU where one traces rays, on the CPU otherwise; the default |
-| `gpu`   | with the GPU's ray tracing alone; refused where no GPU traces rays  |
-| `cpu`   | on every core; the reference the SDK's runs are matched against     |
-
-The GPU traces on Vulkan, or on D3D12 where DXC's `dxc/dxcompiler.dll` stands beside the CLI; either needs a GPU with
-ray tracing. Its light is the CPU's but for a few slots in a hundred thousand, each one step off. A CLI built with
-`--no-default-features` has no GPU backend and lights on the CPU. On a 16-core machine with an RTX 5080:
-
-| Level, quality           | CPU   | GPU   | SDK 0.7's xrDO_Light |
-| ------------------------ | ----- | ----- | -------------------- |
-| `mp_darkvalley`, default | 14 s  | 3.5 s | about 12 min         |
-| `jupiter`, proof         | 71 s  | 20 s  | about 23 min         |
-| `jupiter`, as shipped    | 406 s | 51 s  | not run              |
+| Level, lights                  | CPU   | GPU   | SDK 0.7's xrDO_Light (historical) |
+| ------------------------------ | ----- | ----- | --------------------------------- |
+| `mp_darkvalley`, default       | 14 s  | 3.5 s | about 12 min                      |
+| `jupiter`, at `draft` settings | 71 s  | 20 s  | about 23 min                      |
+| `jupiter`, as shipped          | 406 s | 51 s  | not run                           |
 
 ### AI map
 
 The AI step compiles the nodes the Level Editor exported (`build.aimap`) into `level.ai` as SDK 0.7's `xrAI -f` does:
 each node's cell, height and plane packed over the map's box, the nodes sorted by cell with their links renumbered. Its
-covers, how open each node is in four directions from a standing and a crouching height, are traced against xrLC's
-collision form as xrAI traces them: from each node at a corner of the map toward every node it reaches within 30 m, a
-ray dimmed by the alpha of a texture it crosses; every other node then takes a mix of the corners it walks straight to.
-`--backend` traces those rays as it traces the details', with the same choices.
+covers, how open each node is in four directions from a standing and a crouching height, are traced against the
+compilers' ray model (`build.cform`) as xrAI traces them: from each node at a corner of the map toward every node it
+reaches within 30 m, a ray dimmed by the alpha of a texture it crosses; every other node then takes a mix of the corners
+it walks straight to. `--backend` picks what traces those rays ([Ray tracing](#ray-tracing)).
 
 - `--ai-covers none` leaves every cover 0, as xrAI's `-draft` does, and needs no `build.cform`, so it runs on what
   `level build` wrote before the geometry is compiled. `full`, the default, needs `build.cform`, `build.prj` and
   `shaders_xrlc.xr`.
 - A `level.ai` replaced with `--force` keeps its identity while the new map's nodes have the same cells and links, so
   the game's spawn, built against the old map, still loads the level. A map that changed takes an identity hashed from
-  its nodes, the same for the same input; it needs a new spawn, which SDK 0.7's `xrAI -s` builds from every level of a
-  game at once.
+  its nodes, the same for the same input; it needs a new spawn ([Spawn](#spawn)).
 - Before it writes, the map is checked as `level verify` checks one: a node linked to itself stops the step with the
   file left as it was, and links with no link back and parts no link joins are warnings with their counts.
 
 Against SDK 0.7's own runs on the same files, everything but the covers is xrAI's byte for byte, and every cover is
 within one step of sixteen, all but a few in ten thousand exact. Like the details, XRF traces every ray in full rather
-than test the surface that blocked a ray before, so a run gives the same file on any machine. On a 16-core machine with
-an RTX 5080, `jupiter`'s 1.5 million nodes take 35 s on the CPU and 10 s on the GPU, against about 7 min for xrAI.
+than test the surface that blocked a ray before, so a run gives the same file on any machine. `jupiter`'s 1.5 million
+nodes take 35 s on the CPU and 10 s on the GPU; for historical comparison, SDK 0.7's xrAI took about 7 min.
 
-### The SDK's compiler
+### Spawn
 
-- xrLC runs in a working directory of its own (`--work`, a temporary one by default), under an `fsgame.ltx` written
-  there, with its log beside it. Point `--path` at a copy of a level, never at a game installation.
-- Nothing needs answering: xrLC runs with `-silent`. It lowers itself to idle priority, so other work on the machine
-  slows it.
-- The spawn is not a step: xrAI `-s` builds `all.spawn` from every level of a game at once.
-- xrLC runs only with `--sdk`; without it, the geometry step is XRF's own and needs no SDK.
+The spawn is not a step: `all.spawn` is built from every level of a game at once, as SDK 0.7's `xrAI -s` builds it, by
+[`spawn build`](spawn.md).
 
 ## Albedo
 

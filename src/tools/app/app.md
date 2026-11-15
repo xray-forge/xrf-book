@@ -9,11 +9,11 @@ CI.
 It groups its work into editors for archives, configs, dialogs, script exports, equipment icons, levels, spawns, and
 translations. The level decompiler and level compiler run the same code as the CLI's
 [`level decompile`, `level build` and `level compile`](../cli/level.md), with progress, cancelling between steps, and a
-list of what each run left out; the level compiler builds a scene and compiles it with the steps chosen in one run, the
-details' and the AI map's rays traced on the GPU chosen in the renderer settings, or on the CPU. Which screens and
-actions each one currently offers changes with the application, so the application is the authority on that, not this
-book. Some routes are read-only or prototype workflows, and several write files — packing, unpacking, formatting, and
-saving spawn data all overwrite their targets.
+list of what each run left out; the level compiler builds a scene and compiles it with the steps and light quality
+chosen in one run, the light's, the details' and the AI map's rays traced on the GPU chosen in the renderer settings, or
+on the CPU. Which screens and actions each one currently offers changes with the application, so the application is the
+authority on that, not this book. Some routes are read-only or prototype workflows, and several write files — packing,
+unpacking, formatting, and saving spawn data all overwrite their targets.
 
 Keep a backup before writing over game data.
 
