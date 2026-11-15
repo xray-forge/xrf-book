@@ -110,8 +110,54 @@ for checks involving the surrounding assets; test the affected spawning behavior
 
 `verify` and `repack` also take a level's `level.spawn`. Verification of a level's list checks that every object opens
 as a spawn packet with its section, name and position; the rest of each packet is carried as it is, and repacking writes
-it back byte for byte. A level's list has no unpacked form yet: `unpack` refuses one with exit code `1`, and `pack`,
-`re-unpack` and `verify --unpacked` read only a root spawn's folder.
+it back byte for byte.
+
+## Unpack a level's spawn list
+
+`unpack` also takes a level's `level.spawn`. Its folder holds one file, `level_spawns.ltx`, with a section per object in
+the list's order, named by its place:
+
+```powershell
+xrf-cli spawn unpack --path ./levels/l04u_labx18/level.spawn --dest ./labx18_spawn
+xrf-cli spawn pack --path ./labx18_spawn --dest ./level.rebuilt.spawn
+```
+
+Example output excerpt — a list holding objects of Shadow of Chernobyl's layout:
+
+```text
+Unpacking ./levels/l04u_labx18/level.spawn into ./labx18_spawn
+Wrote 0 objects typed and 579 verbatim
+  579 written verbatim: Assertion error: Spawn packet is of spawn version 118, Shadow of Chernobyl's, whose layout is not supported
+Unpacked ./labx18_spawn in 4 ms
+```
+
+Exit code: `0`.
+
+An object the tools read is written with the same keys an object of an unpacked `all.spawn` has. An object they cannot
+read, such as one saved in Shadow of Chernobyl's layout, is written verbatim: its section, name, position and direction
+as keys, the rest of its packet as base64 under `payload`, and why it was not read under `reason`, all marked by
+`form = verbatim`:
+
+```ini
+[0]
+form = verbatim
+reason = Assertion error: Spawn packet is of spawn version 118, Shadow of Chernobyl's, whose layout is not supported
+section = breakable_object
+name = meshes\brkbl#0.ogf
+script_game_id = 0
+script_rp = 254
+position = -4.1748385,12.251056,-9.147421
+direction = -0.0009636891,-0.00012802181,-0.2570078
+payload = AAD_______8hAHYABQAAAP__MQD__wAAAAABAAAA_____7r___8A__________9tZXNoZXNcYnJrYmwjMAAAAACAPw
+```
+
+`unpack` prints how many objects it wrote each way and groups the verbatim ones by reason; its `--report` result carries
+the same as `typedObjects` and `verbatimObjects`. `pack` writes a verbatim object from its `payload` as it stands, and
+ignores `reason`. Lists the game ships number their objects from zero; an object listed under another number keeps it in
+a `chunk_id` key.
+
+`pack`, `re-unpack` and `verify --unpacked` tell the two kinds of folder apart by what they hold: `header.ltx` for a
+root spawn, `level_spawns.ltx` for a level's list. A folder holding neither, or both, is refused.
 
 ## Re-serialize a spawn file
 
