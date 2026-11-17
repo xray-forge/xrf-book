@@ -167,12 +167,13 @@ directory what the Level Editor's Build writes from those parts:
 Each entity takes its name, position and angles from its spawn point, and its volume from the attached shape, as the
 editor's Build does.
 
-Given the objects roots the scene's objects are read from (`--objects`, repeatable) and the game material library
-(`--game-materials`), it also writes what `level compile` takes, as the SDK's compilers took it: `build.prj` with the
-build options the scene sets, `level.ltx`, the occluders (`level.hom`, `level.som`), `build.details` and its atlas,
-`build.aimap`, the tree impostors' atlas (`level_lods.dds`, `level_lods_nm.dds`) and each breakable part
-(`meshes/brkbl#<n>.ogf`). Details and impostors need the textures root their textures are read from (`--textures`). The
-ladders and breakables it cuts out of the geometry open the spawn list, as the editor's Build places them.
+Given the game material library (`--game-materials`), it also writes what `level compile` takes, as the SDK's compilers
+took it: `build.prj` with the build options the scene sets, `level.ltx`, the occluders (`level.hom`, `level.som`),
+`build.details` and its atlas, `build.aimap`, the tree impostors' atlas (`level_lods.dds`, `level_lods_nm.dds`) and each
+breakable part (`meshes/brkbl#<n>.ogf`). It reads the scene's objects from the objects roots `--objects` names,
+repeatable, or by default from `objects` beside the scene's `levels` directory, where `level decompile` writes them.
+Details and impostors need the textures root their textures are read from (`--textures`). The ladders and breakables it
+cuts out of the geometry open the spawn list, as the editor's Build places them.
 
 ```powershell
 xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --textures ./gamedata/textures --force
@@ -216,10 +217,10 @@ xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,li
 It prints each step's time, with what the geometry compiler made, what the light baker lit and where it traced, the
 slots lit for the details, and the nodes and graph for the AI map, then the level.
 
-- `--gamedata` names where the compilers read the game materials (`gamemtl.xr`) and the compiler shaders
-  (`shaders_xrlc.xr`): by default the gamedata holding the level. `--textures` names a textures root, which needs a
-  `.thm` for every texture `build.prj` names: by default the gamedata's `textures`. It repeats, each file read from the
-  first root holding it.
+- `--gamedata` names where the compilers read the game materials (`gamemtl.xr`), the compiler shaders
+  (`shaders_xrlc.xr`) and the textures: by default the gamedata holding the level. Every texture `build.prj` names needs
+  its `.thm` there or under a textures root `--textures` names, such as the one `level decompile` wrote impostor strips
+  into. It repeats, each file read from the first root holding it and the gamedata's `textures` last.
 - `--quality` sets how finely the light step lights, `scene` by default or `draft` for a cheap estimate
   ([Light quality](#light-quality)).
 - `--backend` picks what traces the light, details and AI map rays: the GPU where it can, else the CPU
