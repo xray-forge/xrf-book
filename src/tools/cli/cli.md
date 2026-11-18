@@ -55,9 +55,9 @@ The report is an envelope around a command-specific `result`:
 Verification commands share one shape inside `result`: an overall `status` and a `checks` list. Each check is
 `{ id, status, duration, findings }`, and each finding is `{ ruleId, subject, message }`. A check's `duration` is `null`
 when the check did not time itself. A command adds its own fields beside them, such as a census of what it read. The
-commands using this shape are `gamedata verify`, `translation verify`, `ogf verify`, `level verify`, `dialog info`,
-`archive verify`, `particle verify`, `spawn verify`, `sprite verify-equipment`, `externs export --check`, and
-`omf repack --verify`.
+commands using this shape are `gamedata verify`, `translation verify`, `ogf verify`, `object verify`, `level verify`,
+`dialog info`, `archive verify`, `particle verify`, `spawn verify`, `sprite verify-equipment`, `externs export --check`,
+and `omf repack --verify`.
 
 A failed check still reports its findings. Argument parsing failures occur before command execution and do not produce
 an envelope. If writing the report fails, the process exits 1; an existing report at that path may belong to an earlier

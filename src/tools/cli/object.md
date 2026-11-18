@@ -20,7 +20,7 @@ xrf-cli object compile --path ./rawdata/objects/dynamics/workshop_room/hammer.ob
 Example output — the vanilla hammer:
 
 ```text
-Compiled ./rawdata/objects/dynamics/workshop_room/hammer.object into ./meshes/dynamics/workshop_room/hammer.ogf: 1 children, 56 vertices, 32 faces (0 dropped), 2 bones
+Compiled ./rawdata/objects/dynamics/workshop_room/hammer.object into ./meshes/dynamics/workshop_room/hammer.ogf: 1 children, 56 vertices, 32 faces (0 dropped), 2 bones, Actor Editor tangents
 ```
 
 Exit code: `0`. The command refuses to replace an existing OGF; pass `--force` to overwrite it.
