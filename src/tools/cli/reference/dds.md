@@ -34,20 +34,21 @@ Crop a rectangular region out of a DDS file into a new DDS file
 xrf-cli dds crop [OPTIONS] --path <path> --dest <dest> --x <x> --y <y> --width <width> --height <height>
 ```
 
-| Option                      | Required | Default | Description                                                                 |
-| --------------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>`         | yes      |         | Path to the dds file to read the region from                                |
-| `-d, --dest <dest>`         | yes      |         | Path of the dds file to write                                               |
-| `--x <x>`                   | yes      |         | Left edge of the region, in pixels                                          |
-| `--y <y>`                   | yes      |         | Top edge of the region, in pixels                                           |
-| `--width <width>`           | yes      |         | Width of the region, in pixels                                              |
-| `--height <height>`         | yes      |         | Height of the region, in pixels                                             |
-| `--fit-width <fit-width>`   |          |         | Scale the cropped region to this width, preserving aspect and letterboxing  |
-| `--fit-height <fit-height>` |          |         | Scale the cropped region to this height, preserving aspect and letterboxing |
-| `-s, --silent`              |          |         | Turn off logging                                                            |
-| `-v, --verbose`             |          |         | Turn on verbose logging                                                     |
-| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr        |
-| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                       |
+| Option                      | Required | Default | Description                                                                                     |
+| --------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`         | yes      |         | Path to the dds file to read the region from                                                    |
+| `-d, --dest <dest>`         | yes      |         | Path of the dds file to write                                                                   |
+| `--x <x>`                   | yes      |         | Left edge of the region, in pixels                                                              |
+| `--y <y>`                   | yes      |         | Top edge of the region, in pixels                                                               |
+| `--width <width>`           | yes      |         | Width of the region, in pixels                                                                  |
+| `--height <height>`         | yes      |         | Height of the region, in pixels                                                                 |
+| `--fit-width <fit-width>`   |          |         | Scale the cropped region to this width, preserving aspect and letterboxing                      |
+| `--fit-height <fit-height>` |          |         | Scale the cropped region to this height, preserving aspect and letterboxing                     |
+| `-f, --force`               |          |         | Overwrite the dds file where it already exists; without it, one there is refused before reading |
+| `-s, --silent`              |          |         | Turn off logging                                                                                |
+| `-v, --verbose`             |          |         | Turn on verbose logging                                                                         |
+| `--json`                    |          |         | Write the run's JSON report to stdout, moving human output to stderr                            |
+| `--report <PATH>`           |          |         | Write the run's JSON report to a file                                                           |
 
 ## `xrf-cli dds info`
 

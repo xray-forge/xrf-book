@@ -249,7 +249,9 @@ xrf-cli archive unpack --path .\db\configs.db --dest .\unpacked\configs --dry-ru
 A dry run's report is the summary it printed: `archives`, `files`, `directories` (directory records, which a real run
 creates as folders), `sizeCompressed` and `sizeReal` in bytes, `source`, `destination`, and `isDryRun`.
 
-Use a new or empty destination directory. Existing files can otherwise be replaced while the archive is unpacked.
+An unpack into a directory that already holds any file the archive would write, names compared without case, is refused
+before anything is written. `--force` writes over those files and leaves the others in the directory alone. `extract`
+takes `--force` the same way for its output file or directory.
 
 ### Unpacking speed and memory
 

@@ -84,6 +84,9 @@ Unpacked 1 files
 
 Exit code: `0`.
 
+When `--dest` already holds any sprite the run would cut, names compared without case, it is refused before any sprite
+is written; `--force` writes over them.
+
 After editing the extracted images, pack them back:
 
 ```powershell

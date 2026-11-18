@@ -16,7 +16,8 @@ xrf-cli spawn build --path ./gamedata --out test_jupiter
 
 The root holds `configs/game_levels.ltx` and, by default, the levels' directories under `levels/`. Without `--levels`,
 every level `[levels]` lists whose directory holds the three files is built; `--levels zaton,jupiter` builds those
-alone. The spawn is written as `spawns/<out>.spawn`. `all` is the game's own spawn, and writing over it needs `--force`.
+alone. The spawn is written as `spawns/<out>.spawn`. Writing over a spawn already there, the name compared without case,
+needs `--force`; `all` is the game's own.
 
 Levels built outside the gamedata root, such as into a working copy by `level build` and `level compile`, are read from
 the directory `--levels-root` names, and `--dest` writes the spawn into another directory; the level list still comes

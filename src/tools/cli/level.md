@@ -151,9 +151,10 @@ level replace `level.spawn`'s where the game tree has one:
 - The sidecar lists each source file with its SHA-256, each written file and its sources, and what the decompile chose
   rather than read (object names, level options, the camera, build parameters). The scene's GUID is derived from the
   sources, so decompiling the same level twice gives the same scene.
-- An existing `.level`, part directory, sidecar or object is refused unless `--force` is given. Even with `--force`, a
-  part directory holding a part the decompile would not write is refused, since the editor would read that part as
-  belonging to the scene. A refusal writes nothing.
+- An existing `.level`, sidecar, file in the part directory or object of the level is refused unless `--force` is given,
+  before anything is decompiled, so a refusal writes nothing. With `--force`, the decompile replaces them and removes
+  the parts and objects of this level it no longer writes, since the editor would read a part left behind as belonging
+  to the scene. The report lists what it removed.
 
 ## Build
 
@@ -184,13 +185,15 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
 - The impostor atlas grows to 4096 a side, as Anomaly's largest levels ship it. `--sdk-impostor-atlas` keeps SDK 0.7's
   limit of 2048, which refuses a level of more than 128 tree impostors as that Level Editor does.
 
-- A file it would write that is already there is refused unless `--force` is given. The report says of each file whether
-  it is new, the same bytes as before, or changed. A level decompiled and built back into its own directory reports
-  every file the same but, on most levels, `level.spawn`: the scene saves floats as text with six decimals, as the
-  editor does, which rounds the few that held more, and an entity the decompile left out is missing.
+- Any file it may write that is already there, names compared without case, is refused unless `--force` is given, before
+  the scene is built, so a refusal writes nothing. The report says of each file whether it is new, the same bytes as
+  before, or changed. A level decompiled and built back into its own directory reports every file the same but, on most
+  levels, `level.spawn`: the scene saves floats as text with six decimals, as the editor does, which rounds the few that
+  held more, and an entity the decompile left out is missing.
 - The editor's Build moves every file it may write aside as a `.~` backup first, so a file the scene no longer produces
-  goes away. `level build` moves and deletes nothing. It refuses, naming the file, when the directory holds one the
-  scene does not build, such as a `level.ps_static` from a scene that now places no particles.
+  goes away. With `--force`, `level build` removes such a file instead, such as a `level.ps_static` from a scene that
+  now places no particles or a breakable part it no longer cuts, and the report lists what it removed.
+- A scene that places objects is refused without `--game-materials`, since only the compiler's files carry them.
 
 ## Compile
 
@@ -228,8 +231,9 @@ slots lit for the details, and the nodes and graph for the AI map, then the leve
 - Before any step runs, it checks the inputs in the table above, the compiler shader library and every texture's `.thm`
   where a step reads them, so a missing file stops it at once rather than minutes into a step. What the geometry step
   writes counts as there for the steps after it.
-- The geometry step writes over the files it makes. The details and AI steps refuse a level directory that already holds
-  `level.details` or `level.ai` unless given `-f/--force`.
+- Any file a step it runs writes that is already there, lightmaps and the implicitly lit textures included, refuses the
+  compile before any step runs unless given `-f/--force`. With it, the geometry step also removes the lightmap pages of
+  an earlier compile it no longer writes.
 
 The times below were measured on a 16-core machine with an RTX 5080. Where a time for SDK 0.7's compilers (xrLC,
 xrDO_Light, xrAI) is given, it is a historical comparison from runs made before XRF's compilers replaced them;

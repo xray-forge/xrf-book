@@ -69,6 +69,8 @@ Fitting preserves aspect ratio and centers the image on a transparent canvas. A 
 bounds is unchanged. Equipment packing uses the same fitting behavior; description packing instead requires exact
 dimensions, so fit those icons before packing.
 
+A crop whose `--dest` already exists, the name compared without case, is refused; `--force` writes over it.
+
 ## Convert a texture
 
 Re-encode an existing DDS texture in an explicit format:

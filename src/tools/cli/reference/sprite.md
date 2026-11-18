@@ -54,19 +54,20 @@ Unpack the sprites a texture description xml declares out of its sheets
 xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <base>
 ```
 
-| Option                        | Required | Default | Description                                                                                         |
-| ----------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
-| `--description <description>` | yes      |         | Path to the XML file describing the sheets                                                          |
-| `--base <base>`               | yes      |         | Folder the described sheets are read from                                                           |
-| `-d, --dest <dest>`           |          |         | Folder the sprites are written to, defaults to the base folder                                      |
-| `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted             |
-| `--strict`                    |          |         | Fail on a sheet that cannot be read or a sprite outside its sheet instead of skipping it            |
-| `-j, --jobs <JOBS>`           |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                    |
-| `--refuse-links`              |          |         | Refuse to write through links or junctions already below the destination, instead of following them |
-| `-s, --silent`                |          |         | Turn off logging                                                                                    |
-| `-v, --verbose`               |          |         | Turn on verbose logging                                                                             |
-| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                                |
-| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                                               |
+| Option                        | Required | Default | Description                                                                                                                          |
+| ----------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `--description <description>` | yes      |         | Path to the XML file describing the sheets                                                                                           |
+| `--base <base>`               | yes      |         | Folder the described sheets are read from                                                                                            |
+| `-d, --dest <dest>`           |          |         | Folder the sprites are written to, defaults to the base folder                                                                       |
+| `--file <file>...`            |          |         | Name of a described file to unpack, repeatable; unpacks every described file if omitted                                              |
+| `--strict`                    |          |         | Fail on a sheet that cannot be read or a sprite outside its sheet instead of skipping it                                             |
+| `-f, --force`                 |          |         | Overwrite sprites already in the destination, names compared without case; without it, one there is refused before any sprite is cut |
+| `-j, --jobs <JOBS>`           |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                                                     |
+| `--refuse-links`              |          |         | Refuse to write through links or junctions already below the destination, instead of following them                                  |
+| `-s, --silent`                |          |         | Turn off logging                                                                                                                     |
+| `-v, --verbose`               |          |         | Turn on verbose logging                                                                                                              |
+| `--json`                      |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                 |
+| `--report <PATH>`             |          |         | Write the run's JSON report to a file                                                                                                |
 
 ## `xrf-cli sprite unpack-equipment`
 
