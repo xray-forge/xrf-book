@@ -197,6 +197,9 @@ xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels
   goes away. With `--force`, `level build` removes such a file instead, such as a `level.ps_static` from a scene that
   now places no particles or a breakable part it no longer cuts, and the report lists what it removed.
 - A scene that places objects is refused without `--game-materials`, since only the compiler's files carry them.
+- A scene the Level Editor would load as something else is refused, naming what: a part saved for another scene (another
+  GUID), a group member past the group's `ingroup_count` or missing under it, or a way point linking to itself. GSC's
+  four SDK scenes hold none of these.
 
 ## Compile
 
