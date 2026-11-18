@@ -12,17 +12,17 @@ Find where a section or field is written, declared or patched, across every conf
 xrf-cli ltx find [OPTIONS] --path <path> <--section <section>|--field <field>|--value <value>>
 ```
 
-| Option                | Required | Default | Description                                                                                                                                                             |
-| --------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`   | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition)                                     |
-| `--section <section>` |          |         | Section to find, without brackets or operation prefix. Matches the whole name, case-sensitively, except under --dltx, which lowercases section names as the engine does |
-| `--field <field>`     |          |         | Field to find, without operation prefix. Matches the whole name, case-sensitively                                                                                       |
-| `--value <value>`     |          |         | Text a written value must contain, case-sensitively                                                                                                                     |
-| `--dltx`              |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                                                     |
-| `-s, --silent`        |          |         | Turn off logging                                                                                                                                                        |
-| `-v, --verbose`       |          |         | Turn on verbose logging                                                                                                                                                 |
-| `--json`              |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                                                    |
-| `--report <PATH>`     |          |         | Write the run's JSON report to a file                                                                                                                                   |
+| Option                | Required | Default | Description                                                                                                                         |
+| --------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `-p, --path <path>`   | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
+| `--section <section>` |          |         | Section to find, without brackets or operation prefix. Matches the whole name in any case, as the engine lowercases section names   |
+| `--field <field>`     |          |         | Field to find, without operation prefix. Matches the whole name, case-sensitively                                                   |
+| `--value <value>`     |          |         | Text a written value must contain, case-sensitively                                                                                 |
+| `--dltx`              |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                 |
+| `-s, --silent`        |          |         | Turn off logging                                                                                                                    |
+| `-v, --verbose`       |          |         | Turn on verbose logging                                                                                                             |
+| `--json`              |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                |
+| `--report <PATH>`     |          |         | Write the run's JSON report to a file                                                                                               |
 
 ## `xrf-cli ltx format`
 

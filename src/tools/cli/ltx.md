@@ -107,11 +107,10 @@ Each line names the config and line to open, the statement as written with its o
 or patches. A field written under a `![section]` header counts as a patch. `[archived]` marks a config read from an
 archive, which you cannot edit in place.
 
-Names must match whole, and compare as the game reads them: field names always including case, section names including
-case under standard rules but in any case under `--dltx`, because Monolith's engine lowercases section names. `--value`
-matches any value that contains the text, case-sensitively. Pass names alone: `--section [wpn_ak74]` or `--field !rpm`
-is refused, and `--field rpm` already finds `!rpm`, `>rpm` and `<rpm`. A section query alone lists headers; adding
-`--field` or `--value` lists field lines instead.
+Names must match whole, and compare as the game reads them: field names including case, section names in any case,
+because the engine lowercases section names. `--value` matches any value that contains the text, case-sensitively. Pass
+names alone: `--section [wpn_ak74]` or `--field !rpm` is refused, and `--field rpm` already finds `!rpm`, `>rpm` and
+`<rpm`. A section query alone lists headers; adding `--field` or `--value` lists field lines instead.
 
 `ltx find` shows what each file writes, not the value the game ends up with. Several files can write the same field;
 `ltx inspect` names the one that wins.
