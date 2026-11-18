@@ -6,7 +6,8 @@
 
 ## `xrf-cli ltx find`
 
-Find where a section or field is written, declared or patched, across every config a project holds
+Find where a section or field is written, declared or patched, across every config a project holds. A config that does
+not parse is reported as not searched, and the run fails, since it may hold the answer
 
 ```txt
 xrf-cli ltx find [OPTIONS] --path <path> <--section <section>|--field <field>|--value <value>>

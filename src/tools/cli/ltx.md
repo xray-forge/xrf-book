@@ -101,7 +101,8 @@ Found 3 statement(s) in 3 config(s): 1 declaration(s), 2 patch(es)
 Resolved values: ltx inspect --path ./gamedata-dltx/configs --dltx wpn_ak74
 ```
 
-Exit code: `0`, also when nothing matches.
+Exit code: `0`, also when nothing matches. A config that does not parse is listed as not searched and the exit code is
+`1`: it may hold what you asked for, so the search gave no answer.
 
 Each line names the config and line to open, the statement as written with its operation prefix, and whether it declares
 or patches. A field written under a `![section]` header counts as a patch. `[archived]` marks a config read from an

@@ -171,12 +171,13 @@ Read every archive payload and verify decompression and CRC checks
 xrf-cli archive verify [OPTIONS] --path <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to an archive volume or a directory containing volumes          |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option              | Required | Default | Description                                                                      |
+| ------------------- | -------- | ------- | -------------------------------------------------------------------------------- |
+| `-p, --path <path>` | yes      |         | Path to an archive volume or a directory containing volumes                      |
+| `-j, --jobs <JOBS>` |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%' |
+| `-s, --silent`      |          |         | Turn off logging                                                                 |
+| `-v, --verbose`     |          |         | Turn on verbose logging                                                          |
+| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr             |
+| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                            |
 
 <!-- ANCHOR_END: commands -->

@@ -176,11 +176,12 @@ took it: `build.prj` with the build options the scene sets, `level.ltx`, the occ
 `build.details` and its atlas, `build.aimap`, the tree impostors' atlas (`level_lods.dds`, `level_lods_nm.dds`) and each
 breakable part (`meshes/brkbl#<n>.ogf`). It reads the scene's objects from the objects roots `--objects` names,
 repeatable, or by default from `objects` beside the scene's `levels` directory, where `level decompile` writes them.
-Details and impostors need the textures root their textures are read from (`--textures`). The ladders and breakables it
-cuts out of the geometry open the spawn list, as the editor's Build places them.
+Details and impostors read their textures from `--textures`, by default `gamedata/textures` beside the scene's `rawdata`
+directory, where `level decompile` writes them, so a decompiled scene builds back without naming it. The ladders and
+breakables it cuts out of the geometry open the spawn list, as the editor's Build places them.
 
 ```powershell
-xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --textures ./gamedata/textures --force
+xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --force
 ```
 
 - The build options in `build.prj` are the scene's, as the Level Editor writes them. A quick look at a level comes from
@@ -269,11 +270,13 @@ neither.
 
 `--backend` picks what traces the rays of the light, details and AI map steps:
 
-| Backend | Traces                                                              |
-| ------- | ------------------------------------------------------------------- |
-| `auto`  | on the GPU where one traces rays, on the CPU otherwise; the default |
-| `gpu`   | with the GPU's ray tracing alone; refused where no GPU traces rays  |
-| `cpu`   | on every core; the reference the SDK's runs are matched against     |
+| Backend | Traces                                                                 |
+| ------- | ---------------------------------------------------------------------- |
+| `auto`  | on the GPU where one traces rays, on the CPU otherwise; the default    |
+| `gpu`   | with the GPU's ray tracing alone; refused where no GPU traces rays     |
+| `cpu`   | on the CPU's workers; the reference the SDK's runs are matched against |
+
+`level compile` and `level decompile` take `-j` to bound how many cores they use, `auto` (every one) by default.
 
 The GPU traces on Vulkan, or on D3D12 where DXC's `dxc/dxcompiler.dll` stands beside the CLI; either needs a GPU with
 ray tracing. A CLI built with `--no-default-features` has no GPU backend and traces on the CPU. How closely the GPU's

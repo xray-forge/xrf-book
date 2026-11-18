@@ -11,21 +11,22 @@ points and the patrols. Run it after a change to a level's AI map, entities, gra
 geometry, lighting and details do not need it.
 
 ```powershell
-xrf-cli spawn build --path ./gamedata --out test_jupiter
+xrf-cli spawn build --gamedata ./gamedata --dest ./gamedata/spawns/test_jupiter.spawn
 ```
 
 The root holds `configs/game_levels.ltx` and, by default, the levels' directories under `levels/`. Without `--levels`,
 every level `[levels]` lists whose directory holds the three files is built; `--levels zaton,jupiter` builds those
-alone. The spawn is written as `spawns/<out>.spawn`. Writing over a spawn already there, the name compared without case,
-needs `--force`; `all` is the game's own.
+alone. `--dest` names the `.spawn` file to write; without it the build writes `spawns/all.spawn`, the game's own.
+Writing over a spawn already there, the name compared without case, needs `--force`.
 
 Levels built outside the gamedata root, such as into a working copy by `level build` and `level compile`, are read from
-the directory `--levels-root` names, and `--dest` writes the spawn into another directory; the level list still comes
-from the root:
+the directory `--levels-root` names; the level list still comes from the root:
 
 ```powershell
-xrf-cli spawn build --path ./gamedata --levels-root ./work/levels --levels zaton,jupiter --dest ./work/spawns --out test
+xrf-cli spawn build --gamedata ./gamedata --levels-root ./work/levels --levels zaton,jupiter --dest ./work/spawns/test.spawn
 ```
+
+Like the other heavy commands, `build` takes `-j` to bound how many cores it uses.
 
 Example output excerpt — vanilla's five levels:
 
