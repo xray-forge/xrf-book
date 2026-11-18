@@ -92,7 +92,10 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   too. Each object found is copied, with its thumbnail, from the library to `--objects`, so the scene opens without the
   library. The library's objects in `levels\<name>\`, what an earlier decompile of this level wrote, are not looked for.
   The sidecar's `geometry.instances` lists each copy with its hash and each placement with how well it fits. Geometry no
-  library object matches stays in the sector objects.
+  library object matches stays in the sector objects. A library file that does not read is warned of and listed among
+  the refusals with its path and why; a link back to a folder above it, or to nothing, is listed there too, not
+  followed. An object reference or texture name with `..` or a drive in it refuses the decompile before anything is
+  written.
 - Trees come back as multi-use objects, `<name>_tree_<N>`, one per model, with a scene object per placement.
 - Each object keeps the level's own coordinates and stands at the origin, so every point lands exactly where the level
   had it and neighbouring sectors still meet.
