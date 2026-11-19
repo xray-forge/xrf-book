@@ -69,9 +69,10 @@ xrf-cli level decompile ./gamedata/levels/zaton --dest ./rawdata/levels/zaton.le
 ```
 
 ```text
-Static geometry: 118 objects under ./rawdata/objects, 1648157 faces from 1673272 triangles (25115 two-sided folds, 0 repeats dropped); 1567425 tree triangles left for their own objects
+Surfaces: game materials from 1336822 triangles on a collision face and 351860 traced to one, 79030 on none; 24 compiler shaders chosen, each with its reason in the sidecar
+Static geometry: 225 objects under ./rawdata/objects, 1644492 faces from 1673272 triangles (25115 two-sided folds, 0 repeats dropped); 3530 tree placements of 57 tree models, 0 of them library trees, 57 with impostor strips under ./rawdata/../gamedata/textures; 89848 collision faces no render triangle draws
 Entities from ./gamedata/spawns/all.spawn (1866 objects): 0 disagreements with level.spawn and 262 update packets recorded in the sidecar
-Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 10 files: fog_volume 0, glow 36, light 571, portal 495, ps 129, scene_object 118, sector 118, sound_src 12, spawn 2183, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
+Decompiled ./gamedata/levels/zaton into ./rawdata/levels/zaton.level from 41 files: ai_map, fog_volume 0, glow 36, light 571, portal 495, ps 129, scene_object 3698, sector 118, shape 1, sound_src 12, spawn 2135, wallmark, way 1506; provenance in ./rawdata/levels/zaton.level.xrf.json
 ```
 
 ## Decompile
