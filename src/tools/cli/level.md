@@ -10,11 +10,11 @@ and companions such as `level.cform` (collision), `level.ai` (the AI map) and `l
   inputs the compilers need, into a level directory; [compile](#compile) turns those inputs into the level's geometry,
   light, details and AI map.
 
-The reading commands name the level two ways: `--path` is a level directory on disk, and `--root` with `--level` is one
+The reading commands name the level two ways: the input is a level directory on disk, and `--root` with `--level` is one
 of an installation's levels, read through the game's file system by its engine name `levels\<name>`. A stock Anomaly
 installation ships its levels inside `.db` volumes, with no directory to point at, so the second way is the one that
 reads a real game. `--root` without `--level` fails and names the levels the roots hold. The decompile, build and
-compile commands work on directories on disk: each takes `--path`, and the first two a destination, `--dest`.
+compile commands work on directories on disk: each takes one as its input, and the first two a destination, `--dest`.
 
 ## Examples
 
@@ -65,7 +65,7 @@ Exit code: `0`.
 Decompile a level directory into a Level Editor scene:
 
 ```powershell
-xrf-cli level decompile --path ./gamedata/levels/zaton --dest ./rawdata/levels/zaton.level
+xrf-cli level decompile ./gamedata/levels/zaton --dest ./rawdata/levels/zaton.level
 ```
 
 ```text
@@ -181,7 +181,7 @@ directory, where `level decompile` writes them, so a decompiled scene builds bac
 breakables it cuts out of the geometry open the spawn list, as the editor's Build places them.
 
 ```powershell
-xrf-cli level build --path ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --force
+xrf-cli level build ./rawdata/levels/zaton.level --dest ./gamedata/levels/zaton --objects ./rawdata/objects --objects ./sdk/rawdata/objects --game-materials ./gamedata/gamemtl.xr --force
 ```
 
 - The build options in `build.prj` are the scene's, as the Level Editor writes them. A quick look at a level comes from
@@ -219,9 +219,9 @@ the geometry's pass, since the lightmap pages decide how the surfaces join into 
 `geometry`. `geometry` alone writes the level with neutral light, the quick way to look at a change to its shapes.
 
 ```powershell
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry
-xrf-cli level compile --path ./gamedata/levels/mp_darkvalley --steps geometry,light,details --quality draft
+xrf-cli level compile ./gamedata/levels/mp_darkvalley
+xrf-cli level compile ./gamedata/levels/mp_darkvalley --steps geometry
+xrf-cli level compile ./gamedata/levels/mp_darkvalley --steps geometry,light,details --quality draft
 ```
 
 It prints each step's time, with what the geometry compiler made, what the light baker lit and where it traced, the
@@ -418,7 +418,7 @@ Exit code: `0`.
 Each surface in the report, one per shader table entry, lists its shader and textures, its area, the share of it lying
 on no collision face, and the materials beneath the rest by their share. Foliage, grass and the landscape past the
 playable edge have no collision, so they read as uncovered; a surface the level's author never assigned a material reads
-as `default`. The materials are named from the installation's `gamemtl.xr`; a level read by `--path` alone reports their
-ids. The command needs the level's `level.cform` beside `level` and `level.geom`.
+as `default`. The materials are named from the installation's `gamemtl.xr`; a level read from its directory alone
+reports their ids. The command needs the level's `level.cform` beside `level` and `level.geom`.
 
 {{#include reference/level.md:commands}}

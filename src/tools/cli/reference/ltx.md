@@ -10,12 +10,12 @@ Find where a section or field is written, declared or patched, across every conf
 not parse is reported as not searched, and the run fails, since it may hold the answer
 
 ```txt
-xrf-cli ltx find [OPTIONS] --path <path> <--section <section>|--field <field>|--value <value>>
+xrf-cli ltx find [OPTIONS] <--section <section>|--field <field>|--value <value>> <path>
 ```
 
 | Option                | Required | Default | Description                                                                                                                         |
 | --------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`   | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
+| `<path>`              | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
 | `--section <section>` |          |         | Section to find, without brackets or operation prefix. Matches the whole name in any case, as the engine lowercases section names   |
 | `--field <field>`     |          |         | Field to find, without operation prefix. Matches the whole name, case-sensitively                                                   |
 | `--value <value>`     |          |         | Text a written value must contain, case-sensitively                                                                                 |
@@ -47,13 +47,13 @@ xrf-cli ltx format [OPTIONS] <path>...
 Explain one resolved section: its fields, and where each value is written
 
 ```txt
-xrf-cli ltx inspect [OPTIONS] --path <path> <section>
+xrf-cli ltx inspect [OPTIONS] --section <section> <path>
 ```
 
 | Option                | Required | Default | Description                                                                                                                         |
 | --------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`   | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
-| `<section>`           | yes      |         | Name of the section to explain, without its brackets                                                                                |
+| `<path>`              | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
+| `--section <section>` | yes      |         | Name of the section to explain, without its brackets                                                                                |
 | `-e, --entry <entry>` |          |         | Entry point to resolve, when more than one declares the section                                                                     |
 | `--dltx`              |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                 |
 | `-s, --silent`        |          |         | Turn off logging                                                                                                                    |
@@ -66,33 +66,33 @@ xrf-cli ltx inspect [OPTIONS] --path <path> <section>
 List the LTX configs a project holds, and the role each one plays
 
 ```txt
-xrf-cli ltx list [OPTIONS] --path <path>
+xrf-cli ltx list [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                                                                                         |
-| ------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
-| `--dltx`            |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                 |
-| `-s, --silent`      |          |         | Turn off logging                                                                                                                    |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                                             |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                                               |
+| Option            | Required | Default | Description                                                                                                                         |
+| ----------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
+| `--dltx`          |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                 |
+| `-s, --silent`    |          |         | Turn off logging                                                                                                                    |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                                                                                             |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                                                                               |
 
 ## `xrf-cli ltx verify`
 
 Verify LTX and INI configs
 
 ```txt
-xrf-cli ltx verify [OPTIONS] --path <path>
+xrf-cli ltx verify [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                                                                                         |
-| ------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
-| `--dltx`            |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                 |
-| `-s, --silent`      |          |         | Turn off logging                                                                                                                    |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                                             |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                                               |
+| Option            | Required | Default | Description                                                                                                                         |
+| ----------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to a folder with ltx files, or to a game installation root holding fsgame.ltx (fsgame_&lt;game&gt;.ltx in an Enhanced Edition) |
+| `--dltx`          |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files                                 |
+| `-s, --silent`    |          |         | Turn off logging                                                                                                                    |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                                                                                             |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr                                                                |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                                                                               |
 
 <!-- ANCHOR_END: commands -->

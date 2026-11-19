@@ -42,7 +42,7 @@ declares. `--report` writes the verify commands' shared shape: the counts beside
 the config to open and lead with the section and field.
 
 ```powershell
-xrf-cli ltx verify --path ./gamedata/configs
+xrf-cli ltx verify ./gamedata/configs
 ```
 
 Only sections that declare `$scheme` are checked against a scheme. Other sections, including array-style sections, are
@@ -56,8 +56,8 @@ Use `ltx list` to list config files and their includers. Use `ltx inspect` to se
 each value was written:
 
 ```powershell
-xrf-cli ltx list --path ./gamedata/configs
-xrf-cli ltx inspect wpn_ak74 --path ./gamedata/configs
+xrf-cli ltx list ./gamedata/configs
+xrf-cli ltx inspect ./gamedata/configs --section wpn_ak74
 ```
 
 Example output — inspect a DLTX override:
@@ -86,8 +86,8 @@ Use `ltx find` to list every place a section or field is written, including conf
 files. Give it `--section`, `--field`, `--value`, or any combination:
 
 ```powershell
-xrf-cli ltx find --path ./gamedata/configs --section wpn_ak74
-xrf-cli ltx find --path ./gamedata/configs --field ammo_class --value ammo_c
+xrf-cli ltx find ./gamedata/configs --section wpn_ak74
+xrf-cli ltx find ./gamedata/configs --field ammo_class --value ammo_c
 ```
 
 Example output — find a section that patch files override:
@@ -98,7 +98,7 @@ items\w_ak74.ltx:1 [wpn_ak74]:wpn_base - declaration
 mod_system_aaa.ltx:3 ![wpn_ak74] - patch
 mod_system_xxx.ltx:3 ![wpn_ak74] - patch
 Found 3 statement(s) in 3 config(s): 1 declaration(s), 2 patch(es)
-Resolved values: ltx inspect --path ./gamedata-dltx/configs --dltx wpn_ak74
+Resolved values: ltx inspect ./gamedata-dltx/configs --dltx --section wpn_ak74
 ```
 
 Exit code: `0`, also when nothing matches. A config that does not parse is listed as not searched and the exit code is
@@ -123,7 +123,7 @@ Anomaly and its Monolith-based descendants let an addon patch a config without e
 error names the flag.
 
 ```powershell
-xrf-cli ltx verify --path "C:/games/anomaly" --dltx
+xrf-cli ltx verify "C:/games/anomaly" --dltx
 xrf-cli gamedata verify "C:/games/anomaly" --dltx
 ```
 
