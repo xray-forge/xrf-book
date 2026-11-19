@@ -30,17 +30,17 @@ xrf-cli ltx find [OPTIONS] --path <path> <--section <section>|--field <field>|--
 Format LTX and INI files
 
 ```txt
-xrf-cli ltx format [OPTIONS] --path <path>...
+xrf-cli ltx format [OPTIONS] <path>...
 ```
 
-| Option                 | Required | Default | Description                                                          |
-| ---------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>...` | yes      |         | Paths to ltx files or folders with ltx files                         |
-| `-c, --check`          |          |         | Run formatter in check mode                                          |
-| `-s, --silent`         |          |         | Turn off logging                                                     |
-| `-v, --verbose`        |          |         | Turn on verbose logging                                              |
-| `--json`               |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`      |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Ltx files, or folders holding them                                   |
+| `-c, --check`     |          |         | Run formatter in check mode                                          |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli ltx inspect`
 

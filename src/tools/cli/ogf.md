@@ -70,11 +70,11 @@ xrf-cli ogf patch-motion-refs ./meshes/wpn_ak74_hud.ogf `
 ```
 
 Use backslashes and omit `.omf` for an individual bank. A reference ending in `\*.omf` loads every OMF in that
-directory. Multiple values replace the list in the supplied order:
+directory. Repeated `--refs` replace the list in the supplied order:
 
 ```powershell
 xrf-cli ogf patch-motion-refs ./hands.ogf --dest ./hands.patched.ogf `
-  --refs "first\animation" "second\animation"
+  --refs "first\animation" --refs "second\animation"
 xrf-cli ogf patch-motion-refs ./hands.ogf --dest ./hands.wildcard.ogf `
   --refs "dynamics\weapons\wpn_hand\hud_animation\*.omf"
 ```

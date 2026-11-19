@@ -30,20 +30,20 @@ xrf-cli omf duplicate-motion [OPTIONS] --from <from> --to <to> <path>
 Keep only the selected motions of an OMF file
 
 ```txt
-xrf-cli omf filter-motions [OPTIONS] --dest <dest> <--keep <keep>...|--keep-prefix <keep-prefix>...> <path>
+xrf-cli omf filter-motions [OPTIONS] --dest <dest> <--keep <keep>|--keep-prefix <keep-prefix>> <path>
 ```
 
-| Option                           | Required | Default | Description                                                          |
-| -------------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `<path>`                         | yes      |         | Path to omf file                                                     |
-| `-d, --dest <dest>`              | yes      |         | Path to resulting omf file                                           |
-| `-k, --keep <keep>...`           |          |         | Exact motion names to keep                                           |
-| `--keep-prefix <keep-prefix>...` |          |         | Keep motions whose name starts with provided prefix                  |
-| `--dry-run`                      |          |         | Validate the change and report the result without writing any file   |
-| `-s, --silent`                   |          |         | Turn off logging                                                     |
-| `-v, --verbose`                  |          |         | Turn on verbose logging                                              |
-| `--json`                         |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`                |          |         | Write the run's JSON report to a file                                |
+| Option                           | Required | Default | Description                                                             |
+| -------------------------------- | -------- | ------- | ----------------------------------------------------------------------- |
+| `<path>`                         | yes      |         | Path to omf file                                                        |
+| `-d, --dest <dest>`              | yes      |         | Path to resulting omf file                                              |
+| `-k, --keep <keep>...`           |          |         | Exact motion name to keep. Repeat to keep several                       |
+| `--keep-prefix <keep-prefix>...` |          |         | Keep motions whose name starts with this prefix. Repeat to keep several |
+| `--dry-run`                      |          |         | Validate the change and report the result without writing any file      |
+| `-s, --silent`                   |          |         | Turn off logging                                                        |
+| `-v, --verbose`                  |          |         | Turn on verbose logging                                                 |
+| `--json`                         |          |         | Write the run's JSON report to stdout, moving human output to stderr    |
+| `--report <PATH>`                |          |         | Write the run's JSON report to a file                                   |
 
 ## `xrf-cli omf info`
 

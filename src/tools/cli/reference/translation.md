@@ -9,12 +9,12 @@
 Build translation files into gamedata
 
 ```txt
-xrf-cli translation build [OPTIONS] --path <path>... --dest <dest>
+xrf-cli translation build [OPTIONS] --dest <dest> <path>...
 ```
 
 | Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------- | -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>...`      | yes      |                           | Root holding translation sources, or one source file. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                       |
+| `<path>`                    | yes      |                           | Root holding translation sources, or one source file. Give several to layer them, highest priority first                                                                                                                                                                                                                                                  |
 | `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
 | `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as translations                                                                                                                                                                                                                                                                                                        |
 | `-d, --dest <dest>`         | yes      |                           | Directory the built string tables are written to                                                                                                                                                                                                                                                                                                          |
@@ -31,12 +31,12 @@ xrf-cli translation build [OPTIONS] --path <path>... --dest <dest>
 Normalize JSON translation sources
 
 ```txt
-xrf-cli translation format [OPTIONS] --path <path>...
+xrf-cli translation format [OPTIONS] <path>...
 ```
 
 | Option                          | Required | Default | Description                                                                                                                  |
 | ------------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>...`          | yes      |         | Paths to json translation sources or folders holding them                                                                    |
+| `<path>`                        | yes      |         | Json translation sources, or folders holding them                                                                            |
 | `-c, --check`                   |          |         | Run formatter in check mode                                                                                                  |
 | `--line-endings <line-endings>` |          |         | Write these line endings instead of preserving each file's own, and judge them in check mode. Possible values: `lf`, `crlf`. |
 | `-s, --silent`                  |          |         | Turn off logging                                                                                                             |
@@ -65,12 +65,12 @@ xrf-cli translation initialize [OPTIONS] <path>
 Parse XML translations into JSON sources
 
 ```txt
-xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --dest <dest>
+xrf-cli translation parse [OPTIONS] --language <language> --dest <dest> <path>...
 ```
 
 | Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------- | -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>...`      | yes      |                           | Root holding raw xml translations. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                                          |
+| `<path>`                    | yes      |                           | Root holding raw xml translations. Give several to layer them, highest priority first                                                                                                                                                                                                                                                                     |
 | `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
 | `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as configs\text\eng                                                                                                                                                                                                                                                                                                    |
 | `-l, --language <language>` | yes      |                           | Language every entry read by this run is filed under. Raw xml carries no language, so it is declared rather than guessed                                                                                                                                                                                                                                  |
@@ -90,12 +90,12 @@ xrf-cli translation parse [OPTIONS] --path <path>... --language <language> --des
 Verify that translation sources build to tables the game loads as written, and are translated into every language
 
 ```txt
-xrf-cli translation verify [OPTIONS] --path <path>...
+xrf-cli translation verify [OPTIONS] <path>...
 ```
 
 | Option                      | Required | Default                   | Description                                                                                                                                                                                                                                                                                                                                               |
 | --------------------------- | -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>...`      | yes      |                           | Root holding translation sources, or one source file. Repeat to layer roots, highest priority first                                                                                                                                                                                                                                                       |
+| `<path>`                    | yes      |                           | Root holding translation sources, or one source file. Give several to layer them, highest priority first                                                                                                                                                                                                                                                  |
 | `--source <source>`         |          | `containing-installation` | How to read the path: auto treats it as an installation only when it declares one, directory ignores any declaration, volumes mounts every archive volume beneath it, installation requires one, containing-installation searches parent directories for one. Possible values: `auto`, `directory`, `volumes`, `installation`, `containing-installation`. |
 | `--prefix <prefix>`         |          |                           | Limit to one logical subtree, such as translations                                                                                                                                                                                                                                                                                                        |
 | `-l, --language <language>` |          | `all`                     | Language to verify, or all of them                                                                                                                                                                                                                                                                                                                        |

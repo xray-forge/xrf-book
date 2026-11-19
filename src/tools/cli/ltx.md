@@ -9,8 +9,8 @@ projects or when you need the lower-level tool behind the engine repository's `f
 formatting, including when the input is a single file. From a project containing `gamedata/configs`:
 
 ```powershell
-xrf-cli ltx format --path ./gamedata/configs
-xrf-cli ltx format --path ./gamedata/configs --check
+xrf-cli ltx format ./gamedata/configs
+xrf-cli ltx format ./gamedata/configs --check
 ```
 
 Example output — check an unformatted LTX file:

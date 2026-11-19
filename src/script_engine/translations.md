@@ -59,8 +59,8 @@ before `ammo-11.43x23-fmj`.
 A source added or edited by hand is normalized with [`xrf-cli translation format`](../tools/cli/translation.md#format):
 
 ```powershell
-xrf-cli translation format --path src/engine/translations
-xrf-cli translation format --path src/engine/translations --check
+xrf-cli translation format src/engine/translations
+xrf-cli translation format src/engine/translations --check
 ```
 
 `--check` writes nothing and exits non-zero when a source is not normalized, which is the form a build step or a
@@ -76,8 +76,8 @@ JSON is the only source format. Raw X-Ray XML — a downloaded mod, a gamedata t
 source through [`xrf-cli translation parse`](../tools/cli/translation.md#parse), one language per run:
 
 ```powershell
-xrf-cli translation parse --path <mod or installation> --language eng --dest src/engine/translations
-xrf-cli translation parse --path <mod or installation> --language ukr --dest src/engine/translations
+xrf-cli translation parse <mod or installation> --language eng --dest src/engine/translations
+xrf-cli translation parse <mod or installation> --language ukr --dest src/engine/translations
 ```
 
 Running it once per language merges them into one file per table, gives every record an explicit `null` for the
@@ -137,7 +137,7 @@ script callbacks rather than plain string ids.
 - Keep ids stable when only the wording changes.
 - Fill every supported locale key used by the file.
 - Use arrays only for intentional multiline text.
-- Run `xrf-cli translation format --path src/engine/translations` after adding records by hand.
+- Run `xrf-cli translation format src/engine/translations` after adding records by hand.
 - Run `npm run cli -- verify translations` after translation edits.
 - Run `npm run cli build -- --include translations` before packaging.
 - Do not patch generated files under `target/gamedata/configs/text`.

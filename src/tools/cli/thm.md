@@ -79,7 +79,7 @@ longer lines up with what the surface shows: cracks and rivets light where the p
 texture pack replaces a diffuse and not its `_bump`, or the reverse. Compare every set an installation declares:
 
 ```powershell
-xrf-cli thm bump-alignment --path ./stalker-anomaly --report ./alignment.json
+xrf-cli thm bump-alignment ./stalker-anomaly --report ./alignment.json
 ```
 
 Example output — stock Anomaly:
@@ -104,7 +104,7 @@ often follow their diffuse only loosely.
 Layer a pack over the game it modifies to check the result as the game sees it, highest priority first:
 
 ```powershell
-xrf-cli thm bump-alignment --path ./texture-pack ./stalker-anomaly --source auto --report ./alignment.json
+xrf-cli thm bump-alignment ./texture-pack ./stalker-anomaly --source auto --report ./alignment.json
 ```
 
 `--prefix textures\wpn` limits the check to the descriptors of one folder; their bumps are still found wherever they

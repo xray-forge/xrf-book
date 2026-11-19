@@ -23,8 +23,8 @@ missing translation; it does not supply fallback text.
 Normalize source layout, then use check mode in automation:
 
 ```powershell
-xrf-cli translation format --path ./translations
-xrf-cli translation format --path ./translations --check
+xrf-cli translation format ./translations
+xrf-cli translation format ./translations --check
 ```
 
 Example output — check unformatted JSON sources:
@@ -48,7 +48,7 @@ The formatter sorts ids and language keys naturally, uses two-space indentation,
 order places `st_thanks2` before `st_thanks10`, and `ammo-5.45x39-ap` before `ammo-11.43x23-fmj`. Check mode writes
 nothing and exits 3 when selected files need formatting.
 
-Repeat `--path` for multiple inputs. Directories select JSON files recursively; an explicitly named file is accepted
+Give several paths to format them all. Directories select JSON files recursively; an explicitly named file is accepted
 regardless of its extension.
 
 By default, each file uses its dominant LF or CRLF line ending; a tie or a file without line breaks selects LF. Mixed
@@ -74,7 +74,7 @@ formatted earlier remain changed. Each replacement is staged as a whole file.
 Compile JSON sources into one XML string table per source and selected language, using that language's code page:
 
 ```powershell
-xrf-cli translation build --path ./translations --dest ./gamedata/configs/text --language ukr
+xrf-cli translation build ./translations --dest ./gamedata/configs/text --language ukr
 ```
 
 Example output — build Ukrainian string tables:
@@ -115,7 +115,7 @@ be outside every source root.
 Check completeness for a language:
 
 ```powershell
-xrf-cli translation verify --path ./translations --language ukr --strict `
+xrf-cli translation verify ./translations --language ukr --strict `
   --report ./translation-report.json
 ```
 
@@ -165,8 +165,8 @@ checked.
 Import XML tables once per language into a shared JSON output directory:
 
 ```powershell
-xrf-cli translation parse --path ./stalker-anomaly --language eng --dest ./translations
-xrf-cli translation parse --path ./stalker-anomaly --language ukr --dest ./translations
+xrf-cli translation parse ./stalker-anomaly --language eng --dest ./translations
+xrf-cli translation parse ./stalker-anomaly --language ukr --dest ./translations
 ```
 
 XML tables do not declare their language. `--language` labels the imported text, so select the language that the input
@@ -184,9 +184,9 @@ Reimporting unchanged tables into an unchanged output is idempotent.
 
 ### Finding the tables
 
-`--path` names the input root. The importer looks under `configs/text` when present, then selects the directory named
-for the requested language. Use `--prefix` for a different layout. A selected scope that still contains another
-language's directory is refused to prevent labeling its strings with the wrong language.
+The input names the root. The importer looks under `configs/text` when present, then selects the directory named for the
+requested language. Use `--prefix` for a different layout. A selected scope that still contains another language's
+directory is refused to prevent labeling its strings with the wrong language.
 
 ### Before writing anything
 

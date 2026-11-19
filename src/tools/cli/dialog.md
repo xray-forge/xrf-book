@@ -10,7 +10,7 @@ dialog phrase by phrase, and `dialog find` shows where dialogs use an info porti
 From a project containing an assembled `gamedata` directory:
 
 ```powershell
-xrf-cli dialog info --path ./gamedata --source directory --strict --report ./dialog-report.json
+xrf-cli dialog info ./gamedata --source directory --strict --report ./dialog-report.json
 ```
 
 Example output excerpt — inspect dialogs:
@@ -29,7 +29,7 @@ Exit code: `0`. The summary ends with "Read 2 files, status: failed". Exit 0 rec
 --strict to fail on its finding.
 
 `--source directory` selects the loose tree explicitly. The default, `containing-installation`, can discover the game
-installation around the supplied path. Repeat `--path` for layered roots, with the highest-priority root first;
+installation around the supplied path. Give several roots to layer them, with the highest-priority root first;
 `--prefix` narrows the virtual path scope.
 
 The summary covers files, dialogs, phrases, and links, including empty dialogs, final phrases, missing text, and phrases
@@ -47,7 +47,7 @@ intended flow.
 ## List the dialogs an NPC offers
 
 ```powershell
-xrf-cli dialog list --path ./gamedata --source directory --profile zat_b33_stalker_snag --language eng
+xrf-cli dialog list ./gamedata --source directory --profile zat_b33_stalker_snag --language eng
 ```
 
 Example output — Snag, in the xrf build:
@@ -73,7 +73,7 @@ profile, or one that resolves to no character, exits 1 and names any character f
 ## Explain one dialog
 
 ```powershell
-xrf-cli dialog inspect zat_b33_stalker_snag_about_cache_dialog --path ./gamedata --source directory --language eng
+xrf-cli dialog inspect ./gamedata --dialog zat_b33_stalker_snag_about_cache_dialog --source directory --language eng
 ```
 
 Each phrase prints as `[id] line -> next ids | effects`, the effects being its info portions, preconditions and actions.
@@ -83,7 +83,7 @@ logical path. The report carries every element of every phrase in document order
 ## Find where an info portion or function is used
 
 ```powershell
-xrf-cli dialog find --path ./gamedata --source directory --info zat_b3_tech_drink_first_time --functor give_toolkit_1
+xrf-cli dialog find ./gamedata --source directory --info zat_b3_tech_drink_first_time --functor give_toolkit_1
 ```
 
 Example output — in the xrf build:

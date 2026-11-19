@@ -42,10 +42,10 @@ unchanged input, but durations, cache statistics, and execution metadata can dif
 
 By default the run ignores `.git`, `.idea`, `particles_unpacked`, `textures_unpacked`, `.gitignore`, `.gitattributes`,
 `README.md`, and `LICENSE`. Supplying `--ignore` replaces this list; include every exclusion the run still needs. Repeat
-the flag or list several entries after one, separated by spaces:
+the flag for each entry:
 
 ```powershell
-xrf-cli gamedata verify ./target/gamedata --ignore .git textures_unpacked docs
+xrf-cli gamedata verify ./target/gamedata --ignore .git --ignore textures_unpacked --ignore docs
 ```
 
 ## Patched installations
@@ -77,7 +77,7 @@ are read.
 Use `gamedata list` to locate a winning file and inspect files hidden by higher-priority mounts:
 
 ```powershell
-xrf-cli gamedata list --path "C:/Games/Anomaly" --prefix textures --shadowed `
+xrf-cli gamedata list "C:/Games/Anomaly" --prefix textures --shadowed `
   --report ./asset-list.json
 ```
 
@@ -96,7 +96,7 @@ Listing ./gamedata
 Exit code: `0`.
 
 The default source mode searches for a containing installation. Use `--source directory` to inspect only a loose tree,
-or `--loose` to omit archived entries. Repeat `--path` to layer roots, highest priority first.
+or `--loose` to omit archived entries. Give several roots to layer them, highest priority first.
 
 Each mount line names the mount's kind, `directory` or `archive`, then its root and label. The report's `mounts` lists
 the same mounts in search order as `{ kind, label, root }` objects, where `root` is the directory, or the directory

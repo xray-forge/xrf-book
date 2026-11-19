@@ -44,14 +44,14 @@ xrf-cli ogf info [OPTIONS] <path>
 Rewrite the motion refs of an OGF visual
 
 ```txt
-xrf-cli ogf patch-motion-refs [OPTIONS] --refs <refs>... <path>
+xrf-cli ogf patch-motion-refs [OPTIONS] --refs <refs> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
 | `<path>`            | yes      |         | Path to ogf file                                                            |
 | `-d, --dest <dest>` |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
-| `--refs <refs>...`  | yes      |         | Motion refs to store in the ogf file                                        |
+| `--refs <refs>...`  | yes      |         | Motion ref to store in the ogf file. Repeat to store several, in order      |
 | `--dry-run`         |          |         | Validate the rewrite and report the result without writing any file         |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
 | `-v, --verbose`     |          |         | Turn on verbose logging                                                     |

@@ -83,7 +83,7 @@ Extract the motions needed from a shared bank:
 xrf-cli omf filter-motions ./shared_bank.omf --dest ./wpn_ak74_hud_animation.omf `
   --keep-prefix ak_74_
 xrf-cli omf filter-motions ./bank.omf --dest ./trimmed.omf --keep idle `
-  --keep-prefix ak_74_ pist_
+  --keep-prefix ak_74_ --keep-prefix pist_
 ```
 
 At least one exact `--keep` name or literal `--keep-prefix` is required; a command with neither is rejected as a usage
