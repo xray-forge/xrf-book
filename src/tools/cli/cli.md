@@ -9,6 +9,11 @@ Commands have a group and an operation. To inspect a command's accepted argument
 xrf-cli archive pack --help
 ```
 
+A command takes what it reads as its positional argument and everything else as named options:
+`xrf-cli archive info ./db`, `xrf-cli ltx inspect ./gamedata/configs --section wpn_ak74`. A command that reads several
+paths takes them in a row; where they layer, the first has the highest priority. An option holding several values is
+repeated once per value, such as `--ignore .git --ignore docs`.
+
 Examples in this chapter assume `xrf-cli` is on `PATH`. Relative paths resolve from the current directory; each workflow
 identifies its input layout. Output blocks show demo runs; paths, counts, and timings depend on the input and machine.
 
