@@ -9,12 +9,12 @@
 Extract one archive file or directory without unpacking the complete set
 
 ```txt
-xrf-cli archive extract [OPTIONS] --path <path> --dest <dest>
+xrf-cli archive extract [OPTIONS] --dest <dest> <path>
 ```
 
 | Option                    | Required | Default | Description                                                                                                                                              |
 | ------------------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`       | yes      |         | Path to an archive volume or a directory containing volumes                                                                                              |
+| `<path>`                  | yes      |         | Path to an archive volume or a directory containing volumes                                                                                              |
 | `--file <file>`           |          |         | Exact logical path of one archive file; --dest is the output file                                                                                        |
 | `--directory <directory>` |          |         | Logical directory to extract; --dest receives that directory's contents                                                                                  |
 | `-d, --dest <dest>`       | yes      |         | Output file for --file, or output directory for --directory                                                                                              |
@@ -31,12 +31,12 @@ xrf-cli archive extract [OPTIONS] --path <path> --dest <dest>
 Find archive entries whose logical path contains text
 
 ```txt
-xrf-cli archive find [OPTIONS] --path <path> --query <query>
+xrf-cli archive find [OPTIONS] --query <query> <path>
 ```
 
 | Option                | Required | Default | Description                                                          |
 | --------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>`   | yes      |         | Path to an archive volume or a directory containing volumes          |
+| `<path>`              | yes      |         | Path to an archive volume or a directory containing volumes          |
 | `-q, --query <query>` | yes      |         | Case-insensitive text to find in an entry's logical path             |
 | `--files`             |          |         | Search files only, excluding directory records                       |
 | `--directories`       |          |         | Search directory records only, excluding files                       |
@@ -50,46 +50,46 @@ xrf-cli archive find [OPTIONS] --path <path> --query <query>
 Describe an X-Ray archive volume or volume set
 
 ```txt
-xrf-cli archive info [OPTIONS] --path <path>
+xrf-cli archive info [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to an archive volume or a directory containing volumes          |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to an archive volume or a directory containing volumes          |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli archive list`
 
 List the merged entries in an X-Ray archive volume or volume set
 
 ```txt
-xrf-cli archive list [OPTIONS] --path <path>
+xrf-cli archive list [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to an archive volume or a directory containing volumes          |
-| `--files`           |          |         | List files only, excluding directory records                         |
-| `--directories`     |          |         | List directory records only, excluding files                         |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to an archive volume or a directory containing volumes          |
+| `--files`         |          |         | List files only, excluding directory records                         |
+| `--directories`   |          |         | List directory records only, excluding files                         |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli archive pack`
 
 Pack a directory into *.db archive volumes
 
 ```txt
-xrf-cli archive pack [OPTIONS] --path <path>
+xrf-cli archive pack [OPTIONS] <path>
 ```
 
 | Option                                                       | Required | Default    | Description                                                                                                    |
 | ------------------------------------------------------------ | -------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`                                          | yes      |            | Directory to pack, normally a gamedata root                                                                    |
+| `<path>`                                                     | yes      |            | Directory to pack, normally a gamedata root                                                                    |
 | `--config <config>`                                          |          |            | Path to a packing configuration describing what to include, as *.ltx or *.json                                 |
 | `--include-file <include-file>...`                           |          |            | File to pack, named relative to the source, repeatable                                                         |
 | `--include-directory <include-directory>...`                 |          |            | Directory to pack with everything below it, relative to the source, repeatable                                 |
@@ -116,12 +116,12 @@ xrf-cli archive pack [OPTIONS] --path <path>
 Pack what a gamedata tree changes about an installation into overriding *.db archive volumes
 
 ```txt
-xrf-cli archive pack-patch [OPTIONS] --path <path>
+xrf-cli archive pack-patch [OPTIONS] <path>
 ```
 
 | Option                                       | Required | Default  | Description                                                                                                    |
 | -------------------------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`                          | yes      |          | What to patch: an installation, a directory of volumes, or a gamedata tree                                     |
+| `<path>`                                     | yes      |          | What to patch: an installation, a directory of volumes, or a gamedata tree                                     |
 | `--target <target>`                          |          |          | Tree the patch delivers; omit to use the loose gamedata of the input itself                                    |
 | `--dry-run`                                  |          |          | Report the difference and write no volumes                                                                     |
 | `--config <config>`                          |          |          | Path to a patching configuration describing the comparison scope and header, as *.ltx or *.json                |
@@ -147,12 +147,12 @@ xrf-cli archive pack-patch [OPTIONS] --path <path>
 Unpack an archive into separate files
 
 ```txt
-xrf-cli archive unpack [OPTIONS] --path <path>
+xrf-cli archive unpack [OPTIONS] <path>
 ```
 
 | Option              | Required | Default    | Description                                                                                                                |
 | ------------------- | -------- | ---------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |            | Path to the *.db archive                                                                                                   |
+| `<path>`            | yes      |            | Path to an archive volume or a directory containing volumes                                                                |
 | `-d, --dest <dest>` |          | `unpacked` | Folder to unpack into                                                                                                      |
 | `--dry-run`         |          |            | Report what would be unpacked without writing anything                                                                     |
 | `-f, --force`       |          |            | Overwrite files already in the folder, names compared without case; without it, one there is refused before any is written |
@@ -168,12 +168,12 @@ xrf-cli archive unpack [OPTIONS] --path <path>
 Read every archive payload and verify decompression and CRC checks
 
 ```txt
-xrf-cli archive verify [OPTIONS] --path <path>
+xrf-cli archive verify [OPTIONS] <path>
 ```
 
 | Option              | Required | Default | Description                                                                      |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to an archive volume or a directory containing volumes                      |
+| `<path>`            | yes      |         | Path to an archive volume or a directory containing volumes                      |
 | `-j, --jobs <JOBS>` |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%' |
 | `-s, --silent`      |          |         | Turn off logging                                                                 |
 | `-v, --verbose`     |          |         | Turn on verbose logging                                                          |
