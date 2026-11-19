@@ -10,12 +10,12 @@ Compile an SDK .object into the OGF the engine loads (a skeleton with bones, els
 model where the destination is one
 
 ```txt
-xrf-cli object compile [OPTIONS] --path <path> --dest <dest>
+xrf-cli object compile [OPTIONS] --dest <dest> <path>
 ```
 
 | Option                  | Required | Default | Description                                                                                                                                                                                                                                                                                                     |
 | ----------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`     | yes      |         | Path to the .object to compile                                                                                                                                                                                                                                                                                  |
+| `<path>`                | yes      |         | Path to the .object to compile                                                                                                                                                                                                                                                                                  |
 | `-d, --dest <dest>`     | yes      |         | Path of the OGF to write, or of a .dm, whose flags and scale range come from the sidecar of an object decompiled from one and are the editor's defaults otherwise                                                                                                                                               |
 | `-f, --force`           |          |         | Overwrite an existing OGF                                                                                                                                                                                                                                                                                       |
 | `--tangents <tangents>` |          | `auto`  | Tangent method of a skeleton: auto follows the provenance sidecar beside a decompiled object (MikkTSpace for a model exported from Blender) and the Actor Editor's otherwise; actor-editor or mikktspace forces one. A static visual stores no tangents. Possible values: `auto`, `actor-editor`, `mikktspace`. |
@@ -30,12 +30,12 @@ Decompile a skeleton or static OGF, or a .dm detail model, into an SDK .object, 
 sidecar beside it
 
 ```txt
-xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
+xrf-cli object decompile [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                          |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the OGF or .dm to decompile                                  |
+| `<path>`            | yes      |         | Path to the OGF or .dm to decompile                                  |
 | `-d, --dest <dest>` | yes      |         | Path of the .object to write; its sidecar is written beside it       |
 | `-f, --force`       |          |         | Overwrite an existing .object and sidecar                            |
 | `-s, --silent`      |          |         | Turn off logging                                                     |
@@ -48,16 +48,16 @@ xrf-cli object decompile [OPTIONS] --path <path> --dest <dest>
 Compile an SDK .object in memory and compare it with the OGF it should stand in for
 
 ```txt
-xrf-cli object verify [OPTIONS] --path <path> --ogf <ogf>
+xrf-cli object verify [OPTIONS] --ogf <ogf> <path>
 ```
 
-| Option              | Required | Default | Description                                                                                 |
-| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the .object to compile                                                              |
-| `--ogf <ogf>`       | yes      |         | Path to the OGF the compile should stand in for, such as the one the object was exported to |
-| `-s, --silent`      |          |         | Turn off logging                                                                            |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                     |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                        |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                       |
+| Option            | Required | Default | Description                                                                                 |
+| ----------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to the .object to compile                                                              |
+| `--ogf <ogf>`     | yes      |         | Path to the OGF the compile should stand in for, such as the one the object was exported to |
+| `-s, --silent`    |          |         | Turn off logging                                                                            |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                                                     |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr                        |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                                       |
 
 <!-- ANCHOR_END: commands -->

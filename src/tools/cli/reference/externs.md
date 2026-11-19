@@ -9,12 +9,12 @@
 Export TypeScript extern declarations as JSON, XML, or HTML
 
 ```txt
-xrf-cli externs export [OPTIONS] --path <path> --dest <dest>
+xrf-cli externs export [OPTIONS] --dest <dest> <path>
 ```
 
 | Option                          | Required | Default | Description                                                                                                   |
 | ------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`             | yes      |         | Root directory containing TypeScript declaration sources                                                      |
+| `<path>`                        | yes      |         | Root directory containing TypeScript declaration sources                                                      |
 | `-d, --dest <dest>`             | yes      |         | Artifact to create or replace, or with --check to verify                                                      |
 | `-c, --check`                   |          |         | Verify the artifact against the declarations without writing                                                  |
 | `--format <format>`             |          |         | Artifact format, inferred from the artifact's extension when omitted. Possible values: `json`, `xml`, `html`. |

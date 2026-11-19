@@ -9,12 +9,12 @@
 Rewrite OGF visuals into well-formed bytes, changing nothing the engine reads
 
 ```txt
-xrf-cli ogf fix [OPTIONS] --path <path>
+xrf-cli ogf fix [OPTIONS] <path>
 ```
 
 | Option              | Required | Default | Description                                                                                          |
 | ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to an ogf file or a directory to sweep                                                          |
+| `<path>`            | yes      |         | Path to an ogf file or a directory to sweep                                                          |
 | `-d, --dest <dest>` |          |         | Path to the resulting ogf file, defaults to in place rewrite of the source file; not for a directory |
 | `--dry-run`         |          |         | Report what would change and how many bytes would go without writing any file                        |
 | `-j, --jobs <JOBS>` |          | `auto`  | How much of the machine to use: 'auto', a worker count, or a share such as '50%'                     |
@@ -28,28 +28,28 @@ xrf-cli ogf fix [OPTIONS] --path <path>
 Print what an OGF visual holds
 
 ```txt
-xrf-cli ogf info [OPTIONS] --path <path>
+xrf-cli ogf info [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the OGF file                                                 |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to the OGF file                                                 |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli ogf patch-motion-refs`
 
 Rewrite the motion refs of an OGF visual
 
 ```txt
-xrf-cli ogf patch-motion-refs [OPTIONS] --path <path> --refs <refs>...
+xrf-cli ogf patch-motion-refs [OPTIONS] --refs <refs>... <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to ogf file                                                            |
+| `<path>`            | yes      |         | Path to ogf file                                                            |
 | `-d, --dest <dest>` |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
 | `--refs <refs>...`  | yes      |         | Motion refs to store in the ogf file                                        |
 | `--dry-run`         |          |         | Validate the rewrite and report the result without writing any file         |
@@ -63,12 +63,12 @@ xrf-cli ogf patch-motion-refs [OPTIONS] --path <path> --refs <refs>...
 Rename a texture reference of an OGF visual
 
 ```txt
-xrf-cli ogf patch-texture-refs [OPTIONS] --path <path> --from <from> --to <to>
+xrf-cli ogf patch-texture-refs [OPTIONS] --from <from> --to <to> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to ogf file                                                            |
+| `<path>`            | yes      |         | Path to ogf file                                                            |
 | `-d, --dest <dest>` |          |         | Path to resulting ogf file, defaults to in place rewrite of the source file |
 | `--from <from>`     | yes      |         | Texture reference to rename, matched exactly                                |
 | `--to <to>`         | yes      |         | Texture reference to write in its place                                     |
@@ -83,16 +83,16 @@ xrf-cli ogf patch-texture-refs [OPTIONS] --path <path> --from <from> --to <to>
 Verify that OGF visuals can be packed for rendering
 
 ```txt
-xrf-cli ogf verify [OPTIONS] --path <path>
+xrf-cli ogf verify [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                                   |
-| ------------------- | -------- | ------- | ----------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to an ogf file or a directory to sweep                                   |
-| `--root <root>...`  |          |         | Additional root searched for textures after the visual's own tree, repeatable |
-| `-s, --silent`      |          |         | Turn off logging                                                              |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                       |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr          |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                         |
+| Option             | Required | Default | Description                                                                   |
+| ------------------ | -------- | ------- | ----------------------------------------------------------------------------- |
+| `<path>`           | yes      |         | Path to an ogf file or a directory to sweep                                   |
+| `--root <root>...` |          |         | Additional root searched for textures after the visual's own tree, repeatable |
+| `-s, --silent`     |          |         | Turn off logging                                                              |
+| `-v, --verbose`    |          |         | Turn on verbose logging                                                       |
+| `--json`           |          |         | Write the run's JSON report to stdout, moving human output to stderr          |
+| `--report <PATH>`  |          |         | Write the run's JSON report to a file                                         |
 
 <!-- ANCHOR_END: commands -->

@@ -10,9 +10,8 @@ its diffuse, which a texture pack installed in part breaks without any file goin
 Run from a gamedata root containing the descriptor and its replacement bump texture:
 
 ```powershell
-xrf-cli thm patch-bump --path ./textures/wpn/wpn_pm/wpn_pm.thm --to "wpn\wpn_pm\wpn_pm_bump" `
-  --dry-run
-xrf-cli thm patch-bump --path ./textures/wpn/wpn_pm/wpn_pm.thm --to "wpn\wpn_pm\wpn_pm_bump"
+xrf-cli thm patch-bump ./textures/wpn/wpn_pm/wpn_pm.thm --to "wpn\wpn_pm\wpn_pm_bump" --dry-run
+xrf-cli thm patch-bump ./textures/wpn/wpn_pm/wpn_pm.thm --to "wpn\wpn_pm\wpn_pm_bump"
 ```
 
 Example report result — preview a bump-name change:
@@ -40,7 +39,7 @@ Use `--dest` to write a separate descriptor. `--to` changes the name while prese
 If the surface should have no bump map, clear the declaration:
 
 ```powershell
-xrf-cli thm patch-bump --path ./textures/tile/tile_walls_red_01.thm --off
+xrf-cli thm patch-bump ./textures/tile/tile_walls_red_01.thm --off
 ```
 
 `--off` sets the mode to `none` and clears the name, matching the form written by `STextureParams`. Give exactly one of

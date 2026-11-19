@@ -10,7 +10,7 @@ separate output paths when keeping the originals.
 ## DDS inspection
 
 ```powershell
-xrf-cli dds info --path ./textures/ui/ui_icon_equipment.dds
+xrf-cli dds info ./textures/ui/ui_icon_equipment.dds
 ```
 
 Example output — inspect a DDS sheet:
@@ -38,7 +38,7 @@ output format or diagnosing a texture that the renderer cannot load.
 Crop a single icon when its source sheet has no compatible inventory config:
 
 ```powershell
-xrf-cli dds crop --path ./textures/ui/ui_icon_equipment.dds --dest ./wpn_ak74.png `
+xrf-cli dds crop ./textures/ui/ui_icon_equipment.dds --dest ./wpn_ak74.png `
   --x 1000 --y 0 --width 250 --height 100
 ```
 
@@ -61,7 +61,7 @@ BC3 DDS. Prefer PNG for subsequent packing; `sprite pack-equipment` selects `<se
 Supply both fit dimensions to resize the crop into a fixed output rectangle:
 
 ```powershell
-xrf-cli dds crop --path ./ui_actor_weapons.dds --dest ./upgrade_ak74.png --x 0 --y 400 `
+xrf-cli dds crop ./ui_actor_weapons.dds --dest ./upgrade_ak74.png --x 0 --y 400 `
   --width 300 --height 100 --fit-width 295 --fit-height 110
 ```
 
@@ -76,8 +76,8 @@ A crop whose `--dest` already exists, the name compared without case, is refused
 Re-encode an existing DDS texture in an explicit format:
 
 ```powershell
-xrf-cli dds convert --path ./source.dds --dest ./texture.dds --format bc3
-xrf-cli dds info --path ./texture.dds
+xrf-cli dds convert ./source.dds --dest ./texture.dds --format bc3
+xrf-cli dds info ./texture.dds
 ```
 
 Example output — convert a DDS texture:
@@ -104,7 +104,7 @@ numerical error alone does not establish acceptable appearance.
 From a working directory containing a height image, generate the two DDS files used by an X-Ray bumped surface:
 
 ```powershell
-xrf-cli dds make-bump --path ./height.png --dest ./textures/tile/wall --gloss-constant 0.5
+xrf-cli dds make-bump ./height.png --dest ./textures/tile/wall --gloss-constant 0.5
 ```
 
 Example output — generate a bump pair:

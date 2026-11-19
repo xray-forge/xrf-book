@@ -11,7 +11,7 @@ source by default; `--dest` selects a separate output and `--dry-run` previews t
 Inspect a model before changing its references:
 
 ```powershell
-xrf-cli ogf info --path ./meshes/example.ogf
+xrf-cli ogf info ./meshes/example.ogf
 ```
 
 Example output excerpt — inspect model texture references:
@@ -44,7 +44,7 @@ neighboring models from the same archive.
 Check a model or directory before importing it:
 
 ```powershell
-xrf-cli ogf verify --path ./meshes --root ./gamedata --report ./ogf-report.json
+xrf-cli ogf verify ./meshes --root ./gamedata --report ./ogf-report.json
 ```
 
 The command checks model data and resolves texture dependencies. Repeat `--root` for additional lookup roots, searched
@@ -63,9 +63,9 @@ inspect the model in the target renderer to verify its appearance.
 An animated model stores references to OMF animation banks. Replace the list when moving those banks:
 
 ```powershell
-xrf-cli ogf patch-motion-refs --path ./meshes/wpn_ak74_hud.ogf `
+xrf-cli ogf patch-motion-refs ./meshes/wpn_ak74_hud.ogf `
   --refs "dynamics\weapons\wpn_ak74\wpn_ak74_hud_animation" --dry-run
-xrf-cli ogf patch-motion-refs --path ./meshes/wpn_ak74_hud.ogf `
+xrf-cli ogf patch-motion-refs ./meshes/wpn_ak74_hud.ogf `
   --refs "dynamics\weapons\wpn_ak74\wpn_ak74_hud_animation"
 ```
 
@@ -73,9 +73,9 @@ Use backslashes and omit `.omf` for an individual bank. A reference ending in `\
 directory. Multiple values replace the list in the supplied order:
 
 ```powershell
-xrf-cli ogf patch-motion-refs --path ./hands.ogf --dest ./hands.patched.ogf `
+xrf-cli ogf patch-motion-refs ./hands.ogf --dest ./hands.patched.ogf `
   --refs "first\animation" "second\animation"
-xrf-cli ogf patch-motion-refs --path ./hands.ogf --dest ./hands.wildcard.ogf `
+xrf-cli ogf patch-motion-refs ./hands.ogf --dest ./hands.wildcard.ogf `
   --refs "dynamics\weapons\wpn_hand\hud_animation\*.omf"
 ```
 
@@ -90,7 +90,7 @@ Confirm the stored list with `ogf info`, then verify that the referenced banks e
 Rename one exact texture reference, including occurrences in nested child visuals:
 
 ```powershell
-xrf-cli ogf patch-texture-refs --path ./meshes/wpn_ak74u.ogf --from "wpn\wpn_aksu\wpn_aksu" `
+xrf-cli ogf patch-texture-refs ./meshes/wpn_ak74u.ogf --from "wpn\wpn_aksu\wpn_aksu" `
   --to "wpn\wpn_ak74u\wpn_ak74u"
 ```
 
@@ -121,9 +121,9 @@ engine does not consume, such as data beyond the counted motion-reference list.
 Preview a directory sweep, then apply it or write a separate output for one model:
 
 ```powershell
-xrf-cli ogf fix --path ./meshes --dry-run
-xrf-cli ogf fix --path ./meshes/actors/stalker_zombied/stalker_zombied_bandit2a_face1.ogf
-xrf-cli ogf fix --path ./meshes/wpn_m1891.ogf --dest ./fixed/wpn_m1891.ogf
+xrf-cli ogf fix ./meshes --dry-run
+xrf-cli ogf fix ./meshes/actors/stalker_zombied/stalker_zombied_bandit2a_face1.ogf
+xrf-cli ogf fix ./meshes/wpn_m1891.ogf --dest ./fixed/wpn_m1891.ogf
 ```
 
 Example output excerpt — remove unread model bytes:

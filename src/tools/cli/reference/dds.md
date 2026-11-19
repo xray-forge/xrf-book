@@ -9,12 +9,12 @@
 Re-encode a DDS file into another format, with its mip chain rebuilt
 
 ```txt
-xrf-cli dds convert [OPTIONS] --path <path> --dest <dest> --format <format>
+xrf-cli dds convert [OPTIONS] --dest <dest> --format <format> <path>
 ```
 
 | Option                      | Required | Default  | Description                                                                                                                                                                                                                                     |
 | --------------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`         | yes      |          | Path of the dds file to read                                                                                                                                                                                                                    |
+| `<path>`                    | yes      |          | Path of the dds file to read                                                                                                                                                                                                                    |
 | `-d, --dest <dest>`         | yes      |          | Path of the dds file to write                                                                                                                                                                                                                   |
 | `--format <format>`         | yes      |          | Format to write, of the five worth offering for an X-Ray texture. Possible values: `bc1`, `bc2`, `bc3`, `rgba8`, `bc7`.                                                                                                                         |
 | `--mip-filter <mip-filter>` |          | `kaiser` | Kernel the mip chain is reduced with, from the X-Ray converter's own family. Possible values: `point`, `box`, `triangle`, `quadratic`, `cubic`, `catrom`, `mitchell`, `gaussian`, `sinc`, `bessel`, `hanning`, `hamming`, `blackman`, `kaiser`. |
@@ -31,12 +31,12 @@ xrf-cli dds convert [OPTIONS] --path <path> --dest <dest> --format <format>
 Crop a rectangular region out of a DDS file into a new DDS file
 
 ```txt
-xrf-cli dds crop [OPTIONS] --path <path> --dest <dest> --x <x> --y <y> --width <width> --height <height>
+xrf-cli dds crop [OPTIONS] --dest <dest> --x <x> --y <y> --width <width> --height <height> <path>
 ```
 
 | Option                      | Required | Default | Description                                                                                     |
 | --------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`         | yes      |         | Path to the dds file to read the region from                                                    |
+| `<path>`                    | yes      |         | Path to the dds file to read the region from                                                    |
 | `-d, --dest <dest>`         | yes      |         | Path of the dds file to write                                                                   |
 | `--x <x>`                   | yes      |         | Left edge of the region, in pixels                                                              |
 | `--y <y>`                   | yes      |         | Top edge of the region, in pixels                                                               |
@@ -55,28 +55,28 @@ xrf-cli dds crop [OPTIONS] --path <path> --dest <dest> --x <x> --y <y> --width <
 Print what a DDS file holds
 
 ```txt
-xrf-cli dds info [OPTIONS] --path <path>
+xrf-cli dds info [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to dds file                                                     |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to dds file                                                     |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli dds make-bump`
 
 Generate the `_bump` and `_bump#` pair a bumped surface binds, from a height map
 
 ```txt
-xrf-cli dds make-bump [OPTIONS] --path <path> --dest <dest>
+xrf-cli dds make-bump [OPTIONS] --dest <dest> <path>
 ```
 
 | Option                              | Required | Default | Description                                                                                                                                                                                                                                     |
 | ----------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`                 | yes      |         | Path of the height map the relief is read from, averaged across its colour channels                                                                                                                                                             |
+| `<path>`                            | yes      |         | Path of the height map the relief is read from, averaged across its colour channels                                                                                                                                                             |
 | `-d, --dest <dest>`                 | yes      |         | Path of the texture the pair belongs to, without the `_bump` suffix or an extension                                                                                                                                                             |
 | `--gloss-alpha`                     |          |         | Read the gloss from the height map's own alpha, where the SDK's bump source carries it                                                                                                                                                          |
 | `--gloss <gloss>`                   |          |         | Path of a gloss mask, averaged across its colour channels                                                                                                                                                                                       |

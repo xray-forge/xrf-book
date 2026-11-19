@@ -27,12 +27,12 @@ xrf-cli thm bump-alignment [OPTIONS] --path <path>...
 Repoint the bump texture reference of a THM file
 
 ```txt
-xrf-cli thm patch-bump [OPTIONS] --path <path> <--to <to>|--off>
+xrf-cli thm patch-bump [OPTIONS] <--to <to>|--off> <path>
 ```
 
 | Option              | Required | Default | Description                                                                                                    |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to thm file                                                                                               |
+| `<path>`            | yes      |         | Path to thm file                                                                                               |
 | `-d, --dest <dest>` |          |         | Path to resulting thm file, defaults to in place rewrite of the source file                                    |
 | `--to <to>`         |          |         | Bump texture reference to write, engine style without extension, for example 'wpn\wpn_pm\wpn_pm_bump'          |
 | `--off`             |          |         | Declare no bump at all, clearing the mode and the name; use for a bump that does not exist and is not going to |

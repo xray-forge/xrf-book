@@ -17,7 +17,7 @@ definition names.
 ## `omf info`
 
 ```powershell
-xrf-cli omf info --path ./meshes/example.omf --verbose
+xrf-cli omf info ./meshes/example.omf --verbose
 ```
 
 Example output — inspect a motion bank:
@@ -55,9 +55,9 @@ Select the mode by the input and output arguments:
 `--dest` and `--verify` cannot be combined, and one of them is required. A directory without `--verify` is refused.
 
 ```powershell
-xrf-cli omf repack --path ./meshes/example.omf --dest ./meshes/example.repacked.omf
-xrf-cli omf repack --path ./meshes/example.omf --verify
-xrf-cli omf repack --path ./meshes --verify
+xrf-cli omf repack ./meshes/example.omf --dest ./meshes/example.repacked.omf
+xrf-cli omf repack ./meshes/example.omf --verify
+xrf-cli omf repack ./meshes --verify
 ```
 
 Example output — verify byte-identical serialization:
@@ -80,9 +80,9 @@ Add `--verbose` to list the files that matched.
 Extract the motions needed from a shared bank:
 
 ```powershell
-xrf-cli omf filter-motions --path ./shared_bank.omf --dest ./wpn_ak74_hud_animation.omf `
+xrf-cli omf filter-motions ./shared_bank.omf --dest ./wpn_ak74_hud_animation.omf `
   --keep-prefix ak_74_
-xrf-cli omf filter-motions --path ./bank.omf --dest ./trimmed.omf --keep idle `
+xrf-cli omf filter-motions ./bank.omf --dest ./trimmed.omf --keep idle `
   --keep-prefix ak_74_ pist_
 ```
 
@@ -109,7 +109,7 @@ Create `ak74.json` as a flat map from current names to replacement names:
 Apply it to the bank:
 
 ```powershell
-xrf-cli omf rename-motions --path ./trimmed.omf --dest ./renamed.omf --map ./ak74.json
+xrf-cli omf rename-motions ./trimmed.omf --dest ./renamed.omf --map ./ak74.json
 ```
 
 Unmapped motions keep their names. Add `--strict` to require a map entry for every motion; the error identifies missing
@@ -123,7 +123,7 @@ the result, then update configs that refer to the old names.
 Copy an existing motion under a new name:
 
 ```powershell
-xrf-cli omf duplicate-motion --path ./wpn_hand_pm_hud_animation.omf --from pm_idle `
+xrf-cli omf duplicate-motion ./wpn_hand_pm_hud_animation.omf --from pm_idle `
   --to pm_idle_bore --play-once
 ```
 

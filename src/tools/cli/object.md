@@ -14,7 +14,7 @@ game draws as details: see [Detail models](#detail-models). `object verify` comp
 ## Compile a model
 
 ```powershell
-xrf-cli object compile --path ./rawdata/objects/dynamics/workshop_room/hammer.object --dest ./meshes/dynamics/workshop_room/hammer.ogf
+xrf-cli object compile ./rawdata/objects/dynamics/workshop_room/hammer.object --dest ./meshes/dynamics/workshop_room/hammer.ogf
 ```
 
 Example output — the vanilla hammer:
@@ -58,7 +58,7 @@ object is written once, where the editor writes all of its faces twice over by m
 ## Verify a model
 
 ```powershell
-xrf-cli object verify --path ./rawdata/objects/dynamics/balon/bidon.object --ogf ./meshes/dynamics/balon/bidon.ogf
+xrf-cli object verify ./rawdata/objects/dynamics/balon/bidon.object --ogf ./meshes/dynamics/balon/bidon.ogf
 ```
 
 Example output — the vanilla canister against its shipped OGF:
@@ -100,7 +100,7 @@ An object the compile refuses is refused here too, with exit `1`.
 ## Decompile a model
 
 ```powershell
-xrf-cli object decompile --path ./meshes/ventilator_01.ogf --dest ./rawdata/ventilator_01.object
+xrf-cli object decompile ./meshes/ventilator_01.ogf --dest ./rawdata/ventilator_01.object
 ```
 
 Example output — a vanilla fan:
@@ -162,8 +162,8 @@ A `.dm` path decompiles a detail model into an object of one mesh and one surfac
 object into one, as the Level Editor's detail export writes it:
 
 ```powershell
-xrf-cli object decompile --path ./meshes/dm/dm_lightning-01.dm --dest ./rawdata/dm_lightning-01.object
-xrf-cli object compile --path ./rawdata/dm_lightning-01.object --dest ./meshes/dm/dm_lightning-01.dm
+xrf-cli object decompile ./meshes/dm/dm_lightning-01.dm --dest ./rawdata/dm_lightning-01.object
+xrf-cli object compile ./rawdata/dm_lightning-01.object --dest ./meshes/dm/dm_lightning-01.dm
 ```
 
 The vanilla lightning models come back exactly: decompiled and compiled again, each is the same file, byte for byte. A

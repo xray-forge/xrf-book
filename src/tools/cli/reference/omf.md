@@ -9,12 +9,12 @@
 Copy a motion of an OMF file under a new name
 
 ```txt
-xrf-cli omf duplicate-motion [OPTIONS] --path <path> --from <from> --to <to>
+xrf-cli omf duplicate-motion [OPTIONS] --from <from> --to <to> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to omf file                                                            |
+| `<path>`            | yes      |         | Path to omf file                                                            |
 | `-d, --dest <dest>` |          |         | Path to resulting omf file, defaults to in place rewrite of the source file |
 | `--from <from>`     | yes      |         | Motion to copy, matched exactly                                             |
 | `--to <to>`         | yes      |         | Name to give the copy                                                       |
@@ -30,12 +30,12 @@ xrf-cli omf duplicate-motion [OPTIONS] --path <path> --from <from> --to <to>
 Keep only the selected motions of an OMF file
 
 ```txt
-xrf-cli omf filter-motions [OPTIONS] --path <path> --dest <dest> <--keep <keep>...|--keep-prefix <keep-prefix>...>
+xrf-cli omf filter-motions [OPTIONS] --dest <dest> <--keep <keep>...|--keep-prefix <keep-prefix>...> <path>
 ```
 
 | Option                           | Required | Default | Description                                                          |
 | -------------------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>`              | yes      |         | Path to omf file                                                     |
+| `<path>`                         | yes      |         | Path to omf file                                                     |
 | `-d, --dest <dest>`              | yes      |         | Path to resulting omf file                                           |
 | `-k, --keep <keep>...`           |          |         | Exact motion names to keep                                           |
 | `--keep-prefix <keep-prefix>...` |          |         | Keep motions whose name starts with provided prefix                  |
@@ -50,28 +50,28 @@ xrf-cli omf filter-motions [OPTIONS] --path <path> --dest <dest> <--keep <keep>.
 Print what an OMF file holds
 
 ```txt
-xrf-cli omf info [OPTIONS] --path <path>
+xrf-cli omf info [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the OMF file                                                 |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to the OMF file                                                 |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli omf rename-motions`
 
 Rename the motions of an OMF file
 
 ```txt
-xrf-cli omf rename-motions [OPTIONS] --path <path> --dest <dest> --map <map>
+xrf-cli omf rename-motions [OPTIONS] --dest <dest> --map <map> <path>
 ```
 
 | Option              | Required | Default | Description                                                          |
 | ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to omf file                                                     |
+| `<path>`            | yes      |         | Path to omf file                                                     |
 | `-d, --dest <dest>` | yes      |         | Path to resulting omf file                                           |
 | `-m, --map <map>`   | yes      |         | Path to JSON object mapping existing motion names to new ones        |
 | `--strict`          |          |         | Require every motion in the file to be covered by the map            |
@@ -86,12 +86,12 @@ xrf-cli omf rename-motions [OPTIONS] --path <path> --dest <dest> --map <map>
 Repack an OMF file, or verify that OMF files repack into the bytes they were read from
 
 ```txt
-xrf-cli omf repack [OPTIONS] --path <path>
+xrf-cli omf repack [OPTIONS] <path>
 ```
 
 | Option              | Required | Default | Description                                                             |
 | ------------------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Omf file to repack, or with --verify an omf file or a directory of them |
+| `<path>`            | yes      |         | Omf file to repack, or with --verify an omf file or a directory of them |
 | `-d, --dest <dest>` |          |         | Repacked omf file written                                               |
 | `--verify`          |          |         | Verify that repacked bytes match the source instead of writing them     |
 | `-s, --silent`      |          |         | Turn off logging                                                        |

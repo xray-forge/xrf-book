@@ -11,7 +11,7 @@ another declaration tree, replace `src/engine/declarations` with its root.
 This command creates or replaces `target/parsed/externs.html`, creating parent directories when needed:
 
 ```powershell
-xrf-cli externs export --path src/engine/declarations `
+xrf-cli externs export src/engine/declarations `
   --dest target/parsed/externs.html
 ```
 
@@ -34,7 +34,7 @@ source paths are relative to the declarations root.
 | `xml`  | `<externs><exports>` document.     | LF                   |
 | `html` | Collapsible namespace reference.   | LF                   |
 
-`-p, --path` names the declarations root and `-d, --dest` names the artifact. The format is inferred from the artifact's
+The input names the declarations root and `-d, --dest` names the artifact. The format is inferred from the artifact's
 extension; `--format json`, `--format xml`, or `--format html` overrides it, for example for an artifact with another
 extension. Use `--line-endings lf` or `--line-endings crlf` to override the format's default.
 
@@ -43,7 +43,7 @@ extension. Use `--line-endings lf` or `--line-endings crlf` to override the form
 Add `--check` to compare the existing `--dest` artifact with the declarations without writing either:
 
 ```powershell
-xrf-cli externs export --path src/engine/declarations `
+xrf-cli externs export src/engine/declarations `
   --dest src/engine/declarations/extern.json --check
 ```
 
