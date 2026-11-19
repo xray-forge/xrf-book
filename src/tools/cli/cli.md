@@ -31,7 +31,7 @@ Prefer a report file for large verification runs. Capture the exit code immediat
 fields needed for the decision. From a project containing `target/gamedata`:
 
 ```powershell
-xrf-cli gamedata verify --path ./target/gamedata --report ./verification-report.json 2>$null
+xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json 2>$null
 $verificationExit = $LASTEXITCODE
 $report = Get-Content ./verification-report.json -Raw | ConvertFrom-Json
 $report.result.status
@@ -77,7 +77,7 @@ Commands that support parallel work accept `-j, --jobs`:
 | A percentage     | Use that share of the `auto` count, rounded down with a minimum of one worker.         |
 
 ```powershell
-xrf-cli gamedata verify --path ./target/gamedata -j 50%
+xrf-cli gamedata verify ./target/gamedata -j 50%
 ```
 
 Commands without parallel work do not accept `--jobs`.

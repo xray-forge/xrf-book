@@ -116,7 +116,7 @@ exit too.
 Filling a new file with the full set of locale keys is an [`xrf-cli`](../tools/cli/translation.md) task:
 
 ```powershell
-xrf-cli translation initialize --path src/engine/translations
+xrf-cli translation initialize src/engine/translations
 ```
 
 ## References from game data

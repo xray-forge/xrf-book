@@ -30,13 +30,13 @@ xrf-cli sprite pack-description [OPTIONS] --description <description> --base <ba
 Pack an equipment sprite from separate icon files
 
 ```txt
-xrf-cli sprite pack-equipment [OPTIONS] --system-ltx <system-ltx> --path <path> --dest <dest>
+xrf-cli sprite pack-equipment [OPTIONS] --system-ltx <system-ltx> --dest <dest> <path>
 ```
 
 | Option                      | Required | Default | Description                                                                                         |
 | --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `<path>`                    | yes      |         | Folder holding one icon per section                                                                 |
 | `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
-| `-p, --path <path>`         | yes      |         | Folder holding one icon per section                                                                 |
 | `-d, --dest <dest>`         | yes      |         | Equipment sprite dds file to write                                                                  |
 | `--gamedata <gamedata>`     |          |         | Path to gamedata folder for resources usage                                                         |
 | `--strict`                  |          |         | Fail on an icon that cannot be read or placed instead of skipping it                                |
@@ -74,13 +74,13 @@ xrf-cli sprite unpack-description [OPTIONS] --description <description> --base <
 Unpack separate icon files out of an equipment sprite
 
 ```txt
-xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --path <path> --dest <dest>
+xrf-cli sprite unpack-equipment [OPTIONS] --system-ltx <system-ltx> --dest <dest> <path>
 ```
 
 | Option                      | Required | Default | Description                                                                                         |
 | --------------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------- |
+| `<path>`                    | yes      |         | Equipment sprite dds file to read                                                                   |
 | `--system-ltx <system-ltx>` | yes      |         | Path to system ltx file or root folder with ltx files                                               |
-| `-p, --path <path>`         | yes      |         | Equipment sprite dds file to read                                                                   |
 | `-d, --dest <dest>`         | yes      |         | Folder the section icons are written to                                                             |
 | `--dltx`                    |          |         | Resolve configs with the Monolith/Anomaly DLTX patch dialect, applying mod_&lt;base&gt;_*.ltx files |
 | `--refuse-links`            |          |         | Refuse to write through links or junctions already below the destination, instead of following them |

@@ -11,12 +11,12 @@ level.game into one spawn with the game graph, its cross tables, the entities, a
 levels give the same file
 
 ```txt
-xrf-cli spawn build [OPTIONS] --gamedata <gamedata>
+xrf-cli spawn build [OPTIONS] <path>
 ```
 
 | Option                        | Required | Default | Description                                                                                                                                                                                                  |
 | ----------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--gamedata <gamedata>`       | yes      |         | Gamedata root holding configs/game_levels.ltx, and by default the levels' directories under levels/ and the spawn written under spawns/                                                                      |
+| `<path>`                      | yes      |         | Gamedata root holding configs/game_levels.ltx, and by default the levels' directories under levels/ and the spawn written under spawns/                                                                      |
 | `--levels-root <levels-root>` |          |         | Directory holding the levels' directories; by default levels/ under the gamedata root                                                                                                                        |
 | `-d, --dest <dest>`           |          |         | The .spawn file to write; by default spawns/all.spawn under the gamedata root, the game's own                                                                                                                |
 | `--levels <levels>...`        |          |         | Levels to build, by directory name, comma-separated or repeated; by default every level the game lists whose directory holds level.ai, level.spawn and level.game. Accepts multiple values separated by `,`. |
@@ -34,28 +34,28 @@ xrf-cli spawn build [OPTIONS] --gamedata <gamedata>
 Print what a spawn file holds
 
 ```txt
-xrf-cli spawn info [OPTIONS] --path <path>
+xrf-cli spawn info [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to a root spawn such as all.spawn, or to a level's level.spawn  |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to a root spawn such as all.spawn, or to a level's level.spawn  |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli spawn pack`
 
 Pack an unpacked spawn file folder into one *.spawn
 
 ```txt
-xrf-cli spawn pack [OPTIONS] --path <path> --dest <dest>
+xrf-cli spawn pack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Unpacked spawn file folder                                                  |
+| `<path>`            | yes      |         | Unpacked spawn file folder                                                  |
 | `-d, --dest <dest>` | yes      |         | Packed *.spawn written                                                      |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -68,12 +68,12 @@ xrf-cli spawn pack [OPTIONS] --path <path> --dest <dest>
 Read a *.spawn and write it packed again
 
 ```txt
-xrf-cli spawn repack [OPTIONS] --path <path> --dest <dest>
+xrf-cli spawn repack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed *.spawn                                                              |
+| `<path>`            | yes      |         | Packed *.spawn                                                              |
 | `-d, --dest <dest>` | yes      |         | Repacked *.spawn written                                                    |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -86,12 +86,12 @@ xrf-cli spawn repack [OPTIONS] --path <path> --dest <dest>
 Read an unpacked spawn file folder and write it unpacked again
 
 ```txt
-xrf-cli spawn re-unpack [OPTIONS] --path <path> --dest <dest>
+xrf-cli spawn re-unpack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Unpacked spawn file folder                                                  |
+| `<path>`            | yes      |         | Unpacked spawn file folder                                                  |
 | `-d, --dest <dest>` | yes      |         | Folder the re-unpacked spawn file is written to                             |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -104,12 +104,12 @@ xrf-cli spawn re-unpack [OPTIONS] --path <path> --dest <dest>
 Unpack a *.spawn into a folder of text files
 
 ```txt
-xrf-cli spawn unpack [OPTIONS] --path <path> --dest <dest>
+xrf-cli spawn unpack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed *.spawn                                                              |
+| `<path>`            | yes      |         | Packed *.spawn                                                              |
 | `-d, --dest <dest>` | yes      |         | Folder the unpacked spawn file is written to                                |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -122,16 +122,16 @@ xrf-cli spawn unpack [OPTIONS] --path <path> --dest <dest>
 Verify that a *.spawn reads
 
 ```txt
-xrf-cli spawn verify [OPTIONS] --path <path>
+xrf-cli spawn verify [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed *.spawn, or its unpacked folder with --unpacked               |
-| `-u, --unpacked`    |          |         | Read the path as an unpacked spawn file folder                       |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Packed *.spawn, or its unpacked folder with --unpacked               |
+| `-u, --unpacked`  |          |         | Read the path as an unpacked spawn file folder                       |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 <!-- ANCHOR_END: commands -->

@@ -66,7 +66,7 @@ available.
 From the directory containing the assembled `gamedata` tree, verify the resulting references:
 
 ```powershell
-xrf-cli gamedata verify --path ./gamedata --checks textures --report ./texture-report.json
+xrf-cli gamedata verify ./gamedata --checks textures --report ./texture-report.json
 ```
 
 Resolve remaining bump findings before checking the surface in game. Descriptor validation establishes the reference; it

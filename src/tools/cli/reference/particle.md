@@ -9,12 +9,12 @@
 Find the effects drawing with a texture or shader or running an action, and the groups playing an effect
 
 ```txt
-xrf-cli particle find [OPTIONS] --path <path> <--texture <texture>|--shader <shader>|--action <action>|--effect <effect>>
+xrf-cli particle find [OPTIONS] <--texture <texture>|--shader <shader>|--action <action>|--effect <effect>> <path>
 ```
 
 | Option                   | Required | Default | Description                                                                                                            |
 | ------------------------ | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`      | yes      |         | Path to the particle library, particles.xr                                                                             |
+| `<path>`                 | yes      |         | Path to the particle library, particles.xr                                                                             |
 | `--texture <texture>...` |          |         | Texture to find the effects sampling, with or without its extension. Repeat to find several                            |
 | `--shader <shader>...`   |          |         | Shader to find the effects drawing with, such as particles\add. Repeat to find several                                 |
 | `--action <action>...`   |          |         | Action type to find the effects running, as the unpacked library names it, such as TargetColor. Repeat to find several |
@@ -29,63 +29,63 @@ xrf-cli particle find [OPTIONS] --path <path> <--texture <texture>|--shader <sha
 Print what a particle file holds
 
 ```txt
-xrf-cli particle info [OPTIONS] --path <path>
+xrf-cli particle info [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the particle library, particles.xr                           |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to the particle library, particles.xr                           |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 ## `xrf-cli particle inspect`
 
 Explain one effect or group: its sprite, frames and actions, or the effects it plays and spawns
 
 ```txt
-xrf-cli particle inspect [OPTIONS] --path <path> <name>
+xrf-cli particle inspect [OPTIONS] --name <name> <path>
 ```
 
-| Option              | Required | Default | Description                                                                                 |
-| ------------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the particle library, particles.xr                                                  |
-| `<name>`            | yes      |         | Name of the effect or group, in any case and with either slash, such as explosions\campfire |
-| `-s, --silent`      |          |         | Turn off logging                                                                            |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                     |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                        |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                       |
+| Option            | Required | Default | Description                                                                                 |
+| ----------------- | -------- | ------- | ------------------------------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to the particle library, particles.xr                                                  |
+| `--name <name>`   | yes      |         | Name of the effect or group, in any case and with either slash, such as explosions\campfire |
+| `-s, --silent`    |          |         | Turn off logging                                                                            |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                                                     |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr                        |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                                       |
 
 ## `xrf-cli particle list`
 
 List the effects and groups a particle library holds, with what each draws and plays
 
 ```txt
-xrf-cli particle list [OPTIONS] --path <path>
+xrf-cli particle list [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                                                                     |
-| ------------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Path to the particle library, particles.xr                                                                      |
-| `--kind <kind>`     |          |         | List only effects or only groups. Possible values: `effect`, `group`.                                           |
-| `--name <name>`     |          |         | List only names containing this text, in any case and with either slash, such as campfire or explosions\effects |
-| `-s, --silent`      |          |         | Turn off logging                                                                                                |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                                                                         |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr                                            |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                                                           |
+| Option            | Required | Default | Description                                                                                                     |
+| ----------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Path to the particle library, particles.xr                                                                      |
+| `--kind <kind>`   |          |         | List only effects or only groups. Possible values: `effect`, `group`.                                           |
+| `--name <name>`   |          |         | List only names containing this text, in any case and with either slash, such as campfire or explosions\effects |
+| `-s, --silent`    |          |         | Turn off logging                                                                                                |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                                                                         |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr                                            |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                                                           |
 
 ## `xrf-cli particle pack`
 
 Pack an unpacked particles file folder into one particles.xr
 
 ```txt
-xrf-cli particle pack [OPTIONS] --path <path> --dest <dest>
+xrf-cli particle pack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Unpacked particles file folder                                              |
+| `<path>`            | yes      |         | Unpacked particles file folder                                              |
 | `-d, --dest <dest>` | yes      |         | Packed particles.xr written                                                 |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -98,12 +98,12 @@ xrf-cli particle pack [OPTIONS] --path <path> --dest <dest>
 Read a particles.xr and write it packed again
 
 ```txt
-xrf-cli particle repack [OPTIONS] --path <path> --dest <dest>
+xrf-cli particle repack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed particles.xr                                                         |
+| `<path>`            | yes      |         | Packed particles.xr                                                         |
 | `-d, --dest <dest>` | yes      |         | Repacked particles.xr written                                               |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -116,12 +116,12 @@ xrf-cli particle repack [OPTIONS] --path <path> --dest <dest>
 Read an unpacked particles file folder and write it unpacked again
 
 ```txt
-xrf-cli particle re-unpack [OPTIONS] --path <path> --dest <dest>
+xrf-cli particle re-unpack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Unpacked particles file folder                                              |
+| `<path>`            | yes      |         | Unpacked particles file folder                                              |
 | `-d, --dest <dest>` | yes      |         | Folder the re-unpacked particles file is written to                         |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -134,12 +134,12 @@ xrf-cli particle re-unpack [OPTIONS] --path <path> --dest <dest>
 Unpack a particles.xr into a folder of text files
 
 ```txt
-xrf-cli particle unpack [OPTIONS] --path <path> --dest <dest>
+xrf-cli particle unpack [OPTIONS] --dest <dest> <path>
 ```
 
 | Option              | Required | Default | Description                                                                 |
 | ------------------- | -------- | ------- | --------------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed particles.xr                                                         |
+| `<path>`            | yes      |         | Packed particles.xr                                                         |
 | `-d, --dest <dest>` | yes      |         | Folder the unpacked particles file is written to                            |
 | `-f, --force`       |          |         | Replace the destination when it is already there, once the new one is ready |
 | `-s, --silent`      |          |         | Turn off logging                                                            |
@@ -152,16 +152,16 @@ xrf-cli particle unpack [OPTIONS] --path <path> --dest <dest>
 Verify that a particles.xr reads
 
 ```txt
-xrf-cli particle verify [OPTIONS] --path <path>
+xrf-cli particle verify [OPTIONS] <path>
 ```
 
-| Option              | Required | Default | Description                                                          |
-| ------------------- | -------- | ------- | -------------------------------------------------------------------- |
-| `-p, --path <path>` | yes      |         | Packed particles.xr, or its unpacked folder with --unpacked          |
-| `-u, --unpacked`    |          |         | Read the path as an unpacked particles file folder                   |
-| `-s, --silent`      |          |         | Turn off logging                                                     |
-| `-v, --verbose`     |          |         | Turn on verbose logging                                              |
-| `--json`            |          |         | Write the run's JSON report to stdout, moving human output to stderr |
-| `--report <PATH>`   |          |         | Write the run's JSON report to a file                                |
+| Option            | Required | Default | Description                                                          |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------- |
+| `<path>`          | yes      |         | Packed particles.xr, or its unpacked folder with --unpacked          |
+| `-u, --unpacked`  |          |         | Read the path as an unpacked particles file folder                   |
+| `-s, --silent`    |          |         | Turn off logging                                                     |
+| `-v, --verbose`   |          |         | Turn on verbose logging                                              |
+| `--json`          |          |         | Write the run's JSON report to stdout, moving human output to stderr |
+| `--report <PATH>` |          |         | Write the run's JSON report to a file                                |
 
 <!-- ANCHOR_END: commands -->

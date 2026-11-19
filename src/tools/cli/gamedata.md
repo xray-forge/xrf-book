@@ -8,7 +8,7 @@ build or asset import, before launching or packaging the result.
 From a project containing `target/gamedata`:
 
 ```powershell
-xrf-cli gamedata verify --path ./target/gamedata --report ./verification-report.json
+xrf-cli gamedata verify ./target/gamedata --report ./verification-report.json
 ```
 
 Example output excerpt — verify textures:
@@ -22,15 +22,15 @@ Gamedata project: passed
 
 Exit code: `0`.
 
-`-p, --path` must name an existing gamedata directory or an installation declaring its mounted sources. The resolved
-tree must contain `configs/system.ltx`; it may come from a loose file or an archive.
+The input must name an existing gamedata directory or an installation declaring its mounted sources. The resolved tree
+must contain `configs/system.ltx`; it may come from a loose file or an archive.
 
 All asset checks run unless `--checks` selects a subset. Add `--strict` to fully validate expensive payloads and apply
 the checks' stricter content requirements:
 
 ```powershell
-xrf-cli gamedata verify --path ./target/gamedata --checks scripts,ltx
-xrf-cli gamedata verify --path ./target/gamedata --checks sounds --strict
+xrf-cli gamedata verify ./target/gamedata --checks scripts,ltx
+xrf-cli gamedata verify ./target/gamedata --checks sounds --strict
 ```
 
 A check that finds something prints one failure line naming the check, its status, and its finding count. Add
@@ -45,7 +45,7 @@ By default the run ignores `.git`, `.idea`, `particles_unpacked`, `textures_unpa
 the flag or list several entries after one, separated by spaces:
 
 ```powershell
-xrf-cli gamedata verify --path ./target/gamedata --ignore .git textures_unpacked docs
+xrf-cli gamedata verify ./target/gamedata --ignore .git textures_unpacked docs
 ```
 
 ## Patched installations
@@ -53,7 +53,7 @@ xrf-cli gamedata verify --path ./target/gamedata --ignore .git textures_unpacked
 For Anomaly and Monolith-based installations, enable the [DLTX dialect](ltx.md#the-dltx-patch-dialect):
 
 ```powershell
-xrf-cli gamedata verify --path "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
+xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --report ./anomaly-report.json
 ```
 
 Checks then resolve patched config values. Leave `--dltx` off for standard vanilla or OpenXRay LTX trees.
@@ -66,7 +66,7 @@ tree: Anomaly's launcher or renderer executables, its `$warfare_presets$` mount 
 none of these:
 
 ```powershell
-xrf-cli gamedata verify --path "C:/Games/Anomaly" --dltx --engine extended --report ./anomaly-report.json
+xrf-cli gamedata verify "C:/Games/Anomaly" --dltx --engine extended --report ./anomaly-report.json
 ```
 
 The two options are independent: `--dltx` picks how configs are resolved, and `--engine` picks how the resolved values
@@ -252,7 +252,7 @@ retention.
 Add read tracing when investigating repeated I/O:
 
 ```powershell
-xrf-cli gamedata verify --path ./target/gamedata --trace-reads --report ./read-report.json
+xrf-cli gamedata verify ./target/gamedata --trace-reads --report ./read-report.json
 ```
 
 `reads` reports `paths`, `reads`, `bytes`, `uniqueBytes`, and the 25 hottest paths. The difference between total and

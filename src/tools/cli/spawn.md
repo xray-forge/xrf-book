@@ -11,7 +11,7 @@ points and the patrols. Run it after a change to a level's AI map, entities, gra
 geometry, lighting and details do not need it.
 
 ```powershell
-xrf-cli spawn build --gamedata ./gamedata --dest ./gamedata/spawns/test_jupiter.spawn
+xrf-cli spawn build ./gamedata --dest ./gamedata/spawns/test_jupiter.spawn
 ```
 
 The root holds `configs/game_levels.ltx` and, by default, the levels' directories under `levels/`. Without `--levels`,
@@ -23,7 +23,7 @@ Levels built outside the gamedata root, such as into a working copy by `level bu
 the directory `--levels-root` names; the level list still comes from the root:
 
 ```powershell
-xrf-cli spawn build --gamedata ./gamedata --levels-root ./work/levels --levels zaton,jupiter --dest ./work/spawns/test.spawn
+xrf-cli spawn build ./gamedata --levels-root ./work/levels --levels zaton,jupiter --dest ./work/spawns/test.spawn
 ```
 
 Like the other heavy commands, `build` takes `-j` to bound how many cores it uses.
@@ -64,8 +64,8 @@ lacks, two patrols of one name, two neighbouring graph points no path on the AI 
 Run from a working directory containing `all.spawn`, with new output paths:
 
 ```powershell
-xrf-cli spawn info --path ./all.spawn
-xrf-cli spawn unpack --path ./all.spawn --dest ./all_spawn
+xrf-cli spawn info ./all.spawn
+xrf-cli spawn unpack ./all.spawn --dest ./all_spawn
 ```
 
 Example output excerpt — inspect spawn data:
@@ -91,7 +91,7 @@ Exit code: `0`.
 name:
 
 ```powershell
-xrf-cli spawn info --path ./levels/jupiter/level.spawn
+xrf-cli spawn info ./levels/jupiter/level.spawn
 ```
 
 Example output excerpt — inspect a level's spawn list:
@@ -111,8 +111,8 @@ result says which kind was read in its `kind` field, `root` or `level`. A file t
 After editing the exported representation of `all.spawn`:
 
 ```powershell
-xrf-cli spawn pack --path ./all_spawn --dest ./all.rebuilt.spawn
-xrf-cli spawn verify --path ./all.rebuilt.spawn
+xrf-cli spawn pack ./all_spawn --dest ./all.rebuilt.spawn
+xrf-cli spawn verify ./all.rebuilt.spawn
 ```
 
 Verification reads the packed file and checks that its structure can be parsed. Use [gamedata verification](gamedata.md)
@@ -128,8 +128,8 @@ it back byte for byte.
 the list's order, named by its place:
 
 ```powershell
-xrf-cli spawn unpack --path ./levels/l04u_labx18/level.spawn --dest ./labx18_spawn
-xrf-cli spawn pack --path ./labx18_spawn --dest ./level.rebuilt.spawn
+xrf-cli spawn unpack ./levels/l04u_labx18/level.spawn --dest ./labx18_spawn
+xrf-cli spawn pack ./labx18_spawn --dest ./level.rebuilt.spawn
 ```
 
 Example output excerpt — a list holding objects of Shadow of Chernobyl's layout:
@@ -172,7 +172,7 @@ root spawn, `level_spawns.ltx` for a level's list. A folder holding neither, or 
 ## Re-serialize a spawn file
 
 ```powershell
-xrf-cli spawn repack --path ./all.spawn --dest ./all.repacked.spawn
+xrf-cli spawn repack ./all.spawn --dest ./all.repacked.spawn
 ```
 
 `repack` reads a packed file and writes another packed file. It does not automatically compare the output with the

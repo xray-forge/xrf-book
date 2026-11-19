@@ -8,7 +8,7 @@ are made of, and of the pairs that decide the sounds, particles and marks where 
 Run from a working directory containing the game's `gamemtl.xr`:
 
 ```powershell
-xrf-cli gamemtl info --path ./gamemtl.xr
+xrf-cli gamemtl info ./gamemtl.xr
 ```
 
 Example output — inspect the Call of Pripyat library:

@@ -12,7 +12,7 @@ Examples run from a working directory containing a `translations` source folder.
 Add missing language keys as `null` placeholders in the JSON sources:
 
 ```powershell
-xrf-cli translation initialize --path ./translations
+xrf-cli translation initialize ./translations
 ```
 
 This updates files in place. Running it again on the same initialized sources makes no further change. A `null` marks a

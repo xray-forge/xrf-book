@@ -16,8 +16,8 @@ root containing `configs` and `textures`; packing writes the named output sheets
 Unpack the equipment sheet into per-section images:
 
 ```powershell
-xrf-cli sprite unpack-equipment --system-ltx ./configs/system.ltx `
-  --path ./textures/ui/ui_icon_equipment.dds `
+xrf-cli sprite unpack-equipment ./textures/ui/ui_icon_equipment.dds `
+  --system-ltx ./configs/system.ltx `
   --dest ./textures_unpacked/ui/ui_icon_equipment
 ```
 
@@ -29,8 +29,8 @@ Edit the extracted icons, check the grid, then pack the replacement sheet:
 
 ```powershell
 xrf-cli sprite verify-equipment --system-ltx ./configs/system.ltx
-xrf-cli sprite pack-equipment --system-ltx ./configs/system.ltx `
-  --path ./textures_unpacked/ui/ui_icon_equipment `
+xrf-cli sprite pack-equipment ./textures_unpacked/ui/ui_icon_equipment `
+  --system-ltx ./configs/system.ltx `
   --dest ./textures/ui/ui_icon_equipment.dds --strict
 ```
 

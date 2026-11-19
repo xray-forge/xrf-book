@@ -30,12 +30,12 @@ xrf-cli gamedata list [OPTIONS] --path <path>...
 Verify an assembled gamedata tree
 
 ```txt
-xrf-cli gamedata verify [OPTIONS] --path <path>
+xrf-cli gamedata verify [OPTIONS] <path>
 ```
 
 | Option                     | Required | Default                                                                                       | Description                                                                                                                     |
 | -------------------------- | -------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `-p, --path <path>`        | yes      |                                                                                               | Path to the assembled gamedata root                                                                                             |
+| `<path>`                   | yes      |                                                                                               | Path to the assembled gamedata root                                                                                             |
 | `-i, --ignore <ignore>...` |          | `.git,.idea,particles_unpacked,textures_unpacked,.gitignore,.gitattributes,README.md,LICENSE` | Root entries to skip, replacing the defaults. Repeat to skip several                                                            |
 | `--checks <checks>...`     |          |                                                                                               | Checks to run, comma-separated or repeated; every check when omitted. Accepts multiple values separated by `,`.                 |
 | `--strict`                 |          |                                                                                               | Fully validate expensive asset payloads                                                                                         |

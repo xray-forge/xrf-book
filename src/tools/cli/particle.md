@@ -9,8 +9,8 @@ Run from a working directory containing the source `particles.xr`. Use new desti
 rebuilt file:
 
 ```powershell
-xrf-cli particle info --path ./particles.xr
-xrf-cli particle unpack --path ./particles.xr --dest ./particles_unpacked
+xrf-cli particle info ./particles.xr
+xrf-cli particle unpack ./particles.xr --dest ./particles_unpacked
 ```
 
 Example output — inspect particles:
@@ -28,9 +28,9 @@ Exit code: `0`.
 Edit the exported files, then validate and pack them:
 
 ```powershell
-xrf-cli particle verify --path ./particles_unpacked --unpacked
-xrf-cli particle pack --path ./particles_unpacked --dest ./particles.rebuilt.xr
-xrf-cli particle verify --path ./particles.rebuilt.xr
+xrf-cli particle verify ./particles_unpacked --unpacked
+xrf-cli particle pack ./particles_unpacked --dest ./particles.rebuilt.xr
+xrf-cli particle verify ./particles.rebuilt.xr
 ```
 
 `verify` checks that the selected representation can be read. It does not resolve the library's texture dependencies.
@@ -40,9 +40,9 @@ and inspect the affected effects in game.
 ## Look up effects and groups
 
 ```powershell
-xrf-cli particle list --path ./particles.xr --kind group --name campfire
-xrf-cli particle find --path ./particles.xr --texture pfx/pfx_splash_02 --effect explosions\effects\campfire_sparks
-xrf-cli particle inspect --path ./particles.xr explosions\campfire_boar_grill
+xrf-cli particle list ./particles.xr --kind group --name campfire
+xrf-cli particle find ./particles.xr --texture pfx/pfx_splash_02 --effect explosions\effects\campfire_sparks
+xrf-cli particle inspect ./particles.xr --name explosions\campfire_boar_grill
 ```
 
 `list` names every effect and group, or those of one kind or whose name holds a text: an effect with its shader,
@@ -76,8 +76,8 @@ Exit code: `0`.
 ## Re-serialize a library
 
 ```powershell
-xrf-cli particle repack --path ./particles.xr --dest ./particles.repacked.xr
-xrf-cli particle re-unpack --path ./particles_unpacked --dest ./particles_unpacked_roundtrip
+xrf-cli particle repack ./particles.xr --dest ./particles.repacked.xr
+xrf-cli particle re-unpack ./particles_unpacked --dest ./particles_unpacked_roundtrip
 ```
 
 `repack` reads a packed library and writes another packed file. `re-unpack` imports an unpacked library and exports it
