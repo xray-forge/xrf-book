@@ -19,6 +19,10 @@ every level `[levels]` lists whose directory holds the three files is built; `--
 alone. `--dest` names the `.spawn` file to write; without it the build writes `spawns/all.spawn`, the game's own.
 Writing over a spawn already there, the name compared without case, needs `--force`.
 
+Each entity is written as the class its section declares in the root's `configs/system.ltx`. A mod built on DLTX patch
+files (`mod_system_*.ltx`) needs `--dltx`, so its sections read as its game reads them. Where the configs do not read,
+such as game data unpacked in part, the build warns and takes each class from a built-in table of vanilla's sections.
+
 Levels built outside the gamedata root, such as into a working copy by `level build` and `level compile`, are read from
 the directory `--levels-root` names; the level list still comes from the root:
 
