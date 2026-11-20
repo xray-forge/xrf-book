@@ -150,11 +150,11 @@ happens through `CTexture::Preload`.
 
 ## Preservation and verification
 
-The patcher rebuilds only the bump chunk and copies other chunks byte for byte. Before writing, it requires a rewrite of
-the existing declaration to reproduce the source exactly. After writing, it reads the requested declaration back. A
-failed read-back check triggers restoration of an in-place source or removal of a separate destination. This does not
-make an interrupted or failed filesystem write transactional; use a separate destination when the original must remain
-available.
+`thm patch-bump` keeps every byte of the descriptor it does not change, as `thm set-field` does. Before changing
+anything, it checks that the descriptor writes back exactly as it was read; one that would not, such as a file whose
+chunks are in an order the SDK never writes, is refused rather than rewritten, and a descriptor with no bump chunk is
+refused too. The result is written to a temporary file beside the target and then renamed over it, so a failed write
+leaves the original in place.
 
 From the directory containing the assembled `gamedata` tree, verify the resulting references:
 
