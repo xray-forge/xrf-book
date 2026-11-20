@@ -28,7 +28,7 @@ them to descendants. `$inventory_icon = false` excludes a section.
 Edit the extracted icons, check the grid, then pack the replacement sheet:
 
 ```powershell
-xrf-cli sprite verify-equipment --system-ltx ./configs/system.ltx
+xrf-cli sprite verify-equipment ./configs/system.ltx
 xrf-cli sprite pack-equipment ./textures_unpacked/ui/ui_icon_equipment `
   --system-ltx ./configs/system.ltx `
   --dest ./textures/ui/ui_icon_equipment.dds --strict
@@ -71,7 +71,7 @@ Exit code: `0`.
 Unpack sheets named by an XML texture description:
 
 ```powershell
-xrf-cli sprite unpack-description --description ./configs/ui/textures_descr/ui_actor.xml `
+xrf-cli sprite unpack-description ./configs/ui/textures_descr/ui_actor.xml `
   --base ./textures --dest ./textures_unpacked
 ```
 
@@ -90,17 +90,17 @@ is written; `--force` writes over them.
 After editing the extracted images, pack them back:
 
 ```powershell
-xrf-cli sprite pack-description --description ./configs/ui/textures_descr/ui_actor.xml `
+xrf-cli sprite pack-description ./configs/ui/textures_descr/ui_actor.xml `
   --base ./textures_unpacked --dest ./textures --strict
 ```
 
 Each image must exactly match its declared rectangle; description packing does not rescale. Use
 [DDS fitting](dds.md#fitting-into-different-bounds) when an imported icon needs different bounds.
 
-The description and base path are required. `-d, --dest` defaults to the base path when omitted, so name a separate
-destination explicitly when keeping source and result apart. Both commands accept `--strict`; `-s` means `--silent`.
-Without `--strict`, packing leaves the place of an unreadable sprite empty, and unpacking skips a sheet it cannot read
-or a sprite outside its sheet.
+The description file, given first, and `--base` are required. `-d, --dest` defaults to the base path when omitted, so
+name a separate destination explicitly when keeping source and result apart. Both commands accept `--strict`; `-s` means
+`--silent`. Without `--strict`, packing leaves the place of an unreadable sprite empty, and unpacking skips a sheet it
+cannot read or a sprite outside its sheet.
 
 The report records what was written: `base`, `description`, `destination`, `duration`, `files` and `sprites` written,
 and `skippedFiles` and `skippedSprites` passed over. Check the skipped counts after a run without `--strict`; a run that
@@ -112,7 +112,7 @@ Both commands process every declared sheet by default. Repeat `--file` to narrow
 
 ```powershell
 xrf-cli sprite pack-description `
-  --description ./configs/ui/textures_descr/ui_actor_upgrades.xml --base ./textures_unpacked `
+  ./configs/ui/textures_descr/ui_actor_upgrades.xml --base ./textures_unpacked `
   --dest ./textures --file ui_actor_weapons --strict
 ```
 
