@@ -127,6 +127,12 @@ image. `--virtual-height` controls relief depth, defaulting to `0.05`.
 Bump generation uses the `box` mip filter by default. A warning about very dark gloss indicates little specular
 response; the files are still written because a matte surface may be intentional.
 
+Both halves are written as BC3 (DXT5) by default, as the SDK writes them. Pass `--format bc7` to write the pair as BC7
+instead. The second file stores what compression lost from the first, so it is measured against the format actually
+written, and the shader needs no change. A BC7 pair loads on DX11 only: the DX9 renderer cannot read it, and the command
+warns before writing. GL support is unverified. A texture descriptor cannot name BC7, so rebuilding the pair from its
+descriptor writes BC3 again.
+
 ## Bump declarations
 
 Generating or moving a bump texture does not update its descriptor. Follow
