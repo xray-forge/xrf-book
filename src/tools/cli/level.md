@@ -131,9 +131,13 @@ Where the directory holds `level.geom`, the static geometry comes back as one `.
   lightmap. Among those that fit, the `--library` roots prefer the one their objects pair most with the surface's engine
   shader.
 - The two libraries are `gamemtl.xr` and `shaders_xrlc.xr` in the level's `gamedata`, or `--game-materials` and
-  `--compiler-shaders`. `--surfaces defaults` gives every surface the editor's `default` instead. The sidecar's
-  `geometry.surfaces` records the libraries, how many triangles lay on a collision face, were traced to one or lay on
-  none, and each compiler shader chosen with why.
+  `--compiler-shaders`. `--surfaces defaults` gives every surface the editor's `default` instead; with `--library` roots
+  the decompile still reads the two libraries, to tell the placed objects' ladders, breakables and surfaces. The
+  sidecar's `geometry.libraries` names and hashes each library read, whatever the surfaces choice, and
+  `geometry.surfaces` records how many triangles lay on a collision face, were traced to one or lay on none, and each
+  compiler shader chosen with why.
+- A level whose occluders the game materials cannot build back, as a Clear Sky library holds no `materials\occ`, keeps
+  them out of the scene: `level.hom` is among the refusals, by the occluder object's name.
 
 Entities come from `level.spawn` and `level_rs.spawn`, each as a spawn point at its place with its packet as spawn data,
 and a zone's or restrictor's volume as a shape attached to it. An entity whose class the decompile cannot read, such as
