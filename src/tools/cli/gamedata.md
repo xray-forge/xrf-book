@@ -134,11 +134,12 @@ Findings carry a stable rule identifier. These groups expose the following rules
     strength there. The finding names the granularity and the time, in seconds.
 - **Dialogs:** `dialog.offer-missing`, `dialog.character-flags`, `dialog.phrase-entry`, `dialog.phrase-next`,
   `dialog.logic-missing`, `dialog.heal-missing`, `dialog.profile-unresolved`, `dialog.phrase-unreachable`,
-  `dialog.text-missing`, `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the dialogs under
-  `configs\gameplay`, the character, profile and info portion files `system.ltx` lists (or, where it lists none, every
-  such file by name), and the `meet` and `wounded` logic sections of every config. Each dialog id is judged by its first
-  declaration, which is the one the engine reads. Each rule has one severity: those for what the engine stops on are
-  failures, and those marked reported below are warnings, which fail the check only under `--strict`.
+  `dialog.text-missing`, `dialog.file-missing`, `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`,
+  `dialog.partner-unreadable`. This check reads the dialog, character, profile and info portion files `system.ltx` lists
+  under `configs\gameplay` (or, where it lists none, every such file by name), and the `meet` and `wounded` logic
+  sections of every config. Each id is judged by its first declaration, which is the one the engine reads. Each rule has
+  one severity: those for what the engine stops on are failures, and those marked reported below are warnings, which
+  fail the check only under `--strict`.
   - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
     declares.
   - `dialog.profile-unresolved` (reported): a profile no NPC can be spawned with, or a `character_profile` in
@@ -156,9 +157,15 @@ Findings carry a stable rule identifier. These groups expose the following rules
     a wounded NPC, so the NPC is never healed.
   - `dialog.phrase-unreachable` (reported): phrases no path from phrase `0` reaches, which the engine never loads.
   - `dialog.text-missing` (reported): a phrase line with no text in a language the game ships, shown as its key.
-  - `dialog.unreadable`, `dialog.partner-unreadable` (reported): a file the check could not read or a listed partner
-    file that is missing, so what it declares is not judged. The check reads XML more strictly than the engine, which
-    may still load the file.
+  - `dialog.file-missing`: a dialog, character or profile file `system.ltx` lists that the tree does not hold, which the
+    engine asserts on.
+  - `dialog.file-unlisted` (reported): a dialog or partner file `system.ltx` does not list, so the engine never loads
+    what it declares.
+  - `dialog.duplicate` (reported): a second declaration of a dialog, character, profile or info portion id, which the
+    engine skips.
+  - `dialog.unreadable`, `dialog.partner-unreadable` (reported): a file the check could not read, so what it declares is
+    not judged, or a listed info portion file that is missing, which the engine skips. The engine refuses XML its parser
+    cannot read too, but the check's reader may refuse more than it does.
 - **Environment:** `environment.engine`, `environment.reference`, `environment.convention`, `environment.asset`. This
   check covers everything under `configs\environment` that the engine reads: weather cycles and effects, suns,
   thunderbolts, ambients with their sound channels and effects, and Anomaly's sun table.
