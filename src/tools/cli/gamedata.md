@@ -107,8 +107,8 @@ well as the winning paths: a successfully produced listing may still be incomple
 
 ## Checks and rules
 
-Select checks by their group names: `animations`, `environment`, `levels`, `ltx`, `materials`, `meshes`, `particles`,
-`particles-usage`, `scripts`, `shaders`, `sounds`, `spawns`, `textures`, and `weapons`.
+Select checks by their group names: `animations`, `dialogs`, `environment`, `levels`, `ltx`, `materials`, `meshes`,
+`particles`, `particles-usage`, `scripts`, `shaders`, `sounds`, `spawns`, `textures`, and `weapons`.
 
 Findings carry a stable rule identifier. These groups expose the following rules:
 
@@ -132,6 +132,33 @@ Findings carry a stable rule identifier. These groups expose the following rules
   - `animations.post-process-noise-granularity`: an effect's keyed noise granularity reaches zero or below at a time the
     effect plays, from its start to its length. The engine stops with an assertion once the effect plays at full
     strength there. The finding names the granularity and the time, in seconds.
+- **Dialogs:** `dialog.offer-missing`, `dialog.character-flags`, `dialog.phrase-entry`, `dialog.phrase-next`,
+  `dialog.logic-missing`, `dialog.heal-missing`, `dialog.profile-unresolved`, `dialog.phrase-unreachable`,
+  `dialog.text-missing`, `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the dialogs under
+  `configs\gameplay`, the character, profile and info portion files `system.ltx` lists (or, where it lists none, every
+  such file by name), and the `meet` and `wounded` logic sections of every config. Each dialog id is judged by its first
+  declaration, which is the one the engine reads. Each rule has one severity: those for what the engine stops on fail
+  the check, and those marked reported below fail it only under `--strict`.
+  - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
+    declares.
+  - `dialog.profile-unresolved` (reported): a profile no NPC can be spawned with, or a `character_profile` in
+    `system.ltx` naming a profile no file declares. A profile is unresolvable when the character it pins is not
+    declared, or when no character of its class is marked `team_default` without `no_random`. The engine asserts on
+    either only when an NPC is spawned with the profile, which the configs do not tell: vanilla ships fifty profiles and
+    several sections nothing spawns.
+  - `dialog.character-flags`: a character marked both `no_random` and `team_default`, which the engine refuses.
+  - `dialog.phrase-entry`: a dialog whose phrase list has no phrase `0`, or that has no phrase list and no `init_func`
+    to build one.
+  - `dialog.phrase-next`: a phrase reached from phrase `0` whose `next` names a phrase the dialog does not list.
+  - `dialog.logic-missing`: a `meet_dialog` or `help_start_dialog` naming a dialog no file declares, which the engine
+    opens as the NPC's start dialog.
+  - `dialog.heal-missing` (reported): a `help_dialog` naming a dialog no file declares. It only marks which dialog heals
+    a wounded NPC, so the NPC is never healed.
+  - `dialog.phrase-unreachable` (reported): phrases no path from phrase `0` reaches, which the engine never loads.
+  - `dialog.text-missing` (reported): a phrase line with no text in a language the game ships, shown as its key.
+  - `dialog.unreadable`, `dialog.partner-unreadable` (reported): a file the check could not read or a listed partner
+    file that is missing, so what it declares is not judged. The check reads XML more strictly than the engine, which
+    may still load the file.
 - **Environment:** `environment.engine`, `environment.reference`, `environment.convention`, `environment.asset`. This
   check covers everything under `configs\environment` that the engine reads: weather cycles and effects, suns,
   thunderbolts, ambients with their sound channels and effects, and Anomaly's sun table.

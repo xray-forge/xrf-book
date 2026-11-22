@@ -68,7 +68,8 @@ lists its own conditions under `elements` in the report; whether it is offered r
 judge.
 
 Without `--profile`, the command lists every dialog in the tree. The report carries the `dialogs` either way. An unknown
-profile, or one that resolves to no character, exits 1 and names any character files that could not be read.
+profile, one that resolves to no character, or one picking by a class no `team_default` character has exits 1 and names
+any character files that could not be read. The engine cannot spawn an NPC of such a profile.
 
 ## Explain one dialog
 
