@@ -133,26 +133,31 @@ Findings carry a stable rule identifier. These groups expose the following rules
     effect plays, from its start to its length. The engine stops with an assertion once the effect plays at full
     strength there. The finding names the granularity and the time, in seconds.
 - **Dialogs:** `dialog.offer-missing`, `dialog.character-flags`, `dialog.phrase-entry`, `dialog.phrase-next`,
-  `dialog.logic-missing`, `dialog.heal-missing`, `dialog.profile-unresolved`, `dialog.phrase-unreachable`,
-  `dialog.text-missing`, `dialog.file-missing`, `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`,
-  `dialog.partner-unreadable`. This check reads the dialog, character, profile and info portion files `system.ltx` lists
-  under `configs\gameplay` (or, where it lists none, every such file by name), and the `meet` and `wounded` logic
-  sections of every config. Each id is judged by its first declaration, which is the one the engine reads. Each rule has
-  one severity: those for what the engine stops on are failures, and those marked reported below are warnings, which
-  fail the check only under `--strict`.
+  `dialog.logic-missing`, `dialog.heal-missing`, `dialog.spawn-unresolved`, `dialog.profile-unresolved`,
+  `dialog.phrase-unreachable`, `dialog.text-missing`, `dialog.file-missing`, `dialog.file-unlisted`, `dialog.duplicate`,
+  `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the dialog, character, profile and info portion
+  files `system.ltx` lists under `configs\gameplay` (or, where it lists none, every such file by name), the `meet` and
+  `wounded` logic sections of every config, and the NPCs the spawn files under `spawns` place, with the logic their
+  custom data carries. Each id is judged by its first declaration, which is the one the engine reads. Each rule has one
+  severity: those for what the engine stops on are failures, and those marked reported below are warnings, which fail
+  the check only under `--strict`.
   - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
     declares.
+  - `dialog.spawn-unresolved`: an NPC a spawn file places as a character no file declares, or with a profile no file
+    declares or no character resolves. A new game reads every object of the spawn and resolves its character there, so
+    the engine asserts on it at once.
   - `dialog.profile-unresolved` (reported): a profile no NPC can be spawned with, or a `character_profile` in
-    `system.ltx` naming a profile no file declares. A profile is unresolvable when the character it pins is not
-    declared, or when no character of its class is marked `team_default` without `no_random`. The engine asserts on
-    either only when an NPC is spawned with the profile, which the configs do not tell: vanilla ships fifty profiles and
-    several sections nothing spawns.
+    `system.ltx` naming a profile no file declares, where no spawn file places an NPC with it. A profile is unresolvable
+    when the character it pins is not declared, or when no character of its class is marked `team_default` without
+    `no_random`. The engine asserts on either only when a script spawns an NPC with the profile, which the configs do
+    not tell: vanilla ships fifty profiles and several sections nothing spawns. Call of Pripyat's spawn places only the
+    actor; squads place its NPCs at runtime.
   - `dialog.character-flags`: a character marked both `no_random` and `team_default`, which the engine refuses.
   - `dialog.phrase-entry`: a dialog whose phrase list has no phrase `0`, or that has no phrase list and no `init_func`
     to build one.
   - `dialog.phrase-next`: a phrase reached from phrase `0` whose `next` names a phrase the dialog does not list.
-  - `dialog.logic-missing`: a `meet_dialog` or `help_start_dialog` naming a dialog no file declares, which the engine
-    opens as the NPC's start dialog.
+  - `dialog.logic-missing`: a `meet_dialog` or `help_start_dialog`, in a config or in a spawned object's custom data,
+    naming a dialog no file declares, which the engine opens as the NPC's start dialog.
   - `dialog.heal-missing` (reported): a `help_dialog` naming a dialog no file declares. It only marks which dialog heals
     a wounded NPC, so the NPC is never healed.
   - `dialog.phrase-unreachable` (reported): phrases no path from phrase `0` reaches, which the engine never loads.
