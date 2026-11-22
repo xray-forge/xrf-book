@@ -148,15 +148,17 @@ Findings carry a stable rule identifier. These groups expose the following rules
     non-local function `scripts\<namespace>.script` declares, in `_g.script` for a name without a dot, or registered
     through xrf-engine's `extern`, by name or as a member of the table it registers. A phrase `0` condition the engine
     never reads is not judged, nor is any function in a tree holding no scripts.
-  - `dialog.spawn-unresolved`: an NPC a spawn file places as a character no file declares, or with a profile no file
-    declares or no character resolves. A new game reads every object of the spawn and resolves its character there, so
-    the engine asserts on it at once.
+  - `dialog.spawn-unresolved`: an NPC a spawn file or a spawned squad places as a character no file declares, or with a
+    profile no file declares or no character resolves. A new game reads every object of the spawn and resolves its
+    character there; a squad resolves its NPCs as it creates them. The squads read as spawned are those
+    `misc\simulation.ltx` starts a new game with (`[start_position_<level>]`), those a smart terrain's `spawn_squads`
+    names, and those a condlist's `create_squad` effect names; each places the stalker and trader sections its `npc` and
+    `npc_random` list, with their `character_profile` or `default`.
   - `dialog.profile-unresolved` (reported): a profile no NPC can be spawned with, or a `character_profile` in
-    `system.ltx` naming a profile no file declares, where no spawn file places an NPC with it. A profile is unresolvable
-    when the character it pins is not declared, or when no character of its class is marked `team_default` without
-    `no_random`. The engine asserts on either only when a script spawns an NPC with the profile, which the configs do
-    not tell: vanilla ships fifty profiles and several sections nothing spawns. Call of Pripyat's spawn places only the
-    actor; squads place its NPCs at runtime.
+    `system.ltx` naming a profile no file declares, where neither a spawn file nor a spawned squad places an NPC with
+    it. A profile is unresolvable when the character it pins is not declared, or when no character of its class is
+    marked `team_default` without `no_random`. The engine asserts on either only when a script spawns an NPC with the
+    profile by a name the configs do not hold: vanilla ships fifty profiles and several sections nothing spawns.
   - `dialog.character-flags`: a character marked both `no_random` and `team_default`, which the engine refuses.
   - `dialog.phrase-entry`: a dialog whose phrase list has no phrase `0`, or that has no phrase list and no `init_func`
     to build one.
