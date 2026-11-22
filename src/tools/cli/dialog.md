@@ -67,7 +67,13 @@ everyone. Character descriptions are read with their `#include` lines spliced in
 lists its own conditions under `elements` in the report; whether it is offered right now is for the running game to
 judge.
 
-Without `--profile`, the command lists every dialog in the tree. The report carries the `dialogs` either way. An unknown
+The command reads the dialog, character, profile and info portion files `configs\system.ltx` lists, with its includes,
+as the engine loads them: a file the lists leave out declares nothing, whatever its name. A tree with no `system.ltx`,
+or one listing none of these, such as a folder of dialog files, is read by file name instead: `dialog*` files for
+dialogs, `character_desc*`, `npc_profile*` and `info_*` for the rest. A `system.ltx` that does not resolve stops the
+command.
+
+Without `--profile`, the command lists every dialog it read. The report carries the `dialogs` either way. An unknown
 profile, one that resolves to no character, or one picking by a class no `team_default` character has exits 1 and names
 any character files that could not be read. The engine cannot spawn an NPC of such a profile.
 

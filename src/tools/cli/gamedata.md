@@ -134,13 +134,13 @@ Findings carry a stable rule identifier. These groups expose the following rules
     strength there. The finding names the granularity and the time, in seconds.
 - **Dialogs:** `dialog.offer-missing`, `dialog.functor-missing`, `dialog.character-flags`, `dialog.phrase-entry`,
   `dialog.phrase-next`, `dialog.logic-missing`, `dialog.heal-missing`, `dialog.spawn-unresolved`,
-  `dialog.profile-unresolved`, `dialog.phrase-unreachable`, `dialog.text-missing`, `dialog.file-missing`,
-  `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the
-  dialog, character, profile and info portion files `system.ltx` lists under `configs\gameplay` (or, where it lists
-  none, every such file by name), the `meet` and `wounded` logic sections of every config, and the NPCs the spawn files
-  under `spawns` place, with the logic their custom data carries. Each id is judged by its first declaration, which is
-  the one the engine reads. Each rule has one severity: those for what the engine stops on are failures, and those
-  marked reported below are warnings, which fail the check only under `--strict`.
+  `dialog.squad-missing`, `dialog.profile-unresolved`, `dialog.phrase-unreachable`, `dialog.text-missing`,
+  `dialog.file-missing`, `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`, `dialog.partner-unreadable`.
+  This check reads the dialog, character, profile and info portion files `system.ltx` lists under `configs\gameplay`
+  (or, where it lists none, every such file by name), the `meet` and `wounded` logic sections of every config, and the
+  NPCs the spawn files under `spawns` place, with the logic their custom data carries. Each id is judged by its first
+  declaration, which is the one the engine reads. Each rule has one severity: those for what the engine stops on are
+  failures, and those marked reported below are warnings, which fail the check only under `--strict`.
   - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
     declares.
   - `dialog.functor-missing`: a precondition, action or script text of a dialog or of a phrase the engine reaches, or a
@@ -151,9 +151,15 @@ Findings carry a stable rule identifier. These groups expose the following rules
   - `dialog.spawn-unresolved`: an NPC a spawn file or a spawned squad places as a character no file declares, or with a
     profile no file declares or no character resolves. A new game reads every object of the spawn and resolves its
     character there; a squad resolves its NPCs as it creates them. The squads read as spawned are those
-    `misc\simulation.ltx` starts a new game with (`[start_position_<level>]`), those a smart terrain's `spawn_squads`
-    names, and those a condlist's `create_squad` effect names; each places the stalker and trader sections its `npc` and
-    `npc_random` list, with their `character_profile` or `default`.
+    `misc\simulation.ltx` starts a new game with, those a smart terrain's `spawn_squads` names, and those a condlist's
+    `create_squad` effect names; each places the stalker and trader sections its `npc` and `npc_random` list, with their
+    `character_profile` or `default`. Start positions are read as the game reads them: `[start_position_<level>]` for
+    each level of the root spawn's game graph in id order, stopping at the first level with none, so the sections
+    vanilla keeps for its test levels are not read.
+  - `dialog.squad-missing`: a squad a config spawns that no section declares, or an NPC section a spawned squad lists
+    that no section declares; the game stops when it creates either. An NPC section that only squads nothing in the
+    configs spawns list is reported instead: scripts create squads by names they pick as they run, which the check
+    cannot follow, so every `ON_OFF_S` section counts as a squad something may create.
   - `dialog.profile-unresolved` (reported): a profile no NPC can be spawned with, or a `character_profile` in
     `system.ltx` naming a profile no file declares, where neither a spawn file nor a spawned squad places an NPC with
     it. A profile is unresolvable when the character it pins is not declared, or when no character of its class is
