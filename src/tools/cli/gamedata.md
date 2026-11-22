@@ -132,17 +132,22 @@ Findings carry a stable rule identifier. These groups expose the following rules
   - `animations.post-process-noise-granularity`: an effect's keyed noise granularity reaches zero or below at a time the
     effect plays, from its start to its length. The engine stops with an assertion once the effect plays at full
     strength there. The finding names the granularity and the time, in seconds.
-- **Dialogs:** `dialog.offer-missing`, `dialog.character-flags`, `dialog.phrase-entry`, `dialog.phrase-next`,
-  `dialog.logic-missing`, `dialog.heal-missing`, `dialog.spawn-unresolved`, `dialog.profile-unresolved`,
-  `dialog.phrase-unreachable`, `dialog.text-missing`, `dialog.file-missing`, `dialog.file-unlisted`, `dialog.duplicate`,
-  `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the dialog, character, profile and info portion
-  files `system.ltx` lists under `configs\gameplay` (or, where it lists none, every such file by name), the `meet` and
-  `wounded` logic sections of every config, and the NPCs the spawn files under `spawns` place, with the logic their
-  custom data carries. Each id is judged by its first declaration, which is the one the engine reads. Each rule has one
-  severity: those for what the engine stops on are failures, and those marked reported below are warnings, which fail
-  the check only under `--strict`.
+- **Dialogs:** `dialog.offer-missing`, `dialog.functor-missing`, `dialog.character-flags`, `dialog.phrase-entry`,
+  `dialog.phrase-next`, `dialog.logic-missing`, `dialog.heal-missing`, `dialog.spawn-unresolved`,
+  `dialog.profile-unresolved`, `dialog.phrase-unreachable`, `dialog.text-missing`, `dialog.file-missing`,
+  `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the
+  dialog, character, profile and info portion files `system.ltx` lists under `configs\gameplay` (or, where it lists
+  none, every such file by name), the `meet` and `wounded` logic sections of every config, and the NPCs the spawn files
+  under `spawns` place, with the logic their custom data carries. Each id is judged by its first declaration, which is
+  the one the engine reads. Each rule has one severity: those for what the engine stops on are failures, and those
+  marked reported below are warnings, which fail the check only under `--strict`.
   - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
     declares.
+  - `dialog.functor-missing`: a precondition, action or script text of a dialog or of a phrase the engine reaches, or a
+    scripted dialog's `init_func`, naming a `namespace.function` no script defines. A function is defined as any
+    non-local function `scripts\<namespace>.script` declares, in `_g.script` for a name without a dot, or registered
+    through xrf-engine's `extern`, by name or as a member of the table it registers. A phrase `0` condition the engine
+    never reads is not judged, nor is any function in a tree holding no scripts.
   - `dialog.spawn-unresolved`: an NPC a spawn file places as a character no file declares, or with a profile no file
     declares or no character resolves. A new game reads every object of the spawn and resolves its character there, so
     the engine asserts on it at once.
