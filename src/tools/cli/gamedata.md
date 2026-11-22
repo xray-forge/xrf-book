@@ -137,8 +137,8 @@ Findings carry a stable rule identifier. These groups expose the following rules
   `dialog.text-missing`, `dialog.unreadable`, `dialog.partner-unreadable`. This check reads the dialogs under
   `configs\gameplay`, the character, profile and info portion files `system.ltx` lists (or, where it lists none, every
   such file by name), and the `meet` and `wounded` logic sections of every config. Each dialog id is judged by its first
-  declaration, which is the one the engine reads. Each rule has one severity: those for what the engine stops on fail
-  the check, and those marked reported below fail it only under `--strict`.
+  declaration, which is the one the engine reads. Each rule has one severity: those for what the engine stops on are
+  failures, and those marked reported below are warnings, which fail the check only under `--strict`.
   - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
     declares.
   - `dialog.profile-unresolved` (reported): a profile no NPC can be spawned with, or a `character_profile` in
@@ -248,7 +248,7 @@ The saved file uses the [shared report envelope](cli.md#reporting). Its `result`
 engine the configs were read as and the evidence that decided it.
 
 Each check is `{ id, status, duration, findings, summary }`. `id` is the check's group name, such as `textures`, and
-`summary` is the check's one-line verdict. Each finding is `{ ruleId, subject, message }`.
+`summary` is the check's one-line verdict. Each finding is `{ ruleId, severity, subject, message }`.
 
 Example report finding — inspect a missing mesh dependency:
 
@@ -256,6 +256,7 @@ Example report finding — inspect a missing mesh dependency:
 {
   "message": "Mesh references missing motion 'dynamics\\devices\\dev_bolt\\dev_bolt_hud_animation'",
   "ruleId": "meshes.motion-validation",
+  "severity": "failure",
   "subject": "meshes/ogf/dev_bolt_hud.ogf"
 }
 ```
@@ -263,8 +264,9 @@ Example report finding — inspect a missing mesh dependency:
 Exit code: `3`. The referenced animation bank is missing.
 
 `subject` is relative to the verified root when the asset lies beneath it, and `null` when the finding has no asset
-subject. `message` is human-readable; use `ruleId` for automated classification. Findings are ordered by subject, rule,
-and message.
+subject. `message` is human-readable; use `ruleId` for automated classification. `severity` is `failure` for what the
+engine cannot work with and `warning` for what it tolerates; a check passes with warnings, and `--strict` fails it on
+them. Findings are ordered by subject, rule, message, then severity.
 
 Statuses are `passed`, `failed`, `error`, `incomplete`, or `skipped`; the overall status reflects the most severe check
 result. A check's duration is `null` when it did not run; measured durations are whole milliseconds. `skippedMounts`

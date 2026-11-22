@@ -25,8 +25,7 @@ Encodings: UTF-8: 1, windows-1251: 1
 Dialog elements: dont_has_info: 1, has_info: 1, init_func: 1, precondition: 1
 ```
 
-Exit code: `0`. The summary ends with "Read 2 files, status: failed". Exit 0 records a completed inspection; add
---strict to fail on its finding.
+Exit code: `0`. The finding is a warning, so the inspection passes; add `--strict` to fail on it.
 
 `--source directory` selects the loose tree explicitly. The default, `containing-installation`, can discover the game
 installation around the supplied path. Give several roots to layer them, with the highest-priority root first;
@@ -37,9 +36,10 @@ outside a phrase list. Use `--verbose` for individual findings or inspect `resul
 
 ## Interpret the result
 
-Without `--strict`, completed inspection can return exit 0 even when it finds invalid dialogs. With `--strict`, those
-findings produce exit 3. An error, incomplete inspection, or skipped input produces exit 1, including when no dialog
-files were selected.
+Every `dialog info` finding is a warning: the reader is stricter than the engine's, so an unreadable file or an
+off-schema element is something to look at. Without `--strict`, a completed inspection passes with them, exit 0. With
+`--strict`, they fail it with exit 3, and the report's status says so. An error, incomplete inspection, or skipped input
+produces exit 1, including when no dialog files were selected.
 
 These checks establish structural consistency. Review the conversation in game to verify its conditions, scripting, and
 intended flow.

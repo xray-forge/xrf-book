@@ -152,9 +152,10 @@ Verify also checks what the game would refuse or show wrong, and fails with exit
 
 The report's `result` holds `checkedTranslations`, `missingTranslations`, `engineProblems`, `languages`, `status`, and
 `checks`. The `translations` check carries one `translations.missing` finding per missing id. The `translations.engine`
-check carries the game problems. `languages` holds a summary row per file and language. `status` is `failed` whenever a
-translation is missing or a problem is found; only `--strict` makes a missing translation exit 3. Use the summary rows
-to review large imports, then inspect findings for the files being translated.
+check carries the game problems. `languages` holds a summary row per file and language. A missing translation is a
+`warning` finding and a game problem a `failure`, so `status` is `failed` when a problem is found, and with `--strict`
+when a translation is missing too; it always matches the exit code. Use the summary rows to review large imports, then
+inspect findings for the files being translated.
 
 An unreadable source is an execution failure, exit 1. A malformed source fails verification with exit 3 regardless of
 `--strict`; the report then carries the parse error as a single `translations.source` finding, with nothing else
@@ -191,7 +192,7 @@ directory is refused to prevent labeling its strings with the wrong language.
 ### Before writing anything
 
 Add `--dry-run` to inspect the proposed import without writing. Use `--file` to select one table. Unreadable tables are
-reported; `--strict` makes those findings fail the run.
+reported as warnings and the import goes on; `--strict` makes those findings fail the run.
 
 ## Notes
 
