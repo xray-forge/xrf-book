@@ -136,12 +136,13 @@ Findings carry a stable rule identifier. These groups expose the following rules
 - **Dialogs:** `dialog.offer-missing`, `dialog.functor-missing`, `dialog.character-flags`, `dialog.phrase-entry`,
   `dialog.phrase-next`, `dialog.logic-missing`, `dialog.heal-missing`, `dialog.spawn-unresolved`,
   `dialog.squad-missing`, `dialog.profile-unresolved`, `dialog.phrase-unreachable`, `dialog.text-missing`,
-  `dialog.file-missing`, `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`, `dialog.partner-unreadable`.
-  This check reads the dialog, character, profile and info portion files `system.ltx` lists under `configs\gameplay`
-  (or, where it lists none, every such file by name), the `meet` and `wounded` logic sections of every config, and the
-  NPCs the spawn files under `spawns` place, with the logic their custom data carries. Each id is judged by its first
-  declaration, which is the one the engine reads. Each rule has one severity: those for what the engine stops on are
-  failures, and those marked reported below are warnings, which fail the check only under `--strict`.
+  `dialog.file-missing`, `dialog.file-invalid`, `dialog.file-unlisted`, `dialog.duplicate`, `dialog.unreadable`,
+  `dialog.partner-unreadable`. This check reads the dialog, character, profile and info portion files `system.ltx` lists
+  under `configs\gameplay` (or, where it lists none, every such file by name), the `meet` and `wounded` logic sections
+  of every config, and the NPCs the spawn files under `spawns` place, with the logic their custom data carries. Each id
+  is judged by its first declaration, which is the one the engine reads. Each rule has one severity: those for what the
+  engine stops on are failures, and those marked reported below are warnings, which fail the check only under
+  `--strict`.
   - `dialog.offer-missing`: a character's start or actor dialog, or a dialog an info portion opens, that no dialog file
     declares.
   - `dialog.functor-missing`: a precondition, action or script text of a dialog or of a phrase the engine reaches, or a
@@ -182,9 +183,13 @@ Findings carry a stable rule identifier. These groups expose the following rules
     what it declares.
   - `dialog.duplicate` (reported): a second declaration of a dialog, character, profile or info portion id, which the
     engine skips.
-  - `dialog.unreadable`, `dialog.partner-unreadable` (reported): a file the check could not read, so what it declares is
-    not judged, or a listed info portion file that is missing, which the engine skips. The engine refuses XML its parser
-    cannot read too, but the check's reader may refuse more than it does.
+  - `dialog.file-invalid`: a dialog, character or profile file `system.ltx` lists that does not read as the engine reads
+    configs, with `#include` lines spliced in: an XML parse error, or an include the tree does not hold. The engine
+    asserts on either.
+  - `dialog.unreadable`, `dialog.partner-unreadable` (reported): a file whose contents go unjudged though the engine
+    does not stop on it. That is an info portion file that is missing or does not read, which Call of Pripyat skips; a
+    dialog file the engine reads but the check does not model, such as one splicing dialogs in through `#include`; or
+    any unreadable file in a tree whose `system.ltx` lists none, which the engine may not load.
 - **Environment:** `environment.engine`, `environment.reference`, `environment.convention`, `environment.asset`. This
   check covers everything under `configs\environment` that the engine reads: weather cycles and effects, suns,
   thunderbolts, ambients with their sound channels and effects, and Anomaly's sun table.
