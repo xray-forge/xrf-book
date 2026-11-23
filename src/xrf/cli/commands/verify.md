@@ -40,9 +40,9 @@ A full run validates everything and is slow. When iterating on one kind of asset
 npm run cli -- verify gamedata --checks meshes weapons animations
 ```
 
-Available checks: `animations`, `dialogs`, `environment`, `levels`, `ltx`, `materials`, `meshes`, `particles`,
-`particles-usage`, `scripts`, `shaders`, `sounds`, `spawns`, `textures`, `weapons`. Unknown names are rejected before
-the tool runs.
+Available checks: `animations`, `dialogs`, `environment`, `info-portions`, `levels`, `ltx`, `materials`, `meshes`,
+`particles`, `particles-usage`, `scripts`, `shaders`, `sounds`, `spawns`, `textures`, `weapons`. Unknown names are
+rejected before the tool runs.
 
 ### Structured report
 
