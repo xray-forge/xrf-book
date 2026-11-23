@@ -195,21 +195,28 @@ Findings carry a stable rule identifier. These groups expose the following rules
     its checked range, a clamped value, or text after a number. Problems in a definition that nothing references are
     reported under this rule too, because the engine never loads that definition.
   - `environment.asset`: a sky or clouds texture that the game does not contain.
-- **Info portions:** `info-portion.read-only` (reported). The game accepts any info portion name and never warns about
-  one nothing gives, so a misspelling between the side that gives a portion and the side that reads it stalls a quest
-  without an error. This check gathers every portion the tree names: those `info_*.xml` declares, those condlists in
-  configs and in spawned objects' custom data read (`{+name}`, `{-name}`), give (`%+name%`) and take (`%-name%`), those
-  dialogs in the files `system.ltx` lists read (`has_info`, `dont_has_info`), give (`give_info`) and take
-  (`disable_info`), and those spawned documents give. An NPC's known info section (the section its logic's `known_info`
-  names, or `[known_info]`) gives each portion it lists, since the actor takes them on searching the body, and each
-  debug scene in `scripts\scenes.ltx` gives the portion it starts with, the author's way into the quest.
-  - `info-portion.read-only`: a portion something reads that nothing gives. A portion counts as given when a script
-    could give it: when a script passes its name to a call, keeps it in a table under another key, or builds it onto a
-    prefix of at least two parts ending in `_`, such as `zat_b51_ordered_item_`. A condlist function receiving it as a
-    parameter counts too. A table that maps a name to itself, as a list of constants does, gives nothing. The finding
-    names a dialog in a file `system.ltx` does not list that would give the portion, and suggests the given or scripted
-    name it may be a misspelling of, at most two edits away. A tree holding no scripts is skipped, since what its
-    scripts give is unknown.
+- **Info portions:** `info-portion.read-only`, `info-portion.unread` (both reported). The game accepts any info portion
+  name and never warns about one nothing gives, so a misspelling between the side that gives a portion and the side that
+  reads it stalls a quest without an error. This check gathers every portion the tree names: those `info_*.xml`
+  declares, those condlists in configs and in spawned objects' custom data read (`{+name}`, `{-name}`), give (`%+name%`)
+  and take (`%-name%`), those dialogs in the files `system.ltx` lists read (`has_info`, `dont_has_info`), give
+  (`give_info`) and take (`disable_info`), and those spawned documents give. An NPC's known info section (the section
+  its logic's `known_info` names, or `[known_info]`) gives each portion it lists, since the actor takes them on
+  searching the body, and each debug scene in `scripts\scenes.ltx` gives the portion it starts with, the author's way
+  into the quest.
+  - Scripts are read by the function each name is passed to. `give_info_portion`, `give_info` and `giveInfoPortion`
+    give; `disable_info_portion`, `disable_info` and `disableInfoPortion` take; `has_alife_info`, `dont_has_alife_info`,
+    `has_info`, `dont_has_info` and `hasInfoPortion` read. A name passed to any other function, kept in a table as a key
+    or a value, or built onto a prefix of at least two parts ending in `_`, such as `zat_b51_ordered_item_`, may be
+    given or read; so may a name a condlist function receives as a parameter. A table that maps a name to itself, as a
+    list of constants does, names nothing.
+  - `info-portion.read-only`: a portion something reads that nothing gives. The finding names a dialog in a file
+    `system.ltx` does not list that would give the portion, and suggests the given or scripted name it may be a
+    misspelling of, at most two edits away.
+  - `info-portion.unread`: a portion something gives that nothing reads, and that does nothing by being held: its
+    declaration opens no dialog and takes no other portion away (`<disable>`). Such a portion is dead state, or a
+    misused effect, such as `%+restore_health%` written for `%=restore_health%`.
+  - A tree holding no scripts is skipped, since what its scripts give and read is unknown.
 - **Levels:** `levels.ai-guid`, `levels.ai-node-count`, `levels.ai-version`, `levels.cform-version`,
   `levels.details-pair`, `levels.file-empty`, `levels.file-truncated`, `levels.game-material`, `levels.graph-duplicate`,
   `levels.graph-guid`, `levels.header-version`, `levels.level-guid`, `levels.ltx-read`, `levels.map-texture`,
