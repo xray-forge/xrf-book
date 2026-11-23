@@ -200,7 +200,9 @@ Findings carry a stable rule identifier. These groups expose the following rules
   without an error. This check gathers every portion the tree names: those `info_*.xml` declares, those condlists in
   configs and in spawned objects' custom data read (`{+name}`, `{-name}`), give (`%+name%`) and take (`%-name%`), those
   dialogs in the files `system.ltx` lists read (`has_info`, `dont_has_info`), give (`give_info`) and take
-  (`disable_info`), and those spawned documents give.
+  (`disable_info`), and those spawned documents give. An NPC's known info section (the section its logic's `known_info`
+  names, or `[known_info]`) gives each portion it lists, since the actor takes them on searching the body, and each
+  debug scene in `scripts\scenes.ltx` gives the portion it starts with, the author's way into the quest.
   - `info-portion.read-only`: a portion something reads that nothing gives. A portion counts as given when a script
     could give it: when a script passes its name to a call, keeps it in a table under another key, or builds it onto a
     prefix of at least two parts ending in `_`, such as `zat_b51_ordered_item_`. A condlist function receiving it as a
